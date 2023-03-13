@@ -1,0 +1,5 @@
+#ignore all folders
+/JS practise/*
+/lecture slides and Labs/*
+/Practice Project/*
+*.png
