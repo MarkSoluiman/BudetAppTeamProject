@@ -5,7 +5,8 @@ export default function News({navigation}){
     return(
         <View
         style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text>News Screen</Text>
+            {/* its a me Marko! */}
+            <Text>News Screen</Text> 
         </View>
     )
 }
