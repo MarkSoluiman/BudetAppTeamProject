@@ -1,4 +1,4 @@
-import * as React from 'react'
+// import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicones from 'react-native-vector-icons/Ionicons'
@@ -10,6 +10,7 @@ import Log from './screens/Log'
 import Login from './screens/Login'
 import News from './screens/News'
 import Profile from './screens/Profile'
+
 import { View , Text } from 'react-native'
 
 const adviceName = 'Advice'
