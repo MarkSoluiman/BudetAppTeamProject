@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicones from 'react-native-vector-icons/Ionicons'
@@ -10,7 +9,6 @@ import Log from './screens/Log'
 import Login from './screens/Login'
 import News from './screens/News'
 import Profile from './screens/Profile'
-import { View , Text } from 'react-native'
 
 const adviceName = 'Advice'
 const goalsName = 'Goals'
@@ -22,14 +20,22 @@ const profileName = 'Profile'
 
 const Tab = createBottomTabNavigator()
 
-
 export default function MainContainer(){
     return(
-        <NavigationContainer>
+        <NavigationContainer style={{backgroundColor:'#ff8100'}}>
             <Tab.Navigator
                 initialRouteName={homeName}
                 screenOptions={({route}) => ({
-                    tabBarStyle: {paddingBottom: 10},
+                    headerStyle: {
+                        backgroundColor: '#ff8100',
+                    },
+                    tabBarStyle: {
+                        paddingBottom: 10,
+                        paddingTop: 10,
+                        backgroundColor: '#ff8100',
+                        height: 60,
+
+                    },
                     tabBarIcon: ({ focused, color, size}) => {
                         let iconName;
                         let rn = route.name;
@@ -51,9 +57,9 @@ export default function MainContainer(){
                     },
                 })}
                 tabBarOptions={{
-                    activeTintColor: 'tomato',
-                    inactiveTintColor: 'grey',
-                    labelStyle : { fontSize: 10},
+                    activeTintColor: 'white',
+                    inactiveTintColor: '#682d01',
+                    labelStyle : { fontSize: 10}
                 }}
             >
                 <Tab.Screen name={adviceName}  component={Advice}/>
