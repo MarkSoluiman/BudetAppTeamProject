@@ -2,18 +2,14 @@ import React, { Component } from 'react'
 import { StyleSheet, View, Button, Text } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native'
-
-import BalanceModal from './BalanceModal'
 
 export default function Home({navigation}){
-    const modalNav = useNavigation()
 
     return(
         <SafeAreaView style={styles.background}>
             <ScrollView>
                 <View style={styles.widget}>
-                    <Text style={styles.text} onPress={() => modalNav.navigate("BalanceModal")}>Current Balance</Text>
+                    <Text style={styles.text}>Current Balance</Text>
                 </View>
                 <View style={styles.widget}>
                     <Text style={styles.text}>Monthly Spending</Text>
