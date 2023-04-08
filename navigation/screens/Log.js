@@ -1,36 +1,40 @@
-import { View, Text, StyleSheet, Button, Pressable } from "react-native";
+import { View, Text, FlatList, StyleSheet, Pressable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
+import LogItem from "./logComponents/LogItem";
+import LogInput from "./logComponents/LogInput";
 
 export default function Log() {
-  const [enteredLogText, setEnteredLogText] = useState("");
   const [userLogs, setUserLogs] = useState([]);
 
-  function logInputHandler(enteredLog) {
-    setEnteredLogText(enteredLog);
+  function addLogHandler(enteredLogText) {
+    setUserLogs((currentUserLogs) => [
+      ...currentUserLogs,
+      { text: enteredLogText, key: Math.random.toString() },
+    ]);
   }
 
-  function addLogHandler() {
-    setUserLogs((currentUserLogs) => {
-      [...currentUserLogs, enteredLogText];
-    });
+  function deleteLogHandler(id){
+    setUserLogs(currentUserLogs =>
+      {
+        return currentUserLogs.filter(
+          (log)=>log.id !==id)
+      })
   }
+
+
   return (
     <View style={styles.logContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.logInput}
-          placeholder="Your Transaction"
-          onChangeText={logInputHandler}
-        />
-        <Pressable style={styles.button} onPress={addLogHandler}>
-          <Text>Add a Transaction</Text>
-        </Pressable>
-      </View>
+      <LogInput onAddLog={addLogHandler} />
       <View style={styles.transactionsContainer}>
-        {userLogs.map((log) => 
-          <Text>{log}</Text>
-        )}
+        <FlatList
+          data={userLogs}
+          renderItem={(itemData) => {
+            return <LogItem
+             text={itemData.item.text}
+             onDeleteItem={deleteLogHandler} />;
+          }}
+        />
       </View>
     </View>
   );
@@ -44,30 +48,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#f7d69e", //white with a touch of orange
   },
- 
-  logInput: {
-    borderWidth: 1,
-    borderColor: "black",
-    width: "80%",
-    marginRight: 8,
-    padding: 8,
-  },
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "gray",
-    paddingBottom: 14,
-  },
-  button: {
-    borderRadius: 4,
-    padding: 5,
-    fontSize: 24,
-    backgroundColor: "orange",
-  },
 
   buttonText: {
     fontSize: 16,
@@ -78,5 +58,7 @@ const styles = StyleSheet.create({
   },
   transactionsContainer: {
     flex: 6,
+    width: "130%",
+    marginRight: 10,
   },
 });
