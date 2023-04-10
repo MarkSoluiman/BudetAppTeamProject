@@ -1,3 +1,4 @@
+// Component imports
 import { View, Text } from 'react-native'
 
 export default function Advice({navigation}){

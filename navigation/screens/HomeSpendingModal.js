@@ -1,9 +1,15 @@
+// Component imports
 import { View, Text, StyleSheet, Pressable} from 'react-native'
 
+// Exported functions
 export default function HomeSpendingModal({navigation}){
     return(
         <View style={styles.background}>
+
+            {/* Heading */}
             <Text style={styles.prompts}>Monthly Spending</Text>
+
+            {/* Button to return to home page */}
             <Pressable onPress={()=> navigation.navigate('Home')}>
                 <View style={styles.button}>
                     <Text style={styles.prompts}>GO BACK</Text>
@@ -13,6 +19,7 @@ export default function HomeSpendingModal({navigation}){
     )
 }
 
+// Styling
 const styles = StyleSheet.create({
     background:{
         flex:1

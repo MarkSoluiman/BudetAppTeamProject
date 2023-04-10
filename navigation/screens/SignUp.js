@@ -1,11 +1,26 @@
-import { View, Text, Pressable } from 'react-native'
+// Components import
+import { View, Text, Pressable, StyleSheet } from 'react-native'
 
+// Exported function
 export default function SignUp({navigation}){
     return(
-        <View
-        style={{flex:1, backgroundColor: '#ffdeb7', alignItems: 'center', justifyContent: 'center'}}>
+        <View style={styles.background}>
+
+            {/* Heading */}
             <Text>Sign Up Screen</Text>
-            <Pressable onPress={() => navigation.navigate('Login')}><Text>Login screen</Text></Pressable>
+
+            {/* Button to continue to login screen */}
+            <Pressable onPress={() => navigation.navigate('Login')}><Text>SAVE AND LOGIN</Text></Pressable>
         </View>
     )
 }
+
+// Styling
+const styles = StyleSheet.create({
+    background: {
+        flex:1
+        , backgroundColor: '#ffdeb7'
+        , alignItems: 'center'
+        , justifyContent: 'center'
+    }
+})

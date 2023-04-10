@@ -1,13 +1,19 @@
+// Component imports
 import { View, Text, Button, StyleSheet, Pressable} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+// Exported function
 export default function Goals({navigation}){
     return(
         <SafeAreaView style={styles.background}>
+
+            {/* New goal button */}
             <Pressable style={styles.button} onPress={()=> navigation.navigate('New Goal')}>
                 <Text style={styles.buttonText}>NEW GOAL</Text>
             </Pressable>
+
+            {/* List of goals */}
             <ScrollView>
                 <View style={styles.widget}>
 
@@ -17,6 +23,7 @@ export default function Goals({navigation}){
     )
 }
 
+// Styling
 const styles = StyleSheet.create({
     background:{
         flex:1

@@ -1,9 +1,13 @@
+// Component imports
 import { View, Text, StyleSheet, Pressable} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 
+// Exported function
 export default function GoalsModal({navigation}){
     return(
         <View style={styles.background}>
+
+            {/* Text prompts and entry fields regarding new goal data */}
             <Text style={styles.prompts}>GOAL NAME</Text>
             <TextInput label="Write your goal name here" style={styles.entry}/>
             <Text style={styles.prompts}>SAVING AMOUNT</Text>
@@ -13,6 +17,7 @@ export default function GoalsModal({navigation}){
                 <Text>Select date...</Text>
             </Pressable>
 
+            {/* Buttons to save or cancel goal data entry */}
             <View style={styles.buttons}>
                 <Pressable style={styles.button} onPress={()=> navigation.navigate('Goals')}>
                     <Text style={styles.prompts}>BACK</Text>
@@ -25,6 +30,7 @@ export default function GoalsModal({navigation}){
     )
 }
 
+// Styling
 const styles = StyleSheet.create({
     background:{
         flex:1
