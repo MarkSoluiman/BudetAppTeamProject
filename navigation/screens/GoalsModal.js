@@ -1,12 +1,27 @@
-import { View, Text, Button, StyleSheet, Pressable} from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { View, Text, StyleSheet, Pressable} from 'react-native'
+import { TextInput } from 'react-native-gesture-handler'
 
 export default function GoalsModal({navigation}){
     return(
-        <SafeAreaView style={styles.background}>
-            <Text>Modal test</Text>
-        </SafeAreaView>
+        <View style={styles.background}>
+            <Text style={styles.prompts}>GOAL NAME</Text>
+            <TextInput label="Write your goal name here" style={styles.entry}/>
+            <Text style={styles.prompts}>SAVING AMOUNT</Text>
+            <TextInput label="Write your saving amount here" style={styles.entry}/>
+            <Text style={styles.prompts}>COMPLETED BY DATE</Text>
+            <Pressable label="Write your completion date here" style={styles.entry}>
+                <Text>Select date...</Text>
+            </Pressable>
+
+            <View style={styles.buttons}>
+                <Pressable style={styles.button} onPress={()=> navigation.navigate('Goals')}>
+                    <Text style={styles.prompts}>BACK</Text>
+                </Pressable>
+                <Pressable style={styles.button} onPress={()=> alert('Goal saved')}>
+                    <Text style={styles.prompts}>SAVE</Text>
+                </Pressable>
+            </View>
+        </View>
     )
 }
 
@@ -14,28 +29,36 @@ const styles = StyleSheet.create({
     background:{
         flex:1
         , backgroundColor: '#ffdeb7'
+        , paddingVertical: 120
     },
-    widget:{
-        marginHorizontal: 20
-        , marginVertical: 20
-        , borderRadius: 15
+    entry:{
+        borderRadius: 15
+        , borderColor: '#ff8100'
+        , borderWidth: 6
         , width: 370
-        , height: 605
-        , padding: 15
-        , backgroundColor: '#ff8100'
-        , justifyContent: 'space-evenly'
+        , height: 50
+        , backgroundColor: '#ffe9de'
+        , marginVertical: 30
+        , paddingHorizontal: 20
+        , alignSelf: 'center'
+        , alignItems: 'center'
+        , paddingVertical: 7
     },
-    button:{
-        width: 370
-        , height: 55
-        , borderRadius: 30
-        , marginHorizontal: 20
-        , backgroundColor: '#bd5100'
-        , justifyContent: 'center'
-    },
-    buttonText:{
+    prompts:{
         textAlign: 'center'
-        , fontSize: 17
         , fontWeight: 'bold'
+        , fontSize: 17
+    },
+    buttons: {
+        justifyContent: 'center'
+        , flexDirection: 'row'
+    },
+    button: {
+        backgroundColor: '#ff8100'
+        , borderRadius: 25
+        , paddingVertical: 10
+        , height: 50
+        , width: 90
+        , marginHorizontal: 20
     }
 })

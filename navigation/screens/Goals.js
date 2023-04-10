@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 export default function Goals({navigation}){
     return(
         <SafeAreaView style={styles.background}>
-            <Pressable style={styles.button} onPress={() => navigation.navigate('Goals', {screen: 'New Goal'})}>
+            <Pressable style={styles.button} onPress={()=> navigation.navigate('New Goal')}>
                 <Text style={styles.buttonText}>NEW GOAL</Text>
             </Pressable>
             <ScrollView>

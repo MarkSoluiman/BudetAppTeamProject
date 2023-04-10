@@ -2,6 +2,8 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 
+import 'react-native-gesture-handler'
+
 import Ionicones from 'react-native-vector-icons/Ionicons'
 
 import Advice from './screens/Advice'
@@ -25,14 +27,15 @@ const loginName = 'Login'
 const HomeStack = createStackNavigator()
 function HomeStackScreen(){
     return(
-        <HomeStack.Navigator
-            screenOptions={{
+        <HomeStack.Navigator>
+            <HomeStack.Group
+                screenOptions={{
                 headerShown: false
-            }}
-        >
-            <HomeStack.Screen name={homeName} component={Home}/>
-            <HomeStack.Screen name={profileName} component={Profile}/>
-            <HomeStack.Screen name={loginName} component={Login}/>
+            }}>
+                <HomeStack.Screen name={homeName} component={Home}/>
+                <HomeStack.Screen name={profileName} component={Profile}/>
+                <HomeStack.Screen name={loginName} component={Login}/>
+            </HomeStack.Group>
         </HomeStack.Navigator>
     )
 }
@@ -40,10 +43,9 @@ function HomeStackScreen(){
 const GoalsStack = createStackNavigator()
 function GoalsStackScreen(){
     return(
-        <GoalsStack.Navigator
-            screenOptions={{
-                headerShown: false
-            }}
+        <GoalsStack.Navigator 
+            initialRouteName={goalsName}
+            screenOptions={{headerShown: false}}
         >
             <GoalsStack.Screen name={goalsName} component={Goals}/>
             <GoalsStack.Screen name={goalsModalName} component={GoalsModal}/>
