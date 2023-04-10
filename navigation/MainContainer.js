@@ -1,10 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-
-import 'react-native-gesture-handler'
-
 import Ionicones from 'react-native-vector-icons/Ionicons'
+import 'react-native-gesture-handler'
 
 import Advice from './screens/Advice'
 import Goals from './screens/Goals'
@@ -13,12 +11,23 @@ import Log from './screens/Log'
 import News from './screens/News'
 import Login from './screens/Login'
 import Profile from './screens/Profile'
+
 import GoalsModal from './screens/GoalsModal'
+import HomeBalanceModal from './screens/HomeBalanceModal'
+import HomeGoalsModal from './screens/HomeGoalsModal'
+import HomeIncomeModal from './screens/HomeIncomeModal'
+import HomePLModal from './screens/HomePLModal'
+import HomeSpendingModal from './screens/HomeSpendingModal'
 
 const adviceName = 'Advice'
 const goalsName = 'Goals'
 const goalsModalName = 'New Goal'
 const homeName = 'Home'
+const homeBalanceName = 'Current Balance'
+const homeGoalsName = 'Goal Bars'
+const homeIncomeName = 'Monthly Income'
+const homePLName = 'Profit and Loss'
+const homeSpendingName = 'Monthly Spending'
 const logName = 'Log'
 const newsName = 'News'
 const profileName = 'Profile'
@@ -35,6 +44,11 @@ function HomeStackScreen(){
                 <HomeStack.Screen name={homeName} component={Home}/>
                 <HomeStack.Screen name={profileName} component={Profile}/>
                 <HomeStack.Screen name={loginName} component={Login}/>
+                <HomeStack.Screen name={homeBalanceName} component={HomeBalanceModal}/>
+                <HomeStack.Screen name={homeGoalsName} component={HomeGoalsModal}/>
+                <HomeStack.Screen name={homeIncomeName} component={HomeIncomeModal}/>
+                <HomeStack.Screen name={homePLName} component={HomePLModal}/>
+                <HomeStack.Screen name={homeSpendingName} component={HomeSpendingModal}/>
             </HomeStack.Group>
         </HomeStack.Navigator>
     )
