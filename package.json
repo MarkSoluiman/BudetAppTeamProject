@@ -12,6 +12,7 @@
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
+    "@react-navigation/native-stack": "^6.9.12",
     "@react-navigation/stack": "^6.3.16",
     "android": "^0.0.8",
     "androidsdk": "^1.0.0",
@@ -26,7 +27,8 @@
     "react-native-safe-area-context": "4.5.0",
     "react-native-screens": "~3.20.0",
     "react-native-vector-icons": "^9.2.0",
-    "sdk": "^0.5.0"
+    "sdk": "^0.5.0",
+    "@react-native-community/datetimepicker": "6.7.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

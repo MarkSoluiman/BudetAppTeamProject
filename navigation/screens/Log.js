@@ -1,12 +1,15 @@
+// Component imports
 import { View, Text, FlatList, StyleSheet, Pressable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
 import LogItem from "./logComponents/LogItem";
 import LogInput from "./logComponents/LogInput";
 
+// Exported function
 export default function Log() {
   const [userLogs, setUserLogs] = useState([]);
 
+  // Add to log
   function addLogHandler(enteredLogText) {
     setUserLogs((currentUserLogs) => [
       ...currentUserLogs,
@@ -14,6 +17,7 @@ export default function Log() {
     ]);
   }
 
+  // Delete from log
   function deleteLogHandler(id){
     setUserLogs(currentUserLogs =>
       {
@@ -21,8 +25,7 @@ export default function Log() {
           (log)=>log.id !==id)
       })
   }
-
-
+  
   return (
     <View style={styles.logContainer}>
       <LogInput onAddLog={addLogHandler} />
@@ -40,6 +43,7 @@ export default function Log() {
   );
 }
 
+// Styling
 const styles = StyleSheet.create({
   logContainer: {
     flex: 1,

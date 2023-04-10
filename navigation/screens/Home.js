@@ -1,33 +1,45 @@
+// Component imports
 import React, { Component } from 'react'
-import { StyleSheet, View, Button, Text } from 'react-native'
+import { StyleSheet, Pressable, Text } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+// Exported function
 export default function Home({navigation}){
-
     return(
         <SafeAreaView style={styles.background}>
             <ScrollView>
-                <View style={styles.widget}>
+
+                {/* Current Balance widget */}
+                <Pressable style={styles.widget} onPress={()=> navigation.navigate('Current Balance')}>
                     <Text style={styles.text}>Current Balance</Text>
-                </View>
-                <View style={styles.widget}>
+                </Pressable>
+
+                {/* Monthly Spending widget */}
+                <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Spending')}>
                     <Text style={styles.text}>Monthly Spending</Text>
-                </View>
-                <View style={styles.widget}>
+                </Pressable>
+
+                {/* Monthly Income widget */}
+                <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Income')}>
                     <Text style={styles.text}>Monthly Income</Text>
-                </View>
-                <View style={styles.widget}>
+                </Pressable>
+
+                {/* Profit and Loss widget */}
+                <Pressable style={styles.widget} onPress={()=> navigation.navigate('Profit and Loss')}>
                     <Text style={styles.text}>Profit/Loss</Text>
-                </View>
-                <View style={styles.widget}>
+                </Pressable>
+
+                {/* Goal Bars widget */}
+                <Pressable style={styles.widget} onPress={()=> navigation.navigate('Goal Bars')}>
                     <Text style={styles.text}>Goal Bars</Text>
-                </View>
+                </Pressable>
             </ScrollView>
         </SafeAreaView>
     )
 }
 
+// Styling
 const styles = StyleSheet.create({
     background:{
         flex:1
