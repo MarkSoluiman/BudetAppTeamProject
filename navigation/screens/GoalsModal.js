@@ -17,7 +17,7 @@ export default function GoalsModal({navigation}){
                 <Pressable style={styles.button} onPress={()=> navigation.navigate('Goals')}>
                     <Text style={styles.prompts}>BACK</Text>
                 </Pressable>
-                <Pressable style={styles.button} onPress={()=> alert('Goal saved')}>
+                <Pressable style={styles.button} onPress={()=> {alert('Goal saved'); navigation.navigate('Goals')}}>
                     <Text style={styles.prompts}>SAVE</Text>
                 </Pressable>
             </View>

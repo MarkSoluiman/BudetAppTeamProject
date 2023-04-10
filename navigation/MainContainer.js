@@ -1,6 +1,7 @@
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
+import { Pressable, StyleSheet } from 'react-native'
 import Ionicones from 'react-native-vector-icons/Ionicons'
 import 'react-native-gesture-handler'
 
@@ -10,6 +11,7 @@ import Home from './screens/Home'
 import Log from './screens/Log'
 import News from './screens/News'
 import Login from './screens/Login'
+import SignUp from './screens/SignUp'
 import Profile from './screens/Profile'
 
 import GoalsModal from './screens/GoalsModal'
@@ -32,6 +34,7 @@ const logName = 'Log'
 const newsName = 'News'
 const profileName = 'Profile'
 const loginName = 'Login'
+const signUpName = 'Sign Up'
 
 const HomeStack = createStackNavigator()
 function HomeStackScreen(){
@@ -39,11 +42,13 @@ function HomeStackScreen(){
         <HomeStack.Navigator>
             <HomeStack.Group
                 screenOptions={{
-                headerShown: false
-            }}>
+                    headerShown: false
+                }}
+            >
+                <HomeStack.Screen name={loginName} component={Login}/>
+                <HomeStack.Screen name={signUpName} component={SignUp}/>
                 <HomeStack.Screen name={homeName} component={Home}/>
                 <HomeStack.Screen name={profileName} component={Profile}/>
-                <HomeStack.Screen name={loginName} component={Login}/>
                 <HomeStack.Screen name={homeBalanceName} component={HomeBalanceModal}/>
                 <HomeStack.Screen name={homeGoalsName} component={HomeGoalsModal}/>
                 <HomeStack.Screen name={homeIncomeName} component={HomeIncomeModal}/>
@@ -73,16 +78,15 @@ export default function MainContainer(){
         <NavigationContainer style={{backgroundColor:'#ff8100'}}>
             <Tab.Navigator
                 initialRouteName={homeName}
-                screenOptions={({route}) => ({
+                screenOptions={({route, navigation}) => ({
                     headerStyle: {
-                        backgroundColor: '#ff8100',
+                        backgroundColor: '#ff8100'
                     },
                     tabBarStyle: {
                         paddingBottom: 10,
                         paddingTop: 10,
                         backgroundColor: '#ff8100',
                         height: 60,
-
                     },
                     tabBarIcon: ({ focused, color, size}) => {
                         let iconName;
@@ -109,12 +113,53 @@ export default function MainContainer(){
                     labelStyle : { fontSize: 10}
                 }}
             >
-                <Tab.Screen name={adviceName} component={Advice}/>
-                <Tab.Screen name={newsName} component={News}/>
-                <Tab.Screen name={homeName} component={HomeStackScreen}/>
-                <Tab.Screen name={logName} component={Log}/>
-                <Tab.Screen name={goalsName} component={GoalsStackScreen}/>
+                <Tab.Screen name={adviceName} component={Advice} options={({route, navigation}) => ({
+                    headerRight: () => (
+                        <Pressable 
+                            style={styles.headerButton} 
+                            onPress={()=> navigation.navigate('Home', {screen: 'Profile'})}
+                        >
+                            <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
+                        </Pressable>)})}/>
+                <Tab.Screen name={newsName} component={News} options={({route, navigation}) => ({
+                    headerRight: () => (
+                        <Pressable 
+                            style={styles.headerButton} 
+                            onPress={()=> navigation.navigate('Home', {screen: 'Profile'})}
+                        >
+                            <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
+                        </Pressable>)})}/>
+                <Tab.Screen name={homeName} component={HomeStackScreen} options={({route, navigation}) => ({
+                    headerRight: () => (
+                        <Pressable 
+                            style={styles.headerButton} 
+                            onPress={()=> navigation.navigate('Home', {screen: 'Profile'})}
+                        >
+                            <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
+                        </Pressable>)})}/>
+                <Tab.Screen name={logName} component={Log} options={({route, navigation}) => ({
+                    headerRight: () => (
+                        <Pressable 
+                            style={styles.headerButton} 
+                            onPress={()=> navigation.navigate('Home', {screen: 'Profile'})}
+                        >
+                            <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
+                        </Pressable>)})}/>
+                <Tab.Screen name={goalsName} component={GoalsStackScreen} options={({route, navigation}) => ({
+                    headerRight: () => (
+                        <Pressable 
+                            style={styles.headerButton} 
+                            onPress={()=> navigation.navigate('Home', {screen: 'Profile'})}
+                        >
+                            <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
+                        </Pressable>)})}/>
             </Tab.Navigator>
         </NavigationContainer>
     )
 }
+
+const styles = StyleSheet.create({
+    headerButton:{
+        marginRight: 15
+    }
+})
