@@ -78,15 +78,15 @@ export default function MainContainer(){
         <NavigationContainer style={{backgroundColor:'#ff8100'}}>
             <Tab.Navigator
                 initialRouteName={homeName}
-                screenOptions={({route, navigation}) => ({
+                screenOptions={({route}) => ({
                     headerStyle: {
-                        backgroundColor: '#ff8100'
+                        backgroundColor: '#ff8100',
                     },
                     tabBarStyle: {
                         paddingBottom: 10,
                         paddingTop: 10,
                         backgroundColor: '#ff8100',
-                        height: 60,
+                        height: 60
                     },
                     tabBarIcon: ({ focused, color, size}) => {
                         let iconName;
