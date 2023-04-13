@@ -180,10 +180,3 @@ function MainContainer(){
         </Tab.Navigator>
     )
 }
-
-// Styling for profile icon in top header
-const styles = StyleSheet.create({
-    headerButton:{
-        marginRight: 15
-    }
-})

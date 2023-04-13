@@ -1,4 +1,3 @@
-// Component imports
 import { View, Text, Pressable, StyleSheet} from 'react-native'
 
 // Exported function
