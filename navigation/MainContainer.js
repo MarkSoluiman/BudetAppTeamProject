@@ -53,7 +53,7 @@ export default function LoginStackScreen(){
                 >
                     <LoginStack.Screen name={loginName} component={Login}/>
                     <LoginStack.Screen name={signUpName} component={SignUp}/>
-                    <LoginStack.Screen name={homeName} component={MainContainer}/>
+                    <LoginStack.Screen name={homeName} component={MainContainer}/> 
                 </LoginStack.Group>
             </LoginStack.Navigator>
         </NavigationContainer>
@@ -180,3 +180,12 @@ function MainContainer(){
         </Tab.Navigator>
     )
 }
+
+const styles = StyleSheet.create ({
+     headerButton:{
+        marginRight:15
+     }
+
+
+
+})

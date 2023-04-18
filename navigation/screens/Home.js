@@ -1,20 +1,19 @@
 // Component imports
 import React, { Component } from 'react'
-import { StyleSheet, Pressable, Text } from 'react-native'
+import { StyleSheet, Pressable, Text,View, SafeAreaView } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { SafeAreaView } from 'react-native-safe-area-context'
+//import { SafeAreaView } from 'react-native-safe-area-context'
 
 // Exported function
 export default function Home({navigation}){
     return(
-        <SafeAreaView style={styles.background}>
-            <ScrollView>
-
-                {/* Current Balance widget */}
-                <Pressable style={styles.widget} onPress={()=> navigation.navigate('Current Balance')}>
-                    <Text style={styles.text}>Current Balance</Text>
-                </Pressable>
-
+       // <SafeAreaView style={styles.background}>
+            <View style={styles.background}>
+            <ScrollView >
+        
+            
+                <Text>Home Page</Text>
+                
                 {/* Monthly Spending widget */}
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Spending')}>
                     <Text style={styles.text}>Monthly Spending</Text>
@@ -34,10 +33,13 @@ export default function Home({navigation}){
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Goal Bars')}>
                     <Text style={styles.text}>Goal Bars</Text>
                 </Pressable>
-            </ScrollView>
-        </SafeAreaView>
+                <Pressable onPress={() => navigation.navigate('Login')}><Text> EXIT</Text></Pressable>
+             </ScrollView>
+             </View>
+          //   </SafeAreaView>
     )
 }
+
 
 // Styling
 const styles = StyleSheet.create({
@@ -60,6 +62,6 @@ const styles = StyleSheet.create({
         , fontWeight: 'bold'
     },
     text:{
-        textAlign: 'center',
+        textAlign: 'center'
     }
 })
