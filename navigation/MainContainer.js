@@ -181,11 +181,10 @@ function MainContainer(){
     )
 }
 
+//styling for profile icons in top header
 const styles = StyleSheet.create ({
      headerButton:{
         marginRight:15
      }
-
-
 
 })
