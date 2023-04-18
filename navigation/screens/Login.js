@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         , backgroundColor: '#ffa500'
         , alignItems: 'center'
         , justifyContent: 'center'
+       
     },
 
     textInput : {
@@ -37,7 +38,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor:'#cccccc',
         backgroundColor : 'white',
-        width: '50%'
+        width: '50%',
+         marginVertical : 10
 
 
 

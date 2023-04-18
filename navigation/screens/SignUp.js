@@ -12,13 +12,24 @@ export default function SignUp({navigation}){
             <Text>EMAIL</Text>
             <TextInput style ={styles.textInput} placeholder='Email'/>
             <Text>PASSWORD</Text>
-            <TextInput style = {styles.textInput} placeholder='Password' />
+            <TextInput style = {styles.textInput}
+             placeholder='Password'
+             secureTextEntry = {true} />
             <Text> CURRENRT PASSWORD</Text>
-            <TextInput style = {styles.textInput} placeholder=' confirm Password'/>
-            <Button title='GO BACK' color={'#903800'}/>    
-    
-            {/* Button to continue to login screen */}
-            <Pressable onPress={() => navigation.navigate('Login')}><Text> SAVE AND  GO BACK TO LOGIN</Text></Pressable>
+            <TextInput style = {styles.textInput} 
+            placeholder=' confirm Password'
+            secureTextEntry = {true} />
+            <View style = {{flexDirection: 'row', width : '50%', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Button title='GO BACK'
+             color={'#903800'} 
+             onPress = {() => navigation.navigate('Login')}
+             />  
+               <Button title='SIGN UP'
+             color={'#903800'} 
+             onPress = {() => navigation.navigate('Home')}
+             /> 
+             </View>
+           
         </View>
     )
 }
@@ -39,7 +50,8 @@ const styles = StyleSheet.create({
         borderColor:'#ffdeb7',
         backgroundColor : 'white',
         borderRadius: 6,
-        width: '70%'
+        width: '70%',
+        marginVertical : 10
     }
 
    

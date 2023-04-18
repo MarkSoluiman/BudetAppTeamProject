@@ -7,8 +7,8 @@ import { ScrollView } from 'react-native-gesture-handler'
 // Exported function
 export default function Home({navigation}){
     return(
-       // <SafeAreaView style={styles.background}>
-            <View style={styles.background}>
+        <SafeAreaView style={styles.background}>
+           
             <ScrollView >
         
             
@@ -35,8 +35,7 @@ export default function Home({navigation}){
                 </Pressable>
                 <Pressable onPress={() => navigation.navigate('Login')}><Text> EXIT</Text></Pressable>
              </ScrollView>
-             </View>
-          //   </SafeAreaView>
+            </SafeAreaView>
     )
 }
 
