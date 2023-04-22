@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, Pressable,StyleSheet } from 'react-native'
 
 // Exported function
 export default function Profile({navigation}){
@@ -8,6 +8,7 @@ export default function Profile({navigation}){
             
             {/* Heading */}
             <Text>Profile Screen</Text>
+            <Pressable onPress={() => navigation.navigate('Home')}><Text> Go back to Home page</Text></Pressable>
         </View>
     )
 }
@@ -18,6 +19,6 @@ const styles = StyleSheet.create({
         flex:1
         , backgroundColor: '#ffdeb7'
         , alignItems: 'center'
-        , justifyContent: 'center'
+        , justifyContent: 'space-evenly'
     }
 })

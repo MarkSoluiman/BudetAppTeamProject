@@ -1,8 +1,34 @@
 // Components import
-import { View, Text, Pressable, StyleSheet, Button, TextInput } from 'react-native'
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import React,{useState} from 'react'; 
+import { View, Text, StyleSheet, Button, TextInput } from 'react-native'
+import { auth } from '../../firebase.config';
+//import firebase from 'firebase'
 
 // Exported function
 export default function SignUp({navigation}){
+
+     const [email, setEmail] = useState('');
+     const [password, setPassword] = useState('');
+     const [currentPassword, setcurrentPassword] = useState('');
+
+     //async as we will be calling firebase function to check if the email && password is enetered
+     const handleSubmit = async ()=>{
+        if(email && password){
+            try{
+                await createUserWithEmailAndPassword(auth, email, password)
+
+            }catch(error) {
+                console.log('got error: ', errormessage);
+
+            }
+
+
+        }
+
+     }
+          
+
     return(
         <View style={styles.background}>
 
@@ -10,25 +36,41 @@ export default function SignUp({navigation}){
             <Text >MOBILE BUDGETING  </Text>
             <Text>Sign Up Screen</Text>
             <Text>EMAIL</Text>
-            <TextInput style ={styles.textInput} placeholder='Email'/>
+
+            <TextInput style ={styles.textInput} 
+            value={email}
+            onChangeText={value => setEmail(value)}
+            placeholder='Email'/>
+
             <Text>PASSWORD</Text>
+
             <TextInput style = {styles.textInput}
+             value ={password}
+             onChangeText={value => setPassword(value)}
              placeholder='Password'
              secureTextEntry = {true} />
+
             <Text> CURRENRT PASSWORD</Text>
+
             <TextInput style = {styles.textInput} 
             placeholder=' confirm Password'
+            value = {currentPassword}
+            onChangeText={value => setcurrentPassword(value)}
             secureTextEntry = {true} />
+
             <View style = {{flexDirection: 'row', width : '50%', justifyContent: 'space-between', alignItems: 'center' }}>
+
             <Button title='GO BACK'
              color={'#903800'} 
              onPress = {() => navigation.navigate('Login')}
              />  
                <Button title='SIGN UP'
              color={'#903800'} 
-             onPress = {() => navigation.navigate('Home')}
+             onPress = {handleSubmit}
+            // onPress = {() => navigation.navigate('Home')}
              /> 
              </View>
+             <Text> email : {email} password = {password}</Text>
            
         </View>
     )

@@ -1,11 +1,20 @@
 // Component imports
+import { signOut } from 'firebase/auth'
 import React, { Component } from 'react'
-import { StyleSheet, Pressable, Text,View, SafeAreaView } from 'react-native'
+import { StyleSheet, Pressable, Text,View, SafeAreaView, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+import { auth } from '../../firebase.config'
 //import { SafeAreaView } from 'react-native-safe-area-context'
 
 // Exported function
 export default function Home({navigation}){
+    const handleLogout = async ()=>{
+        await signOut(auth);
+    }
+
+
+
+
     return(
         <SafeAreaView style={styles.background}>
            
@@ -33,6 +42,13 @@ export default function Home({navigation}){
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Goal Bars')}>
                     <Text style={styles.text}>Goal Bars</Text>
                 </Pressable>
+
+                <TouchableOpacity 
+                onPress={handleLogout}>
+                    <Text> exit </Text>
+                </TouchableOpacity>
+
+
                 <Pressable onPress={() => navigation.navigate('Login')}><Text> EXIT</Text></Pressable>
              </ScrollView>
             </SafeAreaView>
