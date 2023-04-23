@@ -33,16 +33,17 @@ export default function SignUp({navigation}){
         <View style={styles.background}>
 
             {/* Heading */}
-            <Text >MOBILE BUDGETING  </Text>
-            <Text>Sign Up Screen</Text>
-            <Text>EMAIL</Text>
+            <Text style ={styles.headingText} >MOBILE  </Text>
+            <Text style ={styles.headingText} > BUDGETING  </Text>
+            <Text style = {styles.subHeadingText}>SIGN UP</Text>
+            <Text style = {styles.subHeadingText}>EMAIL</Text>
 
             <TextInput style ={styles.textInput} 
             value={email}
             onChangeText={value => setEmail(value)}
             placeholder='Email'/>
 
-            <Text>PASSWORD</Text>
+            <Text style = {styles.subHeadingText}>PASSWORD</Text>
 
             <TextInput style = {styles.textInput}
              value ={password}
@@ -50,7 +51,7 @@ export default function SignUp({navigation}){
              placeholder='Password'
              secureTextEntry = {true} />
 
-            <Text> CURRENRT PASSWORD</Text>
+            <Text style = {styles.subHeadingText}> CURRENRT PASSWORD</Text>
 
             <TextInput style = {styles.textInput} 
             placeholder=' confirm Password'
@@ -66,12 +67,10 @@ export default function SignUp({navigation}){
              />  
                <Button title='SIGN UP'
              color={'#903800'} 
+             borderRadius = {9}
              onPress = {handleSubmit}
-            // onPress = {() => navigation.navigate('Home')}
              /> 
-             </View>
-             <Text> email : {email} password = {password}</Text>
-           
+             </View>           
         </View>
     )
 }
@@ -81,19 +80,36 @@ const styles = StyleSheet.create({
     background: {
         flex:1,
         padding:20
-        , backgroundColor: '#ffa500'
+        , backgroundColor: '#ff8101'
         , alignItems: 'center'
         , justifyContent: 'center'
     },
+
+    headingText:{
+        color : '#ffe9df', 
+        fontWeight: 'bold',
+        fontSize : 35,
+        marginBottom: 5
+    },
+
+    subHeadingText:{
+        color : 'white', 
+        fontWeight: 'bold',
+        fontSize : 15,
+
+    },
     
     textInput: {
-        padding : 2,
+        padding : 3,
         borderWidth: 1,
+        fontSize: 20,
         borderColor:'#ffdeb7',
-        backgroundColor : 'white',
-        borderRadius: 6,
-        width: '70%',
-        marginVertical : 10
+        backgroundColor : '#ffdeb7',
+        borderRadius: 9,
+        width: '80%',
+        marginVertical : 10,
+        marginBottom: 15,
+        alignItems: 'center'
     }
 
    

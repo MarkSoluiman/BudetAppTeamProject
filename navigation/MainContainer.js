@@ -54,7 +54,8 @@ export default function LoginStackScreen(){
                  screenOptions={{
                     headerShown: false
                 }}
-                >
+                >    
+                        <LoginStack.Screen name={profileName} component={Profile}/>
                         <LoginStack.Screen name={homeName} component={MainContainer}/>
                     </LoginStack.Group>
                 </LoginStack.Navigator>

@@ -27,7 +27,7 @@ export default function Login({navigation}){
 const styles = StyleSheet.create({
     background: {
         flex:1
-        , backgroundColor: '#ffa500'
+        , backgroundColor: '#ff8101'
         , alignItems: 'center'
         , justifyContent: 'center'
        
@@ -36,8 +36,9 @@ const styles = StyleSheet.create({
     textInput : {
         padding : 2,
         borderWidth: 1,
-        borderColor:'#cccccc',
-        backgroundColor : 'white',
+        borderRadius: 9,
+        borderColor:'#ffdeb7',
+        backgroundColor : '#ffdeb7',
         width: '50%',
          marginVertical : 10
 

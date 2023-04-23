@@ -45,11 +45,11 @@ export default function Home({navigation}){
 
                 <TouchableOpacity 
                 onPress={handleLogout}>
-                    <Text> exit </Text>
+                    <Text> LOG OUT </Text>
                 </TouchableOpacity>
 
 
-                <Pressable onPress={() => navigation.navigate('Login')}><Text> EXIT</Text></Pressable>
+               
              </ScrollView>
             </SafeAreaView>
     )
