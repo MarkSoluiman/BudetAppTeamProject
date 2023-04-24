@@ -7,13 +7,8 @@ import { ScrollView } from 'react-native-gesture-handler'
 // Exported function
 export default function Home({navigation}){
     return(
-       // <SafeAreaView style={styles.background}>
-            <View style={styles.background}>
-            <ScrollView >
-        
-            
-                <Text>Home Page</Text>
-                
+       <SafeAreaView style={styles.background}>
+            <ScrollView >                
                 {/* Monthly Spending widget */}
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Spending')}>
                     <Text style={styles.text}>Monthly Spending</Text>
@@ -35,8 +30,7 @@ export default function Home({navigation}){
                 </Pressable>
                 <Pressable onPress={() => navigation.navigate('Login')}><Text> EXIT</Text></Pressable>
              </ScrollView>
-             </View>
-          //   </SafeAreaView>
+        </SafeAreaView>
     )
 }
 
@@ -48,6 +42,7 @@ const styles = StyleSheet.create({
         , backgroundColor: '#ffdeb7'
         , alignItems: 'center'
         , justifyContent: 'center'
+        , paddingTop: 20
     },
     widget:{
         marginHorizontal: 20
