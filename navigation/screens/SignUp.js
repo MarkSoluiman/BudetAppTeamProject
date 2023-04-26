@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React,{useState} from 'react'; 
 import { View, Text, StyleSheet, Button, TextInput } from 'react-native'
 import { auth } from '../../firebase.config';
+
 //import firebase from 'firebase'
 
 // Exported function
@@ -18,8 +19,8 @@ export default function SignUp({navigation}){
             try{
                 await createUserWithEmailAndPassword(auth, email, password)
 
-            }catch(error) {
-                console.log('got error: ', errormessage);
+            }catch(err) {
+                console.log('got error: ', err.message);
 
             }
 
@@ -66,11 +67,11 @@ export default function SignUp({navigation}){
              onPress = {() => navigation.navigate('Login')}
              />  
                <Button title='SIGN UP'
-             color={'#903800'} 
-             borderRadius = {9}
+             color={'#903800'}              
              onPress = {handleSubmit}
              /> 
              </View>           
+             <Text> Email : {email} Password : {password}</Text>
         </View>
     )
 }

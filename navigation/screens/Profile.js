@@ -10,7 +10,7 @@ export default function Profile({navigation}){
             <Text>Profile Screen</Text>
             <View style={styles.widget}> 
             <Button title='SAVE'
-            color={'#ffe9df'}/>
+             />
             </View>
             
             <Pressable onPress={() => navigation.navigate('Home')}><Text> Go back to Home page</Text></Pressable>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         , marginVertical: 20
         , borderRadius: 15
         , width: 370
-        , height: 605
+        , height: 505
         , padding: 15
         , backgroundColor: '#ff8100'
         , justifyContent: 'space-evenly'

@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import { StyleSheet, Pressable, Text,View, SafeAreaView, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { auth } from '../../firebase.config'
+
 //import { SafeAreaView } from 'react-native-safe-area-context'
 
 // Exported function
@@ -21,7 +22,7 @@ export default function Home({navigation}){
             <ScrollView >
         
             
-                <Text>Home Page</Text>
+                
                 
                 {/* Monthly Spending widget */}
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Spending')}>
