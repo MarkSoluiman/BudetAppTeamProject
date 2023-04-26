@@ -1,48 +1,128 @@
 //components import
-import { View, Text, Pressable, StyleSheet, TextInput, Button} from 'react-native'
+import { useState } from "react";
+import {
+  KeyboardAvoidingView,
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  Button,
+} from "react-native";
+import { initializeApp } from "firebase/app";
+import { getAuth,createUserWithEmailAndPassword } from "firebase/auth";
+import { auth,db } from "../../firebase.js";
+
+
 
 // Exported function
-export default function Login({navigation}){
-    return(
-        <View style={styles.background}>
-            {/* Heading */}
-            <Text>MPBILE BUDGETING</Text>
-            <Text>LOG IN</Text>
+export default function Login({ navigation }) {
+    const [email,setEmail]=useState("")
+    const [password,setPassword]=useState("")
+    const auth=getAuth()
 
-            <Text>EMAIL</Text>
-             <TextInput style = {styles.textInput} placeholder='Email'/>
-             <Text>PASSWORD</Text>
-             <TextInput style = {styles.textInput} placeholder='Password'/>
+    const signUpHandler=()=>{
+        createUserWithEmailAndPassword(auth,email,password)
+        .then(userCredentials =>{
+            const user=userCredentials.user
+           console.log(user.email)
+        })
+        
+    }
+  return (
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <View style={styles.inputContainer}>
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={ text=>setEmail(text) }
+          style={styles.input}
+        ></TextInput>
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={ text=>setPassword(text) }
+          style={styles.input}
+          secureTextEntry
+        ></TextInput>
+      </View>
 
-
-
-            {/* Buttons to login to access home page and full app OR to sign up */}
-            <Pressable onPress={() => navigation.navigate('Home')}><Text>LOGIN</Text></Pressable>
-            <Pressable onPress={() => navigation.navigate('Sign Up')}><Text>SIGN UP</Text></Pressable>
-        </View>
-    )
+      <View style={styles.buttonContainer}>
+        <Pressable onPress={() => {}} style={styles.button}>
+          <Text style={styles.button}>Login</Text>
+        </Pressable>
+        <Pressable onPress={signUpHandler} style={[styles.button,styles.buttonOutline]}>
+          <Text style={styles.buttonOutlineText}> Signup</Text>
+        </Pressable>
+      </View>
+    </KeyboardAvoidingView>
+  );
 }
 
 // Styling
 const styles = StyleSheet.create({
-    background: {
-        flex:1
-        , backgroundColor: '#ffa500'
-        , alignItems: 'center'
-        , justifyContent: 'center'
-    },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 1,
+    
+  },
+  inputContainer: {
+    width:"80%",
+    
+  },
+  background: {
+    flex: 1,
+    backgroundColor: "#ffa500",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
-    textInput : {
-        padding : 2,
-        borderWidth: 1,
-        borderColor:'#cccccc',
-        backgroundColor : 'white',
-        width: '50%'
+  textInput: {
+    padding: 2,
+    borderWidth: 1,
+    borderColor: "#cccccc",
+    backgroundColor: "white",
+    width: "50%",
+  },
+  input:{
+    backgroundColor:"white",
+    paddingHorizontal:15,
+    paddingVertical:10,
+    borderRadius:10,
+    marginTop:5,
+  },
+  buttonContainer: {
+    width:"60%",
+    justifyContent:"center",
+    alignItems:"center",
+    marginTop:40,
+  },
+  button: {
+    backgroundColor:"#ffa500",
+    width:"100%",
+    paddingHorizontal:15,
+    borderRadius:10,
+    alignItems:"center",
 
 
+  },
+  buttonOutline:{
+    backgroundColor:"white",
+    marginTop:15,
+    borderColor:"#ffa500",
+    borderWidth:2,
 
-    }
-
-
-
-})
+  },
+  buttonOutlineText:{
+    color:"black",
+    fontWeight:"700",
+    fontSize:16,
+  },
+  buttonText:{
+    color:"white",
+    fontWeight:"700",
+    fontSize:16,
+  }
+});
