@@ -23,6 +23,7 @@ import HomeGoalsModal from './screens/HomeGoalsModal'
 import HomeIncomeModal from './screens/HomeIncomeModal'
 import HomePLModal from './screens/HomePLModal'
 import HomeSpendingModal from './screens/HomeSpendingModal'
+import useAuth from '../hooks/useAuth'
 
 // All screen names initialisation
 const adviceName = 'Advice'
@@ -43,22 +44,51 @@ const signUpName = 'Sign Up'
 // Login navigation, initial navigation accessed: login, sign up, and home (access to the full application)
 const LoginStack = createStackNavigator()
 export default function LoginStackScreen(){
-    return(
-        <NavigationContainer>
-            <LoginStack.Navigator>
-                <LoginStack.Group
-                    screenOptions={{
-                        headerShown: false
-                    }}
-                >
-                    <LoginStack.Screen name={loginName} component={Login}/>
-                    <LoginStack.Screen name={signUpName} component={SignUp}/>
-                    <LoginStack.Screen name={homeName} component={MainContainer}/> 
-                </LoginStack.Group>
-            </LoginStack.Navigator>
-        </NavigationContainer>
-    )
+    const {user} = useAuth();
+    if(user){
+        // when the user has logged in we dont want them to see login and sign up page 
+        return(
+            <NavigationContainer>
+                <LoginStack.Navigator>
+                <LoginStack.Group 
+                 screenOptions={{
+                    headerShown: false
+                }}
+                >    
+                        <LoginStack.Screen name={profileName} component={Profile}/>
+                        <LoginStack.Screen name={homeName} component={MainContainer}/>
+                    </LoginStack.Group>
+                </LoginStack.Navigator>
+            </NavigationContainer>
+        )
+
+
+    } else {
+       // when the user has logged out we wont be showing home screen 
+        return(
+            <NavigationContainer>
+                <LoginStack.Navigator>
+                    <LoginStack.Group
+                        screenOptions={{
+                            headerShown: false
+                        }}
+                    >
+                        <LoginStack.Screen name={loginName} component={Login}/>
+                        <LoginStack.Screen name={signUpName} component={SignUp}/>
+                     
+                       
+                    </LoginStack.Group>
+                </LoginStack.Navigator>
+            </NavigationContainer>
+        )
+
+
+    }
+   
 }
+
+   
+
 
 // Home screen navigation: homescreen, profile, and data visualisation modals
 const HomeStack = createStackNavigator()
