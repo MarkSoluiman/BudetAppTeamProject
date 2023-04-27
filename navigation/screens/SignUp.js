@@ -15,18 +15,25 @@ export default function SignUp({navigation}){
 
      //async as we will be calling firebase function to check if the email && password is enetered
      const handleSubmit = async ()=>{
-        if(email && password){
-            try{
-                await createUserWithEmailAndPassword(auth, email, password)
+        if(password == currentPassword){ // checking if confirm password match password 
 
-            }catch(err) {
-                console.log('got error: ', err.message);
-
+            if(email && password){
+                try{
+                    await createUserWithEmailAndPassword(auth, email, password)
+    
+                }catch(err) {
+                    console.log('got error: ', err.message);
+    
+                }
+    
+    
             }
 
 
+        } else{ 
+            console.log('got error: confirm password does not match the password' ) // need to make pop up error messages 
         }
-
+        
      }
           
 
