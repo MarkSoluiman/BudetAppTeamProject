@@ -1,3 +1,5 @@
+
+
 // Component imports
 import { getAuth, signOut } from 'firebase/auth'
 import { View, Text, StyleSheet, Pressable } from 'react-native'
