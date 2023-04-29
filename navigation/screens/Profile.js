@@ -1,10 +1,6 @@
-<<<<<<< Updated upstream
-import { View, Text } from 'react-native'
-=======
 // Component imports
 import { getAuth, signOut } from 'firebase/auth'
 import { View, Text, StyleSheet, Pressable } from 'react-native'
->>>>>>> Stashed changes
 
 export default function Profile({navigation}){
 const auth=getAuth()
@@ -17,15 +13,6 @@ const signOutHandler=()=>{
 }
 
     return(
-<<<<<<< Updated upstream
-        <View
-        style={{flex:1, backgroundColor: '#ffdeb7', alignItems: 'center', justifyContent: 'center'}}>
-            <Text>Profile Screen</Text>
-            {/* Test merge branches to main */}
-        </View>
-    )
-}
-=======
         <View style={styles.container}>
             
             
@@ -61,4 +48,3 @@ const styles = StyleSheet.create({
     }
 
 })
->>>>>>> Stashed changes

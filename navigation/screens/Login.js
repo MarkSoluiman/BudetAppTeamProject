@@ -1,15 +1,3 @@
-<<<<<<< Updated upstream
-import { View, Text } from 'react-native'
-
-export default function Login({navigation}){
-    return(
-        <View
-        style={{flex:1, backgroundColor: '#ffdeb7', alignItems: 'center', justifyContent: 'center'}}>
-            <Text>Login Screen</Text>
-        </View>
-    )
-}
-=======
 //components import
 import { useEffect, useState } from "react";
 import {
@@ -166,4 +154,3 @@ const styles = StyleSheet.create({
     fontSize:16,
   }
 });
->>>>>>> Stashed changes
