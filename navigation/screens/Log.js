@@ -4,9 +4,23 @@ import { TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
 import LogItem from "./logComponents/LogItem";
 import LogInput from "./logComponents/LogInput";
+import { db,app } from "../../firebase.config";
+import { collection, getDocs, getFirestore} from "@firebase/firestore";
+
 
 // Exported function
 export default function Log() {
+
+ 
+
+
+  async function getLogs(db) {
+    
+    const logsCol = collection(db, "Logs");
+    const logsSnapshot = await getDocs(logsCol);
+    const logsList = logsSnapshot.docs.map((doc) => doc.data());
+    return logsList;
+  }
   const [userLogs, setUserLogs] = useState([]);
 
   // Add to log
@@ -18,24 +32,28 @@ export default function Log() {
   }
 
   // Delete from log
-  function deleteLogHandler(id){
-    setUserLogs(currentUserLogs =>
-      {
-        return currentUserLogs.filter(
-          (log)=>log.id !==id)
-      })
+  function deleteLogHandler(id) {
+    setUserLogs((currentUserLogs) => {
+      return currentUserLogs.filter((log) => log.id !== id);
+    });
   }
-  
+
   return (
+    
     <View style={styles.logContainer}>
       <LogInput onAddLog={addLogHandler} />
       <View style={styles.transactionsContainer}>
+        <Pressable onPress={getLogs}><Text>hello</Text></Pressable>
         <FlatList
           data={userLogs}
           renderItem={(itemData) => {
-            return <LogItem
-             text={itemData.item.text}
-             onDeleteItem={deleteLogHandler} />;
+            return (
+              <LogItem
+                text={itemData.item.text}
+                id={itemData.item.id}
+                onDeleteItem={deleteLogHandler}
+              />
+            );
           }}
         />
       </View>

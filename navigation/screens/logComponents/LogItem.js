@@ -1,7 +1,9 @@
 import { StyleSheet, View, Text,Pressable } from "react-native";
 function LogItem(props) {
+
+
   return (
-    <Pressable onPress={props.onDeleteItem}>
+    <Pressable onPress={props.onDeleteItem.bind(this,props.id)}>
     <View style={styles.logItem}>
       <Text style={styles.logItem}>{props.text}</Text>
     </View>
