@@ -13,7 +13,7 @@ import {
 import { initializeApp } from "firebase/app";
 import { getAuth,createUserWithEmailAndPassword, signInWithEmailAndPassword,onAuthStateChanged } from "firebase/auth";
 import { auth,db } from "../../firebase.js";
-// import { useNavigation } from "@react-navigation/native";
+ import { useNavigation } from "@react-navigation/native";
 
 
 

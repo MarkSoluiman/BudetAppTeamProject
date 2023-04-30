@@ -4,8 +4,8 @@ import { TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
 import LogItem from "./logComponents/LogItem";
 import LogInput from "./logComponents/LogInput";
-import { db,app } from "../../firebase.config";
-import { collection, getDocs, getFirestore} from "@firebase/firestore";
+import { db } from "../../firebase";
+import { getDocs, collection } from "firebase/firestore/lite";
 
 
 // Exported function
@@ -14,12 +14,12 @@ export default function Log() {
  
 
 
-  async function getLogs(db) {
+  async function getLogs() {
     
     const logsCol = collection(db, "Logs");
     const logsSnapshot = await getDocs(logsCol);
     const logsList = logsSnapshot.docs.map((doc) => doc.data());
-    return logsList;
+    console.log(logsList)
   }
   const [userLogs, setUserLogs] = useState([]);
 
