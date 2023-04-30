@@ -23,6 +23,7 @@ export default function SignUp({navigation}){
     
                 }catch(err) {
                     console.log('got error: ', err.message);
+                    //.catch(error=>{alert(error.message)})
     
                 }
     
