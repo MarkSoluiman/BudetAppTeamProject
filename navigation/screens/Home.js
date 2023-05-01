@@ -59,11 +59,11 @@ const styles = StyleSheet.create({
         , backgroundColor: '#ffdeb7'
         , alignItems: 'center'
         , justifyContent: 'center'
-        , paddingTop: 20
+        , paddingTop: '5%'
     },
     widget:{
-        marginHorizontal: 20
-        , marginBottom: 20
+        marginHorizontal: '5%'
+        , marginBottom: '5%'
         , borderRadius: 10
         , borderColor: '#ff8100'
         , borderWidth: 8

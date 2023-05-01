@@ -18,6 +18,7 @@ import Profile from './screens/Profile'
 
 // Sub screen/modal imports
 import GoalsModal from './screens/GoalsModal'
+import LogModal from './screens/LogModal'
 import HomeBalanceModal from './screens/HomeBalanceModal'
 import HomeGoalsModal from './screens/HomeGoalsModal'
 import HomeIncomeModal from './screens/HomeIncomeModal'
@@ -36,6 +37,7 @@ const homeIncomeName = 'Monthly Income'
 const homePLName = 'Profit and Loss'
 const homeSpendingName = 'Monthly Spending'
 const logName = 'Log'
+const logModalName = 'New Transaction'
 const newsName = 'News'
 const profileName = 'Profile'
 const loginName = 'Login'
@@ -126,6 +128,20 @@ function GoalsStackScreen(){
     )
 }
 
+// Goal screen navigation: goals page and goal entry modal
+const LogStack = createStackNavigator()
+function LogStackScreen(){
+    return(
+        <LogStack.Navigator 
+            initialRouteName={logName}
+            screenOptions={{headerShown: false}}
+        >
+            <LogStack.Screen name={logName} component={Log}/>
+            <LogStack.Screen name={logModalName} component={LogModal}/>
+        </LogStack.Navigator>
+    )
+}
+
 // Main container navigation, uses bottom tab to access other navigation structures: advice, news, home, log, and goals
 const Tab = createBottomTabNavigator()
 function MainContainer(){
@@ -191,7 +207,7 @@ function MainContainer(){
                     >
                         <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
                     </Pressable>)})}/>
-            <Tab.Screen name={logName} component={Log} options={({route, navigation}) => ({
+            <Tab.Screen name={logName} component={LogStackScreen} options={({route, navigation}) => ({
                 headerRight: () => (
                     <Pressable 
                         style={styles.headerButton} 
