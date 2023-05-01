@@ -1,9 +1,18 @@
 // Component imports
 import { View, Text, StyleSheet, Pressable} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
+import { Dropdown } from 'react-native-element-dropdown'
+import { useState } from 'react';
+
+const data = [
+    { label: 'Income', value: ''},
+    { label: 'Expenditure', value: '-'}
+];
 
 // Exported function
 export default function LogModal({navigation}){
+    const [value, setValue] = useState(null);
+
     return(
         <View style={styles.background}>
 
@@ -15,9 +24,7 @@ export default function LogModal({navigation}){
                 <Text>Select date...</Text>
             </Pressable>
             <Text style={styles.prompts}>TRANSACTION TYPE</Text>
-            <Pressable label="Write your transaction type here" style={styles.entry}>
-                <Text>Select type...</Text>
-            </Pressable>
+            <Dropdown/>
             <Text style={styles.prompts}>AMOUNT</Text>
             <TextInput label="Write your transaction amount here" style={styles.entry}/>
             <Text style={styles.prompts}>CATEGORY</Text>
