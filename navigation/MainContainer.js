@@ -73,8 +73,9 @@ export default function LoginStackScreen(){
                             headerShown: false
                         }}
                     >
-                        <LoginStack.Screen name={loginName} component={Login}/>
+                        
                         <LoginStack.Screen name={signUpName} component={SignUp}/>
+                        <LoginStack.Screen name={loginName} component={Login}/>
                      
                        
                     </LoginStack.Group>
