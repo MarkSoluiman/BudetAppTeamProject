@@ -11,15 +11,16 @@ export default function SignUp({navigation}){
 
      const [email, setEmail] = useState('');
      const [password, setPassword] = useState('');
-     const [currentPassword, setcurrentPassword] = useState('');
+     const [confirmPassword, setconfirmPassword] = useState('');
 
      //async as we will be calling firebase function to check if the email && password is enetered
      const handleSubmit = async ()=>{
-        if(password == currentPassword){ // checking if confirm password match password 
+        if(password == confirmPassword){ // checking if confirm password match password 
 
             if(email && password){
                 try{
                     await createUserWithEmailAndPassword(auth, email, password)
+                   
     
                 }catch(err) {
                     console.log('got error: ', err.message);
@@ -28,12 +29,16 @@ export default function SignUp({navigation}){
     
                 }
     
-    
+            }
+            else{
+                 
+                Alert.alert('LogIn Error: Please enter an email and password')
             }
 
 
         } else{ 
-            console.log('got error: confirm password does not match the password' ) // need to make pop up error messages 
+            console.log('got error: confirm password does not match the password' )
+            Alert.alert('LogIn Error: confirm password does not match the password') // need to make pop up error messages 
         }
         
      }
@@ -61,12 +66,12 @@ export default function SignUp({navigation}){
              placeholder='Password'
              secureTextEntry = {true} />
 
-            <Text style = {styles.subHeadingText}> CURRENRT PASSWORD</Text>
+            <Text style = {styles.subHeadingText}> CONFIRM PASSWORD</Text>
 
             <TextInput style = {styles.textInput} 
             placeholder=' confirm Password'
-            value = {currentPassword}
-            onChangeText={value => setcurrentPassword(value)}
+            value = {confirmPassword}
+            onChangeText={value => setconfirmPassword(value)}
             secureTextEntry = {true} />
 
             <View style = {{flexDirection: 'row', width : '50%', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -80,7 +85,7 @@ export default function SignUp({navigation}){
              onPress = {handleSubmit}
              /> 
              </View>           
-             <Text> Email : {email} Password : {password}</Text>
+             
         </View>
     )
 }

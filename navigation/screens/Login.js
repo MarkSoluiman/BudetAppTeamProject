@@ -1,7 +1,7 @@
 //components import
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, TextInput, Button} from 'react-native'
+import { View, Text, Pressable, StyleSheet, TextInput, Button, Alert } from 'react-native'
 import { auth } from '../../firebase.config';
 
 // Exported function
@@ -25,7 +25,7 @@ export default function Login({navigation}){
  
              }catch(err) {
                  console.log('got error: ', err.message);
-                 //.catch(error=>{alert(error.message)})
+                 Alert.alert('LogIn Error: ',err.message)
  
              }
  
