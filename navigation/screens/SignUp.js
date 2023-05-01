@@ -1,7 +1,7 @@
 // Components import
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React,{useState} from 'react'; 
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native'
+import { View, Text, StyleSheet, Button, TextInput, Alert } from 'react-native'
 import { auth } from '../../firebase.config';
 
 //import firebase from 'firebase'
@@ -23,6 +23,7 @@ export default function SignUp({navigation}){
     
                 }catch(err) {
                     console.log('got error: ', err.message);
+                    Alert.alert('LogIn Error: ',err.message)
                     //.catch(error=>{alert(error.message)})
     
                 }

@@ -1,5 +1,5 @@
 //components import
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, TextInput, Button} from 'react-native'
 import { auth } from '../../firebase.config';
@@ -10,6 +10,10 @@ export default function Login({navigation}){
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleLogout = async ()=>{
+    await signOut(auth);
+}
   
 
   //async as we will be calling firebase function to check if the email && password is enetered
@@ -56,7 +60,7 @@ export default function Login({navigation}){
              />  
            <Button title='SIGN UP'
            color={'#903800'}              
-            onPress = {() => navigation.navigate('SignUp')}
+           onPress = {() => navigation.navigate('Sign Up')}
            /> 
           </View> 
         </View>
