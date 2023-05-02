@@ -24,8 +24,7 @@ export default function Profile({navigation}){
     return(
         <View style={styles.background}>
             
-            {/* Heading */}
-            <Text>Profile Screen</Text>
+           
            
           
             <View style={styles.widget}> 
@@ -64,18 +63,14 @@ export default function Profile({navigation}){
                 alignItems : 'center'
              }}
              onPress ={()=> saveData()}
-             >
-               
+             >   
                 <Text style= {{
                     color : 'black'
                 }}>
                     SAVE
                 </Text>
-
-
              </TouchableOpacity>
-         
-           
+            
             </View>
             
             <Pressable onPress={() => navigation.navigate('Home')}><Text> Go back to Home page</Text></Pressable>

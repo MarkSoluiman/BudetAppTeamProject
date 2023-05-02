@@ -1,7 +1,7 @@
 //components import
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, TextInput, Button, Alert } from 'react-native'
+import { View, Text, Pressable, StyleSheet, TextInput, Button, Alert, TouchableOpacity} from 'react-native'
 import { auth } from '../../firebase.config';
 
 // Exported function
@@ -30,6 +30,8 @@ export default function Login({navigation}){
              }
  
  
+         } else{
+            Alert.alert('LogIn error : Please enter Email and Password to LogIn')
          }
         }
 
@@ -54,14 +56,27 @@ export default function Login({navigation}){
 
              <View style = {{flexDirection: 'row', width : '50%', justifyContent: 'space-between', alignItems: 'center' }}>
 
-          <Button title='LOGIN'
-           color={'#903800'} 
-            onPress = {handleSubmit}
-             />  
-           <Button title='SIGN UP'
-           color={'#903800'}              
-           onPress = {() => navigation.navigate('Sign Up')}
-           /> 
+             <TouchableOpacity style = {styles.button}
+             onPress = {() => navigation.navigate('Sign Up')}
+             >
+                <Text style= {{
+                    color : 'white'
+                }}>
+                    SIGN UP
+                </Text>
+             </TouchableOpacity>
+
+             <TouchableOpacity style = {styles.button}
+             onPress = {handleSubmit} 
+             >
+                <Text style= {{
+                    color : 'white'
+                }}>
+                    LOGIN
+                </Text>
+             </TouchableOpacity>
+
+        
           </View> 
         </View>
     )
@@ -90,6 +105,16 @@ const styles = StyleSheet.create({
     fontSize : 15,
 
 },
+
+   button: {
+    backgroundColor : '#903800',
+                height : 30,
+                width: 80,
+                marginTop: 10,
+                borderRadius: 20,
+                justifyContent : 'center',
+                alignItems : 'center'
+   },
 
     textInput : {
         padding : 2,

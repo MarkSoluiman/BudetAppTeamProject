@@ -1,7 +1,7 @@
 // Components import
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React,{useState} from 'react'; 
-import { View, Text, StyleSheet, Button, TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, Button, TextInput, Alert, TouchableOpacity} from 'react-native'
 import { auth } from '../../firebase.config';
 
 //import firebase from 'firebase'
@@ -32,7 +32,7 @@ export default function SignUp({navigation}){
             }
             else{
                  
-                Alert.alert('LogIn Error: Please enter an email and password')
+                Alert.alert('LogIn Error: Please enter an Email and Password')
             }
 
 
@@ -69,21 +69,33 @@ export default function SignUp({navigation}){
             <Text style = {styles.subHeadingText}> CONFIRM PASSWORD</Text>
 
             <TextInput style = {styles.textInput} 
-            placeholder=' confirm Password'
+            placeholder=' Confirm Password'
             value = {confirmPassword}
             onChangeText={value => setconfirmPassword(value)}
             secureTextEntry = {true} />
 
-            <View style = {{flexDirection: 'row', width : '50%', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style = {{flexDirection: 'row', width : '70%', justifyContent: 'space-between', alignItems: 'center' }}>
 
-            <Button title='GO BACK'
-             color={'#903800'} 
+              
+               <TouchableOpacity style = {styles.button}
              onPress = {() => navigation.navigate('Login')}
-             />  
-               <Button title='SIGN UP'
-             color={'#903800'}              
-             onPress = {handleSubmit}
-             /> 
+             >
+                <Text style= {{
+                    color : 'white'
+                }}>
+                    GO BACK 
+                </Text>
+             </TouchableOpacity>
+
+               <TouchableOpacity style = {styles.button}
+             onPress = {handleSubmit} 
+             >
+                <Text style= {{
+                    color : 'white'
+                }}>
+                    SIGN UP
+                </Text>
+             </TouchableOpacity>
              </View>           
              
         </View>
@@ -113,6 +125,16 @@ const styles = StyleSheet.create({
         fontSize : 15,
 
     },
+
+    button: {
+        backgroundColor : '#903800',
+                    height : 30,
+                    width: 80,
+                    marginTop: 10,
+                    borderRadius: 20,
+                    justifyContent : 'center',
+                    alignItems : 'center'
+       },
     
     textInput: {
         padding : 3,
