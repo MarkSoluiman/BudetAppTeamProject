@@ -73,7 +73,6 @@ export default function Profile({navigation}){
             
             </View>
             
-            <Pressable onPress={() => navigation.navigate('Home')}><Text> Go back to Home page</Text></Pressable>
         </View>
     )
 }
