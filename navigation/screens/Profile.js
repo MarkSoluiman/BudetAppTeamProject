@@ -1,9 +1,26 @@
 // Component imports
+import { useState } from 'react';
 import { View, Text, Pressable,StyleSheet, Button } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
-
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import { collection, addDoc } from "firebase/firestore"; 
+import { auth , db } from '../../firebase.config';
 // Exported function
 export default function Profile({navigation}){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [primaryLocation, setPrimaryLocation] = useState('');
+    const [transportMeans, setTransportMeans] = useState('');
+    const saveData = async()=> {
+        const docRef = await addDoc(collection(db, "Profile"), {
+            Email : email,
+            Password : password,
+            PrimaryLocation : primaryLocation,
+            TransportMeans : transportMeans
+          });
+          console.log("Document written with ID: ", docRef.id);
+    }
+
+
     return(
         <View style={styles.background}>
             
@@ -13,25 +30,51 @@ export default function Profile({navigation}){
           
             <View style={styles.widget}> 
             
-             <View>
-                <Text>Email</Text>
+             <View >
+            <Text>Email</Text>
+            <TextInput style ={styles.textInput} 
+            value={email}
+            onChangeText={value => setEmail(value)}
+            placeholder='Email'/>
+
              <TextInput style ={styles.textInput} 
-              placeholder='email'/>
-               <Text>Password</Text>
-             <TextInput style ={styles.textInput} 
+              value={password}
+              onChangeText={value => setPassword(value)}
               placeholder='password'/>
+
                <Text>Primary Location</Text>
              <TextInput  style ={styles.textInput} 
+              value={primaryLocation}
+              onChangeText={value => setPrimaryLocation(value)}
              placeholder='primary location '/>
+
               <Text>Transport Means</Text>
              <TextInput  style ={styles.textInput} 
+              value={transportMeans}
+              onChangeText={value => setTransportMeans(value)}
               placeholder='Transport means '/>
              </View>
 
-             <Button title='SAVE'
-             />
+             <TouchableOpacity style = {{
+                backgroundColor : '#ffe9df',
+                height : 50,
+                margin: 20, 
+                borderRadius: 20,
+                justifyContent : 'center',
+                alignItems : 'center'
+             }}
+             onPress ={()=> saveData()}
+             >
+               
+                <Text style= {{
+                    color : 'black'
+                }}>
+                    SAVE
+                </Text>
 
-             
+
+             </TouchableOpacity>
+         
            
             </View>
             
