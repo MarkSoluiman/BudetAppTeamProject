@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, Button, StyleSheet, Pressable, Platform} from 'react-native'
+import { View, Text, Button, StyleSheet, Pressable, Platform, Alert} from 'react-native'
 import React, {useState, useEffect} from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TextInput } from 'react-native-gesture-handler'
@@ -7,8 +7,10 @@ import { TextInput } from 'react-native-gesture-handler'
 // Exported function
 export default function GoalsModal({navigation}){
     const [date, setDate] = useState(new Date())
+    const [newName, setName] = useState('')
+    const [newAmount, setAmount] = useState('')
     const [showPicker, setShowPicker] = useState(false)
-    const [goalDate, setGoalDate] = useState("Select your goal completion")
+    const [goalDate, setGoalDate] = useState("Select your goal completion date")
  
     const toggleDatepicker = () => {
         setShowPicker(!showPicker)
@@ -28,15 +30,32 @@ export default function GoalsModal({navigation}){
         }
     }
 
+    const handleSubmit = async ()=>{
+        if(newName.length > 0){
+            if (Number.isInteger(parseInt(newAmount))) {
+                if(date > new Date()){
+                    Alert.alert('Goal saved')
+                    navigation.navigate('Goals')
+                } else {
+                    Alert.alert('Error: Goal date must be in the future')
+                }
+            } else {
+                Alert.alert('Error: Goal amount must be an integer')
+            }
+        } else {
+            Alert.alert('Error: Goal name must be of length greater than 0')
+        }
+    }
+
     return(
         <View style={styles.background}>
 
             {/* Text prompts and entry fields regarding new goal data */}
             <Text style={styles.prompts}>GOAL NAME</Text>
-            <TextInput placeholder="Write your goal name" style={styles.entry}/>
+            <TextInput placeholder="Write your goal name" onChangeText={newName => setName(newName)} style={styles.entry}/>
 
             <Text style={styles.prompts}>SAVING AMOUNT</Text>
-            <TextInput placeholder="Write your saving amount" style={styles.entry}/>
+            <TextInput placeholder="Write your saving amount" keyboardType='numeric' onChangeText={newAmount => setAmount(newAmount)} style={styles.entry}/>
             
             <Text style={styles.prompts}>COMPLETED BY DATE</Text>
             {!showPicker && (
@@ -59,7 +78,7 @@ export default function GoalsModal({navigation}){
                 <Pressable style={styles.button} onPress={()=> navigation.navigate('Goals')}>
                     <Text style={styles.prompts}>BACK</Text>
                 </Pressable>
-                <Pressable style={styles.button} onPress={()=> {alert('Goal saved'); navigation.navigate('Goals')}}>
+                <Pressable style={styles.button} onPress={handleSubmit}>
                     <Text style={styles.prompts}>SAVE</Text>
                 </Pressable>
             </View>

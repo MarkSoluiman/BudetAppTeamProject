@@ -36,10 +36,6 @@ export default function LogModal({navigation}){
     return(
         <View style={styles.background}>
 
-            {/* Text prompts and entry fields regarding new log data */}
-            <Text style={styles.prompts}>TRANSACTION NAME</Text>
-            <TextInput placeholder="Write your transaction name here" style={styles.entry}/>
-
             <Text style={styles.prompts}>DATE</Text>
             {!showPicker && (
                 <Pressable style={styles.entry} onPress={toggleDatepicker}>
@@ -54,6 +50,10 @@ export default function LogModal({navigation}){
                     onChange={onChange}
                 />
             )}
+
+            {/* Text prompts and entry fields regarding new log data */}
+            <Text style={styles.prompts}>TRANSACTION NAME</Text>
+            <TextInput placeholder="Write your transaction name" style={styles.entry}/>
 
             <Text style={styles.prompts}>TRANSACTION TYPE</Text>
             <View style={styles.drop}>
@@ -70,7 +70,7 @@ export default function LogModal({navigation}){
             
             
             <Text style={styles.prompts}>AMOUNT</Text>
-            <TextInput placeholder="Write your transaction amount here" style={styles.entry}/>
+            <TextInput placeholder="Write your transaction amount" style={styles.entry}/>
 
             <Text style={styles.prompts}>CATEGORY</Text>
             <View style={styles.drop}>

@@ -1,23 +1,70 @@
 // Component imports
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, Pressable } from "react-native";
-
+import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { ActivityIndicator } from 'react-native'
+import firestore from '@react-native-firebase/firestore'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 // Exported function
 export default function Log({navigation}) {  
+
+  // const auth = getAuth();
+  // onAuthStateChanged(auth, (user) => {
+  //   if(user){
+  //     const uid = user.uid
+  //   }
+  // })
+
+  // const [loading, setLoading] = useState(true)
+  // const [log, setLog] = useState([])
+
+  // useEffect (() => {
+  //   const subscriber = firestore()
+  //     .collection('Logs')
+  //     .where('uid', '==', uid)
+  //     .orderBy('trans_date', 'desc')
+  //     .get()
+  //     .then(querySnapshot => {
+  //       const log = [];
+        
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         log.push({
+  //           ...documentSnapshot.data(),
+  //           key: documentSnapshot.id,
+  //         });
+  //       });
+
+  //       setLog(log)
+  //       setLoading(false)
+  //     })
+  //   return () => subscriber();
+  // }, [])
+
+  // if (loading){
+  //   return <ActivityIndicator/>
+  // }
+
   return (
     <SafeAreaView style={styles.background}>
 
-        {/* New goal button */}
+        {/* New transaction button */}
         <Pressable style={styles.button} onPress={()=> navigation.navigate('New Transaction')}>
             <Text style={styles.buttonText}>NEW TRANSACTION</Text>
         </Pressable>
 
-        {/* List of goals */}
-        <ScrollView>
-            <View style={styles.widget}>
-
-            </View>
-        </ScrollView>
+        {/* List of transactions */}
+          <View style={styles.widget}>
+            {/* <FlatList
+              data={log}
+              renderItem={({item}) => (
+                <View style={styles.list}>
+                  <Text>Date: {item.trans_date}</Text>
+                  <Text>Transaction: {item.trans_name}</Text>
+                  <Text>Amount: ${item.trans_type}{item.trans_amount}</Text>
+                </View>
+              )}
+            /> */}
+          </View>
     </SafeAreaView>
   );
 }
