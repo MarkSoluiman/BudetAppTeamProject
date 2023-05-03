@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
       , backgroundColor: '#ffdeb7'
   },
   widget:{
-      marginHorizontal: 20
-      , marginVertical: 20
+      marginHorizontal: '5%'
+      , marginVertical: '5%'
       , borderRadius: 15
       , width: 370
       , height: 605

@@ -3,15 +3,19 @@ import { View, Text, Button, StyleSheet, Pressable, Platform, Alert} from 'react
 import React, {useState, useEffect} from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TextInput } from 'react-native-gesture-handler'
+import { collection, addDoc } from 'firebase/firestore'
+import { auth, db } from '../../firebase.config'
 
 // Exported function
 export default function GoalsModal({navigation}){
+
     const [date, setDate] = useState(new Date())
     const [newName, setName] = useState('')
     const [newAmount, setAmount] = useState('')
     const [showPicker, setShowPicker] = useState(false)
     const [goalDate, setGoalDate] = useState("Select your goal completion date")
  
+
     const toggleDatepicker = () => {
         setShowPicker(!showPicker)
     }
@@ -36,7 +40,15 @@ export default function GoalsModal({navigation}){
                 if(date > new Date()){
                     Alert.alert('Goal saved')
                     navigation.navigate('Goals')
-                    // TO FIREBASE
+                    const docRef = await addDoc(collection(db, "Goals"),{
+                        uid: firebase.auth().currentUser
+                        , goal_name: newName
+                        , goal_amount: newAmount
+                        , goal_date: date
+                        , goal_balance: 0
+                        , goal_complete: false
+                    })
+                    console.log('Document written with ID: ', docRef.id)
                 } else {
                     Alert.alert('Error: Goal date must be in the future')
                 }

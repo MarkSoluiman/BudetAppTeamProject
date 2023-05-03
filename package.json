@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@firebase/firestore": "^3.11.0",
     "@react-firebase/auth": "^0.2.10",
     "@react-native-community/datetimepicker": "6.7.3",
     "@react-native-community/masked-view": "^0.1.11",
