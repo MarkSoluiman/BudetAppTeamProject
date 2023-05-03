@@ -4,6 +4,7 @@ import { View, Text, Pressable,StyleSheet, Button } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { collection, addDoc } from "firebase/firestore"; 
 import { auth , db } from '../../firebase.config';
+import { signOut } from 'firebase/auth';
 // Exported function
 export default function Profile({navigation}){
     const [email, setEmail] = useState('');
@@ -20,13 +21,15 @@ export default function Profile({navigation}){
           console.log("Document written with ID: ", docRef.id);
     }
 
+    const handleLogout = async ()=>{
+        await signOut(auth);
+    }
+
+
 
     return(
         <View style={styles.background}>
             
-           
-           
-          
             <View style={styles.widget}> 
             
              <View >
@@ -72,6 +75,12 @@ export default function Profile({navigation}){
              </TouchableOpacity>
             
             </View>
+            <TouchableOpacity 
+                onPress={handleLogout}>
+                    <Text> LOG OUT </Text>
+                </TouchableOpacity>
+
+              
             
         </View>
     )
