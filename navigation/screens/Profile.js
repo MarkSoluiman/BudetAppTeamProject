@@ -34,7 +34,7 @@ export default function Profile({navigation}){
             
             <View style={styles.widget}> 
             
-             <View >
+             <View style = {{  alignItems : 'center'}} >
             <Text>Email</Text>
             <TextInput style ={styles.textInput} 
             value={email}
@@ -45,19 +45,19 @@ export default function Profile({navigation}){
              <TextInput style ={styles.textInput} 
               value={password}
               onChangeText={value => setPassword(value)}
-              placeholder='password'/>
+              placeholder='Password'/>
 
              <Text>Are you a Student ?</Text>
              <TextInput style ={styles.textInput} 
               value={student}
               onChangeText={value => setStudent(value)}
-              placeholder='yes/no'/>
+              placeholder='Yes/No'/>
 
                <Text>Primary Location</Text>
              <TextInput  style ={styles.textInput} 
               value={primaryLocation}
               onChangeText={value => setPrimaryLocation(value)}
-             placeholder='primary location '/>
+             placeholder='Primary location '/>
 
 
 
@@ -113,7 +113,8 @@ const styles = StyleSheet.create({
         , height: 505
         , padding: 15
         , backgroundColor: '#ff8100'
-        , justifyContent: 'space-evenly'
+        , justifyContent: 'center'
+        
     },
 
     textInput: {
