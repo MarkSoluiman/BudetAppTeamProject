@@ -9,6 +9,7 @@ import { signOut } from 'firebase/auth';
 export default function Profile({navigation}){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [student, setStudent] = useState('');
     const [primaryLocation, setPrimaryLocation] = useState('');
     const [transportMeans, setTransportMeans] = useState('');
     const saveData = async()=> {
@@ -39,16 +40,25 @@ export default function Profile({navigation}){
             onChangeText={value => setEmail(value)}
             placeholder='Email'/>
 
+             <Text>Password</Text>
              <TextInput style ={styles.textInput} 
               value={password}
               onChangeText={value => setPassword(value)}
               placeholder='password'/>
+
+             <Text>Are you a Student ?</Text>
+             <TextInput style ={styles.textInput} 
+              value={student}
+              onChangeText={value => setStudent(value)}
+              placeholder='yes/no'/>
 
                <Text>Primary Location</Text>
              <TextInput  style ={styles.textInput} 
               value={primaryLocation}
               onChangeText={value => setPrimaryLocation(value)}
              placeholder='primary location '/>
+
+
 
               <Text>Transport Means</Text>
              <TextInput  style ={styles.textInput} 
