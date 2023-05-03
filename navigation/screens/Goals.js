@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, Button, StyleSheet, Pressable} from 'react-native'
+import { View, Text, StyleSheet, Pressable} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 

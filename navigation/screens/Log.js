@@ -1,31 +1,9 @@
 // Component imports
-import { View, Text, SafeAreaView, ScrollView, FlatList, StyleSheet, Pressable } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { useState } from "react";
-import LogItem from "./logComponents/LogItem";
-import LogInput from "./logComponents/LogInput";
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, Pressable } from "react-native";
+
 
 // Exported function
-export default function Log({navigation}) {
-  const [userLogs, setUserLogs] = useState([]);
-
-  // Add to log
-  function addLogHandler(enteredLogText) {
-    setUserLogs((currentUserLogs) => [
-      ...currentUserLogs,
-      { text: enteredLogText, key: Math.random.toString() },
-    ]);
-  }
-
-  // Delete from log
-  function deleteLogHandler(id){
-    setUserLogs(currentUserLogs =>
-      {
-        return currentUserLogs.filter(
-          (log)=>log.id !==id)
-      })
-  }
-  
+export default function Log({navigation}) {  
   return (
     <SafeAreaView style={styles.background}>
 

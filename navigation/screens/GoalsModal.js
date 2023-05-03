@@ -1,21 +1,58 @@
 // Component imports
-import { View, Text, StyleSheet, Pressable} from 'react-native'
+import { View, Text, Button, StyleSheet, Pressable, Platform} from 'react-native'
+import React, {useState, useEffect} from 'react'
+import DateTimePicker from '@react-native-community/datetimepicker'
 import { TextInput } from 'react-native-gesture-handler'
 
 // Exported function
 export default function GoalsModal({navigation}){
+    const [date, setDate] = useState(new Date())
+    const [showPicker, setShowPicker] = useState(false)
+    const [goalDate, setGoalDate] = useState("Select your goal completion")
+ 
+    const toggleDatepicker = () => {
+        setShowPicker(!showPicker)
+    }
+
+    const onChange = ({type}, selectedDate) => {
+        if (type == "set"){
+            const currentDate = selectedDate
+            setDate(currentDate)
+
+            if (Platform.OS === "android"){
+                toggleDatepicker()
+                setGoalDate(currentDate.toDateString())
+            }
+        } else {
+            toggleDatepicker()
+        }
+    }
+
     return(
         <View style={styles.background}>
 
             {/* Text prompts and entry fields regarding new goal data */}
             <Text style={styles.prompts}>GOAL NAME</Text>
-            <TextInput label="Write your goal name here" style={styles.entry}/>
+            <TextInput placeholder="Write your goal name" style={styles.entry}/>
+
             <Text style={styles.prompts}>SAVING AMOUNT</Text>
-            <TextInput label="Write your saving amount here" style={styles.entry}/>
+            <TextInput placeholder="Write your saving amount" style={styles.entry}/>
+            
             <Text style={styles.prompts}>COMPLETED BY DATE</Text>
-            <Pressable label="Write your completion date here" style={styles.entry}>
-                <Text>Select date...</Text>
-            </Pressable>
+            {!showPicker && (
+                <Pressable style={styles.entry} onPress={toggleDatepicker}>
+                    <TextInput placeholder={goalDate} editable={false}/>
+                </Pressable>
+            )}
+            
+            {showPicker && (
+                <DateTimePicker
+                    mode="date"
+                    display="spinner"
+                    value={date}
+                    onChange={onChange}
+                />
+            )}
 
             {/* Buttons to save or cancel goal data entry */}
             <View style={styles.buttons}>

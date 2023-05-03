@@ -57,7 +57,6 @@ export default function LoginStackScreen(){
                     headerShown: false
                 }}
                 >    
-                        <LoginStack.Screen name={profileName} component={Profile}/>
                         <LoginStack.Screen name={homeName} component={MainContainer}/>
                     </LoginStack.Group>
                 </LoginStack.Navigator>
@@ -88,9 +87,6 @@ export default function LoginStackScreen(){
     }
    
 }
-
-   
-
 
 // Home screen navigation: homescreen, profile, and data visualisation modals
 const HomeStack = createStackNavigator()
