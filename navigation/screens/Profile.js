@@ -17,6 +17,7 @@ export default function Profile({navigation}){
             Email : email,
             Password : password,
             PrimaryLocation : primaryLocation,
+            Student : student,
             TransportMeans : transportMeans
           });
           console.log("Document written with ID: ", docRef.id);
