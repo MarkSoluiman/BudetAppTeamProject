@@ -1,15 +1,20 @@
 // Component imports
-import { View, Text, StyleSheet, Pressable} from 'react-native'
+import { View, Text, StyleSheet, Pressable, Alert } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import {Picker} from '@react-native-picker/picker'
+import { Picker } from '@react-native-picker/picker'
 
 // Exported function
 export default function LogModal({navigation}){
     const [date, setDate] = useState(new Date())
     const [showPicker, setShowPicker] = useState(false)
     const [tranDate, setTranDate] = useState("Select your transaction date")
+    const [tranName, setTranName] = useState('')
+    const [tranAmount, setTranAmount] = useState('')
+    const [selectedType, setSelectedType] = useState()
+    const [selectedCat, setSelectedCat] = useState()
+    const [selectedGoal, setSelectedGoal] = useState()
  
     const toggleDatepicker = () => {
         setShowPicker(!showPicker)
@@ -29,9 +34,22 @@ export default function LogModal({navigation}){
         }
     }
 
-    const [selectedType, setSelectedType] = useState()
-    const [selectedCat, setSelectedCat] = useState()
-    const [selectedGoal, setSelectedGoal] = useState()
+    const handleSubmit = async () => {
+        if(date){
+            if (tranName.length > 0){
+                if (Number.isInteger(parseInt(tranAmount)) && parseInt(tranAmount) > 0){
+                    Alert.alert('Transaction saved')
+                    navigation.navigate('Log')
+                } else {
+                    Alert.alert('Error: Transaction amount must be an integer greater than 0')
+                }
+            } else {
+                Alert.alert('Error: Transaction name be of length greater than 0')
+            } 
+        } else {
+            Alert.alert('Error: Date must be selected')
+        }
+    }
 
     return(
         <View style={styles.background}>
@@ -53,7 +71,7 @@ export default function LogModal({navigation}){
 
             {/* Text prompts and entry fields regarding new log data */}
             <Text style={styles.prompts}>TRANSACTION NAME</Text>
-            <TextInput placeholder="Write your transaction name" style={styles.entry}/>
+            <TextInput placeholder="Write your transaction name" onChangeText={tranName => setTranName(tranName)} style={styles.entry}/>
 
             <Text style={styles.prompts}>TRANSACTION TYPE</Text>
             <View style={styles.drop}>
@@ -70,7 +88,7 @@ export default function LogModal({navigation}){
             
             
             <Text style={styles.prompts}>AMOUNT</Text>
-            <TextInput placeholder="Write your transaction amount" style={styles.entry}/>
+            <TextInput placeholder="Write your transaction amount" keyboardType='numeric' onChangeText={tranAmount => setTranAmount(tranAmount)} style={styles.entry}/>
 
             <Text style={styles.prompts}>CATEGORY</Text>
             <View style={styles.drop}>
@@ -109,7 +127,7 @@ export default function LogModal({navigation}){
                 <Pressable style={styles.button} onPress={()=> navigation.navigate('Log')}>
                     <Text style={styles.prompts}>BACK</Text>
                 </Pressable>
-                <Pressable style={styles.button} onPress={()=> {alert('Transaction saved'); navigation.navigate('Log')}}>
+                <Pressable style={styles.button} onPress={handleSubmit}>
                     <Text style={styles.prompts}>SAVE</Text>
                 </Pressable>
             </View>

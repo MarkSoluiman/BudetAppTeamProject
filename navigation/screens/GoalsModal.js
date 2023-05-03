@@ -30,17 +30,18 @@ export default function GoalsModal({navigation}){
         }
     }
 
-    const handleSubmit = async ()=>{
+    const handleSubmit = async () => {
         if(newName.length > 0){
-            if (Number.isInteger(parseInt(newAmount))) {
+            if (Number.isInteger(parseInt(newAmount)) && parseInt(newAmount) > 0) {
                 if(date > new Date()){
                     Alert.alert('Goal saved')
                     navigation.navigate('Goals')
+                    // TO FIREBASE
                 } else {
                     Alert.alert('Error: Goal date must be in the future')
                 }
             } else {
-                Alert.alert('Error: Goal amount must be an integer')
+                Alert.alert('Error: Goal amount must be an integer greater than 0')
             }
         } else {
             Alert.alert('Error: Goal name must be of length greater than 0')
