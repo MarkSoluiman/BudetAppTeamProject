@@ -1,41 +1,98 @@
 // Component imports
+import { useState } from 'react';
 import { View, Text, Pressable,StyleSheet, Button } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
-
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
+import { collection, addDoc } from "firebase/firestore"; 
+import { auth , db } from '../../firebase.config';
+import { signOut } from 'firebase/auth';
 // Exported function
 export default function Profile({navigation}){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [student, setStudent] = useState('');
+    const [primaryLocation, setPrimaryLocation] = useState('');
+    const [transportMeans, setTransportMeans] = useState('');
+    const saveData = async()=> {
+        const docRef = await addDoc(collection(db, "Profile"), {
+            Email : email,
+            Password : password,
+            PrimaryLocation : primaryLocation,
+            Student : student,
+            TransportMeans : transportMeans
+          });
+          console.log("Document written with ID: ", docRef.id);
+    }
+
+    const handleLogout = async ()=>{
+        await signOut(auth);
+    }
+
+
+
     return(
         <View style={styles.background}>
             
-            {/* Heading */}
-            <Text>Profile Screen</Text>
-           
-          
             <View style={styles.widget}> 
             
-             <View>
-                <Text>Email</Text>
+             <View style = {{  alignItems : 'center'}} >
+            <Text>Email</Text>
+            <TextInput style ={styles.textInput} 
+            value={email}
+            onChangeText={value => setEmail(value)}
+            placeholder='Email'/>
+
+             <Text>Password</Text>
              <TextInput style ={styles.textInput} 
-              placeholder='email'/>
-               <Text>Password</Text>
+              value={password}
+              onChangeText={value => setPassword(value)}
+              placeholder='Password'/>
+
+             <Text>Are you a Student ?</Text>
              <TextInput style ={styles.textInput} 
-              placeholder='password'/>
+              value={student}
+              onChangeText={value => setStudent(value)}
+              placeholder='Yes/No'/>
+
                <Text>Primary Location</Text>
              <TextInput  style ={styles.textInput} 
-             placeholder='primary location '/>
+              value={primaryLocation}
+              onChangeText={value => setPrimaryLocation(value)}
+             placeholder='Primary location '/>
+
+
+
               <Text>Transport Means</Text>
              <TextInput  style ={styles.textInput} 
+              value={transportMeans}
+              onChangeText={value => setTransportMeans(value)}
               placeholder='Transport means '/>
              </View>
 
-             <Button title='SAVE'
-             />
-
-             
-           
-            </View>
+             <TouchableOpacity style = {{
+                backgroundColor : '#ffe9df',
+                height : 50,
+                margin: 20, 
+                borderRadius: 20,
+                justifyContent : 'center',
+                alignItems : 'center'
+             }}
+             onPress ={()=> saveData()}
+             >   
+                <Text style= {{
+                    color : 'black'
+                }}>
+                    SAVE
+                </Text>
+             </TouchableOpacity>
             
-            <Pressable onPress={() => navigation.navigate('Home')}><Text> Go back to Home page</Text></Pressable>
+            </View>
+            <TouchableOpacity 
+                onPress={handleLogout}>
+                    <Text> LOG OUT </Text>
+                </TouchableOpacity>
+
+              
+            
         </View>
     )
 }
@@ -56,7 +113,8 @@ const styles = StyleSheet.create({
         , height: 505
         , padding: 15
         , backgroundColor: '#ff8100'
-        , justifyContent: 'space-evenly'
+        , justifyContent: 'center'
+        
     },
 
     textInput: {

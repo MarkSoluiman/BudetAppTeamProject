@@ -9,13 +9,7 @@ import { auth } from '../../firebase.config'
 
 // Exported function
 export default function Home({navigation}){
-    const handleLogout = async ()=>{
-        await signOut(auth);
-    }
-
-
-
-
+   
     return(
        <SafeAreaView style={styles.background}>
             <ScrollView >
@@ -38,14 +32,6 @@ export default function Home({navigation}){
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Goal Bars')}>
                     <Text style={styles.text}>Goal Bars</Text>
                 </Pressable>
-
-                <TouchableOpacity 
-                onPress={handleLogout}>
-                    <Text> LOG OUT </Text>
-                </TouchableOpacity>
-
-
-               
              </ScrollView>
         </SafeAreaView>
     )
