@@ -5,6 +5,7 @@ import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { collection, addDoc } from "firebase/firestore"; 
 import { auth , db } from '../../firebase.config';
 import { signOut } from 'firebase/auth';
+
 // Exported function
 export default function Profile({navigation}){
     const [email, setEmail] = useState('');

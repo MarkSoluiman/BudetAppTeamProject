@@ -5,6 +5,8 @@ import { StyleSheet, Pressable, Text,View, SafeAreaView, TouchableOpacity } from
 import { ScrollView } from 'react-native-gesture-handler'
 import { auth } from '../../firebase.config'
 
+
+
 //import { SafeAreaView } from 'react-native-safe-area-context'
 
 // Exported function
@@ -26,6 +28,9 @@ export default function Home({navigation}){
                 {/* Profit and Loss widget */}
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Profit and Loss')}>
                     <Text style={styles.text}>Profit/Loss</Text>
+                   
+                    
+                   
                 </Pressable>
 
                 {/* Goal Bars widget */}

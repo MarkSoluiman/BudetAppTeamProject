@@ -1,48 +1,65 @@
 // Component imports
 import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { ActivityIndicator } from 'react-native'
-import firestore from '@react-native-firebase/firestore'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { db } from '../../firebase.config'
+import { collection, getDocs } from '@firebase/firestore'
+
+
+
+
 
 // Exported function
-export default function Log({navigation}) {  
 
-  // const auth = getAuth();
-  // onAuthStateChanged(auth, (user) => {
-  //   if(user){
-  //     const uid = user.uid
-  //   }
-  // })
 
-  // const [loading, setLoading] = useState(true)
-  // const [log, setLog] = useState([])
+ export default function Log({navigation}) {  
 
-  // useEffect (() => {
-  //   const subscriber = firestore()
-  //     .collection('Logs')
-  //     .where('uid', '==', uid)
-  //     .orderBy('trans_date', 'desc')
-  //     .get()
-  //     .then(querySnapshot => {
-  //       const log = [];
-        
-  //       querySnapshot.forEach(documentSnapshot => {
-  //         log.push({
-  //           ...documentSnapshot.data(),
-  //           key: documentSnapshot.id,
-  //         });
-  //       });
+  const logsCollectionRef=collection(db,"Logs")
+  var expences=[]
+  var earnings=[]
+  var expencesFloat=[]
+  var earningsFloat=[]
+  const [logs,setLogs]=useState([])
 
-  //       setLog(log)
-  //       setLoading(false)
-  //     })
-  //   return () => subscriber();
-  // }, [])
+const getTransactionsValues=async()=>{
+ const data=await getDocs(logsCollectionRef)
+ setLogs(data.docs.map((doc)=>({...doc.data(),id:doc.id})))
 
-  // if (loading){
-  //   return <ActivityIndicator/>
-  // }
+ logs.map((log)=>{
+  console.log(log.trans_amount)
+ })
+}
+
+ addToArrays=()=>{
+  logs.map((log)=>{
+    if(log.trans_type=="Expenditure"){
+      expences.push(log.trans_amount)
+    }else{
+      earnings.push(log.trans_amount)
+    }
+
+   })
+
+   expencesFloat=expences.map(function(str){
+    return parseFloat(str)
+   })
+   earningsFloat=earnings.map(function(str){
+    return parseFloat(str)
+   })
+
+   console.log(expencesFloat)
+   console.log(earningsFloat)
+
+}
+
+ this.calcDifference=()=>{
+  let income=0
+  let expence=0
+  earningsFloat.forEach(n =>income+=n)
+  expencesFloat.forEach(n=> expence+=n)
+  return(income-expence)
+}
+
+
 
   return (
     <SafeAreaView style={styles.background}>
@@ -51,6 +68,18 @@ export default function Log({navigation}) {
         <Pressable style={styles.button} onPress={()=> navigation.navigate('New Transaction')}>
             <Text style={styles.buttonText}>NEW TRANSACTION</Text>
         </Pressable>
+        <Pressable onPress={getTransactionsValues}>
+          <Text>get data</Text>
+        </Pressable>
+        <Pressable onPress={addToArrays}>
+          <Text> add to arrays</Text>
+        </Pressable>
+        <Pressable onPress={calcDifference}>
+          <Text>calculate difference </Text>
+        </Pressable>
+
+
+
 
         {/* List of transactions */}
           <View style={styles.widget}>
@@ -67,6 +96,8 @@ export default function Log({navigation}) {
           </View>
     </SafeAreaView>
   );
+
+  
 }
 
 // Styling
@@ -100,3 +131,4 @@ const styles = StyleSheet.create({
       , fontWeight: 'bold'
   }
 })
+
