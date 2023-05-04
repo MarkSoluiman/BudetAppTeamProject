@@ -1,23 +1,23 @@
 // Component imports
-import { View, Text, Button, StyleSheet, Pressable, Platform, Alert} from 'react-native'
-import React, {useState, useEffect} from 'react'
+import { View, Text, StyleSheet, Pressable, Platform, Alert } from 'react-native'
+import React, { useState } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TextInput } from 'react-native-gesture-handler'
-import { collection, addDoc, getDocs } from 'firebase/firestore/lite'
-import { auth, db, app } from '../../firebase.config'
-import { firebase } from '@react-native-firebase/firestore'
+import { collection, addDoc } from 'firebase/firestore/lite'
+import { db } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
 
 // Exported function
 export default function GoalsModal({navigation}){
 
+    // Initialise constants
     const [date, setDate] = useState(new Date())
     const [newName, setName] = useState('')
     const [newAmount, setAmount] = useState('')
     const [showPicker, setShowPicker] = useState(false)
     const [goalDate, setGoalDate] = useState("Select your goal completion date")
  
-
+    // Initialise date picker for goal completed by date
     const toggleDatepicker = () => {
         setShowPicker(!showPicker)
     }
@@ -36,6 +36,7 @@ export default function GoalsModal({navigation}){
         }
     }
 
+    // Validate entry input, if successful... write to firebase
     const handleSubmit = async () => {
         if(newName.length > 0){
             if (Number.isInteger(parseInt(newAmount)) && parseInt(newAmount) > 0) {
@@ -62,20 +63,23 @@ export default function GoalsModal({navigation}){
         }
     }
 
+    // Exported function
     return(
         <View style={styles.background}>
 
-            {/* Text prompts and entry fields regarding new goal data */}
+            {/* Goal name prompt and entry */}
             <Text style={styles.prompts}>GOAL NAME</Text>
             <TextInput placeholder="Write your goal name" onChangeText={newName => setName(newName)} style={styles.entry}/>
 
+            {/* Goal amount prompt and entry */}
             <Text style={styles.prompts}>SAVING AMOUNT</Text>
             <TextInput placeholder="Write your saving amount" keyboardType='numeric' onChangeText={newAmount => setAmount(newAmount)} style={styles.entry}/>
             
+            {/* Completed  by date prompt and picker */}
             <Text style={styles.prompts}>COMPLETED BY DATE</Text>
             {!showPicker && (
                 <Pressable style={styles.entry} onPress={toggleDatepicker}>
-                    <TextInput placeholder={goalDate} editable={false}/>
+                    <Text>{goalDate}</Text>
                 </Pressable>
             )}
             

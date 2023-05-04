@@ -1,21 +1,27 @@
 // Component imports
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Picker } from '@react-native-picker/picker'
+import { collection, addDoc } from 'firebase/firestore/lite'
+import { db } from '../../firebase.config'
+import { getAuth } from 'firebase/auth'
 
 // Exported function
 export default function LogModal({navigation}){
+
+    // Initialise constants
     const [date, setDate] = useState(new Date())
     const [showPicker, setShowPicker] = useState(false)
     const [tranDate, setTranDate] = useState("Select your transaction date")
     const [tranName, setTranName] = useState('')
     const [tranAmount, setTranAmount] = useState('')
-    const [selectedType, setSelectedType] = useState()
-    const [selectedCat, setSelectedCat] = useState()
-    const [selectedGoal, setSelectedGoal] = useState()
- 
+    const [selectedType, setSelectedType] = useState('')
+    const [selectedCat, setSelectedCat] = useState('')
+    const [selectedGoal, setSelectedGoal] = useState('')
+    
+    // Initialise date picker for transaction date
     const toggleDatepicker = () => {
         setShowPicker(!showPicker)
     }
@@ -34,12 +40,38 @@ export default function LogModal({navigation}){
         }
     }
 
+    // Validate entry input, if successful... write to firebase
     const handleSubmit = async () => {
         if(date){
             if (tranName.length > 0){
                 if (Number.isInteger(parseInt(tranAmount)) && parseInt(tranAmount) > 0){
-                    Alert.alert('Transaction saved')
-                    navigation.navigate('Log')
+                    if (selectedType.length > 0){
+                        if (selectedCat.length > 0){
+                            if (selectedGoal == null || selectedGoal.length > 0){
+                                Alert.alert('Transaction saved')
+                                console.log(selectedType)
+                                navigation.navigate('Log')
+                                const docRef = addDoc(collection(db, "Logs"), {
+                                    uid: getAuth().currentUser.uid
+                                    , trans_date: date
+                                    , trans_name: tranName
+                                    , trans_type: selectedType
+                                    , trans_amount: tranAmount
+                                    , trans_category: selectedCat
+                                    , trans_goal: selectedGoal
+                                });
+                                console.log('Document written with ID: ', docRef.id)
+                                // Deduce from goal
+                            } else {
+                                Alert.alert('Error: A transaction goal association needs to be selected')
+                            }
+                            
+                        } else {
+                            Alert.alert('Error: A transaction category needs to be selected')
+                        }
+                    } else {
+                        Alert.alert('Error: A transaction type needs to be selected')
+                    }
                 } else {
                     Alert.alert('Error: Transaction amount must be a number greater than 0')
                 }
@@ -51,13 +83,15 @@ export default function LogModal({navigation}){
         }
     }
 
+    // Exported function
     return(
         <View style={styles.background}>
 
+            {/* Date prompt and entry */}
             <Text style={styles.prompts}>DATE</Text>
             {!showPicker && (
                 <Pressable style={styles.entry} onPress={toggleDatepicker}>
-                    <TextInput placeholder={tranDate} editable={false}/>
+                    <Text>{tranDate}</Text>
                 </Pressable>
             )}
             {showPicker && (
@@ -69,27 +103,30 @@ export default function LogModal({navigation}){
                 />
             )}
 
-            {/* Text prompts and entry fields regarding new log data */}
+            {/* Transaction name prompt and entry */}
             <Text style={styles.prompts}>TRANSACTION NAME</Text>
             <TextInput placeholder="Write your transaction name" onChangeText={tranName => setTranName(tranName)} style={styles.entry}/>
 
+            {/* Transaction type prompt and picker */}
             <Text style={styles.prompts}>TRANSACTION TYPE</Text>
             <View style={styles.drop}>
                 <Picker
                     selectedValue={selectedType}
-                    onValueChange={(itemValue, itemIndex) =>
+                    onValueChange={(itemValue, itemIndex) =>{
                         setSelectedType(itemValue)
-                    }
+                    }}
                 >
+                    <Picker.Item label="Select transaction type..." value=""/>
                     <Picker.Item label="Expenditure" value="Expenditure"/>
                     <Picker.Item label="Income" value="Income"/>
                 </Picker>
             </View>
             
-            
+            {/* Transaction amount prompt and entry */}
             <Text style={styles.prompts}>AMOUNT</Text>
             <TextInput placeholder="Write your transaction amount" keyboardType='numeric' onChangeText={tranAmount => setTranAmount(tranAmount)} style={styles.entry}/>
 
+            {/* Transaction category prompt and picker */}
             <Text style={styles.prompts}>CATEGORY</Text>
             <View style={styles.drop}>
                 <Picker
@@ -98,6 +135,7 @@ export default function LogModal({navigation}){
                         setSelectedCat(itemValue)
                     }
                 >
+                    <Picker.Item label="Select transaction category..." value=""/>
                     <Picker.Item label="Food" value="Food"/>
                     <Picker.Item label="Transport" value="Transport"/>
                     <Picker.Item label="Health" value="Health"/>
@@ -110,6 +148,7 @@ export default function LogModal({navigation}){
                 </Picker>
             </View>
 
+            {/* Transaction goal association prompt and picker */}
             <Text style={styles.prompts}>ASSOCIATE TO GOAL</Text>
             <View style={styles.drop}>
                 <Picker
@@ -118,7 +157,8 @@ export default function LogModal({navigation}){
                         setSelectedGoal(itemValue)
                     }
                 >
-                    <Picker.Item label="Independent of Goal" value="Null"/>
+                    <Picker.Item label="Select transaction goal association..." value=""/>
+                    <Picker.Item label="Independent of Goal" value={null}/>
                 </Picker>
             </View>
 
