@@ -41,7 +41,7 @@ export default function LogModal({navigation}){
                     Alert.alert('Transaction saved')
                     navigation.navigate('Log')
                 } else {
-                    Alert.alert('Error: Transaction amount must be an integer greater than 0')
+                    Alert.alert('Error: Transaction amount must be a number greater than 0')
                 }
             } else {
                 Alert.alert('Error: Transaction name be of length greater than 0')
