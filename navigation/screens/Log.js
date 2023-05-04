@@ -16,7 +16,7 @@ export default function Log({navigation}) {
   const todoRef = firebase.firestore().collection('Logs').where('uid','==',getAuth().currentUser.uid).orderBy('trans_date', 'desc')
   var sign = ''
 
-  // Use effect for fetching transaction log datat
+  // Use effect for fetching transaction log data
   useEffect( () => {
     async function fetchData(){
       todoRef
@@ -34,10 +34,11 @@ export default function Log({navigation}) {
             }
             transList.push({
 
-              // Formatting date, converting from Firestore TIMESTAMP to DD/MM/YYY
+              // Formatting date, converting from Firestore TIMESTAMP to DD/MM/YYYY
               day: trans_date.toDate().getDate().toString().padStart(2, '0'),
               month: (trans_date.toDate().getMonth() + 1).toString().padStart(2, '0'),
               year: trans_date.toDate().getFullYear().toString().slice(-2),
+              
               trans_name,
               sign,
               trans_amount,
@@ -59,23 +60,23 @@ export default function Log({navigation}) {
         </Pressable>
 
         {/* List of transactions */}
-          <View style={styles.widget}>
-            <FlatList
-              data={transList}
-              numColumns={1}
-              renderItem={({item}) => (
-                <Pressable
-                >
-                  <View>
-                    
-                    {/* Formatting of entries */}
-                    <Text>{item.day}/{item.month}/{item.year}{'\n'}{item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
-                  </View>
-                </Pressable>
-              )}
-            >
-            </FlatList>
-          </View>
+        <View style={styles.widget}>
+          <FlatList
+            data={transList}
+            numColumns={1}
+            renderItem={({item}) => (
+              <Pressable
+              >
+                <View>
+                  
+                  {/* Formatting of entries */}
+                  <Text>{item.day}/{item.month}/{item.year}{'\n'}{item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
+                </View>
+              </Pressable>
+            )}
+          >
+          </FlatList>
+        </View>
     </SafeAreaView>
   );
 }
