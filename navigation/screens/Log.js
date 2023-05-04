@@ -1,172 +1,71 @@
 // Component imports
-import { View, Text, FlatList, StyleSheet, Pressable } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { useState } from "react";
-import LogItem from "./logComponents/LogItem";
-import LogInput from "./logComponents/LogInput";
-import { db, app } from "../../firebase.config";
-
-import {
-  getDocs,
-  collection,
-  setDoc,
-  doc,
-  addDoc,
-  updateDoc,
-  QuerySnapshot,
-} from "firebase/firestore/lite";
-import { useEffect } from "react";
+import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { ActivityIndicator } from 'react-native'
+import firestore from '@react-native-firebase/firestore'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 // Exported function
-export default function Log() {
-  const date = new Date();
+export default function Log({navigation}) {  
 
-  //to fetch every document as an array
-  const [userLogs, setUserLogs] = useState([]);
-  //to fetch a singular user log as an object
-  const [logDescription, setLogDescription] = useState("");
-  const [logValue, setLogValue] = useState("");
-  const [logDate, setLogDate] = useState("");
-  const userLogsRef = collection(db, "Logs");
+  // const auth = getAuth();
+  // onAuthStateChanged(auth, (user) => {
+  //   if(user){
+  //     const uid = user.uid
+  //   }
+  // })
 
-  //Read from firebase all of the logs
-  // async function getLogs() {
-  //   const logsCollection = collection(db, "Logs");
-  //   const data = await getDocs(logsCollection);
-  //   setUserLogs(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  //   // console.log(userLogs.map((user)=>{
-  //   //   user.Description
-  //   // }))
-  //   console.log(
-  //     userLogs.map((user) => {
-  //       user.Description;
+  // const [loading, setLoading] = useState(true)
+  // const [log, setLog] = useState([])
+
+  // useEffect (() => {
+  //   const subscriber = firestore()
+  //     .collection('Logs')
+  //     .where('uid', '==', uid)
+  //     .orderBy('trans_date', 'desc')
+  //     .get()
+  //     .then(querySnapshot => {
+  //       const log = [];
+        
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         log.push({
+  //           ...documentSnapshot.data(),
+  //           key: documentSnapshot.id,
+  //         });
+  //       });
+
+  //       setLog(log)
+  //       setLoading(false)
   //     })
-  //   );
-  // }
+  //   return () => subscriber();
+  // }, [])
 
-  // Add to log
-  // function addLogHandler(enteredLogText) {
-  //   setUserLogs((currentUserLogs) => [
-  //     ...currentUserLogs,
-  //     { text: enteredLogText, key: Math.random.toString() },
-  //   ]);
-  // }
-
-  //reading from firebase:
-
-  useEffect(() => {
-    const getLogs = async () => {
-      const data = await getDocs(userLogsRef);
-      setUserLogs(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    getLogs();
-  }, []);
-
-  //add log to firebase:
-  function createLog() {
-    addDoc(collection(db, "Logs"), {
-      Description:logDescription,
-      Value: logValue,
-      Date: logDate,
-    });
-  }
-
-  //update log:
-  function updateLog() {
-    updateDoc(doc(db, "Logs", "log1"), {
-      Value: logValue,
-      Date: logDate,
-    });
-  }
-
-  let expense=[]
-  let earns=[]
-
-
-
-
-
-
-
-  // // Delete from log
-  // function deleteLogHandler(id) {
-  //   setUserLogs((currentUserLogs) => {
-  //     return currentUserLogs.filter((log) => log.id !== id);
-  //   });
+  // if (loading){
+  //   return <ActivityIndicator/>
   // }
 
   return (
-    <View style={styles.logContainer}>
-      <View>
-        <TextInput value={logDescription}
-        onChangeText={(logDescription)=>{
-          setLogDescription(logDescription)
-        }} placeholder="log Description">
-        
+    <SafeAreaView style={styles.background}>
 
-        </TextInput>
-        <TextInput
-          value={logValue}
-          onChangeText={(logValue) => {
-            setLogValue(logValue);
-          }}
-          placeholder="logValue"
-        ></TextInput>
-
-        <TextInput
-          value={logDate}
-          onChangeText={(logDate) => {
-            setLogDate(logDate);
-          }}
-          placeholder="Date"
-        ></TextInput>
-
-        <Pressable onPress={createLog}>
-          <Text>Create</Text>
-        </Pressable>
-      </View>
-
-      <View>
-        <TextInput
-          value={logValue}
-          onChangeText={(logValue) => {
-            setLogValue(logValue);
-          }}
-          placeholder="logValue"
-        ></TextInput>
-
-        <TextInput
-          value={logDate}
-          onChangeText={(logDate) => {
-            setLogDate(logDate);
-          }}
-          placeholder="Date"
-        ></TextInput>
-        <Pressable onPress={updateLog}>
-          <Text>update</Text>
+        {/* New transaction button */}
+        <Pressable style={styles.button} onPress={()=> navigation.navigate('New Transaction')}>
+            <Text style={styles.buttonText}>NEW TRANSACTION</Text>
         </Pressable>
 
-        <View>
-          <Text>
-          {userLogs.map((userLog)=>{
-            return(
-              <Text>ID:{userLog.id}
-              Description:{userLog.trans_name}
-               Value:{userLog.trans_amount}
-               Date:{userLog.trans_date.toString()}</Text>
-
-            )
-          }
-
-          )}
-          
-          </Text>
-        </View>
-      </View>
-      {/* <View>
-        <Pressable onPress={getLogs}><Text>get logs</Text></Pressable>
-      </View> */}
-    </View>
+        {/* List of transactions */}
+          <View style={styles.widget}>
+            {/* <FlatList
+              data={log}
+              renderItem={({item}) => (
+                <View style={styles.list}>
+                  <Text>Date: {item.trans_date}</Text>
+                  <Text>Transaction: {item.trans_name}</Text>
+                  <Text>Amount: ${item.trans_type}{item.trans_amount}</Text>
+                </View>
+              )}
+            /> */}
+          </View>
+    </SafeAreaView>
   );
 }
 
