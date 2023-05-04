@@ -1,19 +1,18 @@
 // Component imports
+import { signOut } from 'firebase/auth'
 import React, { Component } from 'react'
-import { StyleSheet, Pressable, Text,View, SafeAreaView } from 'react-native'
+import { StyleSheet, Pressable, Text,View, SafeAreaView, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
+import { auth } from '../../firebase.config'
+
 //import { SafeAreaView } from 'react-native-safe-area-context'
 
 // Exported function
 export default function Home({navigation}){
+   
     return(
-       // <SafeAreaView style={styles.background}>
-            <View style={styles.background}>
+       <SafeAreaView style={styles.background}>
             <ScrollView >
-        
-            
-                <Text>Home Page</Text>
-                
                 {/* Monthly Spending widget */}
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Spending')}>
                     <Text style={styles.text}>Monthly Spending</Text>
@@ -33,10 +32,8 @@ export default function Home({navigation}){
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Goal Bars')}>
                     <Text style={styles.text}>Goal Bars</Text>
                 </Pressable>
-                <Pressable onPress={() => navigation.navigate('Login')}><Text> EXIT</Text></Pressable>
              </ScrollView>
-             </View>
-          //   </SafeAreaView>
+        </SafeAreaView>
     )
 }
 
@@ -48,10 +45,11 @@ const styles = StyleSheet.create({
         , backgroundColor: '#ffdeb7'
         , alignItems: 'center'
         , justifyContent: 'center'
+        , paddingTop: '5%'
     },
     widget:{
-        marginHorizontal: 20
-        , marginBottom: 20
+        marginHorizontal: '5%'
+        , marginBottom: '5%'
         , borderRadius: 10
         , borderColor: '#ff8100'
         , borderWidth: 8

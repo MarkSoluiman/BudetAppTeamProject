@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, Button, StyleSheet, Pressable} from 'react-native'
+import { View, Text, StyleSheet, Pressable} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -27,11 +27,12 @@ export default function Goals({navigation}){
 const styles = StyleSheet.create({
     background:{
         flex:1
+        , paddingTop: '5%'
         , backgroundColor: '#ffdeb7'
     },
     widget:{
-        marginHorizontal: 20
-        , marginVertical: 20
+        marginHorizontal: '5%'
+        , marginVertical: '5%'
         , borderRadius: 15
         , width: 370
         , height: 605

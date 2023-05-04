@@ -1,11 +1,10 @@
-// // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-// import { firebase } from "firebase";
-// import { getFirestore } from "@firebase/firestore";
-// import { getAuth } from "@firebase/auth";
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import {getAuth} from 'firebase/auth' // will help with sign up page 
+import { getFirestore, getDocs } from "firebase/firestore/lite";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
 // // Your web app's Firebase configuration
 // // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -19,12 +18,10 @@
 //   measurementId: "G-ZS77NTTZBT"
 // };
 
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// // const analytics = getAnalytics(app);
-// const db = getFirestore()  /* db auth and storage is grabbing 3 services from firebase and storing them into 3 variables */}
-// const auth = getAuth(app)
-// // const storage = firebase.storage();
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app); // This will help with sign up page with authentication servers 
+const db = getFirestore(app);
 
-
-// export default {db, auth, storage,app};
+export {app, auth, db, firebaseConfig}
