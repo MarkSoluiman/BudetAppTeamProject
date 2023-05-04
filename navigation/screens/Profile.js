@@ -1,10 +1,10 @@
 // Component imports
 import { useState } from 'react';
-import { View, Text, Pressable,StyleSheet, Button } from 'react-native'
+import { View, Text, Pressable,StyleSheet, Button , Alert} from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { collection, addDoc } from "firebase/firestore"; 
 import { auth , db } from '../../firebase.config';
-import { signOut } from 'firebase/auth';
+import { signOut, getAuth } from 'firebase/auth';
 // Exported function
 export default function Profile({navigation}){
     const [email, setEmail] = useState('');
@@ -14,6 +14,7 @@ export default function Profile({navigation}){
     const [transportMeans, setTransportMeans] = useState('');
     const saveData = async()=> {
         const docRef = await addDoc(collection(db, "Profile"), {
+            uid: getAuth().currentUser.uid,
             Email : email,
             Password : password,
             PrimaryLocation : primaryLocation,
@@ -21,6 +22,7 @@ export default function Profile({navigation}){
             TransportMeans : transportMeans
           });
           console.log("Document written with ID: ", docRef.id);
+          Alert.alert('Saved successfully')
     }
 
     const handleLogout = async ()=>{

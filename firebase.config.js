@@ -22,5 +22,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
+
+
 export const auth = getAuth(app); // This will help with sign up page with authentication servers 
 export const db = getFirestore(app);
+
