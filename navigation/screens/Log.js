@@ -134,9 +134,9 @@ export default function Log() {
           {userLogs.map((userLog)=>{
             return(
               <Text>ID:{userLog.id}
-              Description:{userLog.Description}
-               Value:{userLog.Value}
-               Date:{userLog.Date}</Text>
+              Description:{userLog.trans_name}
+               Value:{userLog.trans_amount}
+               Date:{userLog.trans_date.toString()}</Text>
 
             )
           }
