@@ -4,7 +4,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { useState } from "react";
 import LogItem from "./logComponents/LogItem";
 import LogInput from "./logComponents/LogInput";
-import { db, app } from "../../firebase";
+import { db, app } from "../../firebase.config";
 
 import {
   getDocs,
@@ -24,7 +24,7 @@ export default function Log() {
   //to fetch every document as an array
   const [userLogs, setUserLogs] = useState([]);
   //to fetch a singular user log as an object
-  //const [singleUserLog, setSingleUserLog] = useState({});
+  const [logDescription, setLogDescription] = useState("");
   const [logValue, setLogValue] = useState("");
   const [logDate, setLogDate] = useState("");
   const userLogsRef = collection(db, "Logs");
@@ -65,6 +65,7 @@ export default function Log() {
   //add log to firebase:
   function createLog() {
     addDoc(collection(db, "Logs"), {
+      Description:logDescription,
       Value: logValue,
       Date: logDate,
     });
@@ -78,16 +79,32 @@ export default function Log() {
     });
   }
 
-  // Delete from log
-  function deleteLogHandler(id) {
-    setUserLogs((currentUserLogs) => {
-      return currentUserLogs.filter((log) => log.id !== id);
-    });
-  }
+  let expense=[]
+  let earns=[]
+
+
+
+
+
+
+
+  // // Delete from log
+  // function deleteLogHandler(id) {
+  //   setUserLogs((currentUserLogs) => {
+  //     return currentUserLogs.filter((log) => log.id !== id);
+  //   });
+  // }
 
   return (
     <View style={styles.logContainer}>
       <View>
+        <TextInput value={logDescription}
+        onChangeText={(logDescription)=>{
+          setLogDescription(logDescription)
+        }} placeholder="log Description">
+        
+
+        </TextInput>
         <TextInput
           value={logValue}
           onChangeText={(logValue) => {
