@@ -1,68 +1,102 @@
 // Component imports
-import { View, Text, FlatList, StyleSheet, Pressable } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-import { useState } from "react";
-import LogItem from "./logComponents/LogItem";
-import LogInput from "./logComponents/LogInput";
+import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { ActivityIndicator } from 'react-native'
+import firestore from '@react-native-firebase/firestore'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 // Exported function
-export default function Log() {
-  const [userLogs, setUserLogs] = useState([]);
+export default function Log({navigation}) {  
 
-  // Add to log
-  function addLogHandler(enteredLogText) {
-    setUserLogs((currentUserLogs) => [
-      ...currentUserLogs,
-      { text: enteredLogText, key: Math.random.toString() },
-    ]);
-  }
+  // const auth = getAuth();
+  // onAuthStateChanged(auth, (user) => {
+  //   if(user){
+  //     const uid = user.uid
+  //   }
+  // })
 
-  // Delete from log
-  function deleteLogHandler(id){
-    setUserLogs(currentUserLogs =>
-      {
-        return currentUserLogs.filter(
-          (log)=>log.id !==id)
-      })
-  }
-  
+  // const [loading, setLoading] = useState(true)
+  // const [log, setLog] = useState([])
+
+  // useEffect (() => {
+  //   const subscriber = firestore()
+  //     .collection('Logs')
+  //     .where('uid', '==', uid)
+  //     .orderBy('trans_date', 'desc')
+  //     .get()
+  //     .then(querySnapshot => {
+  //       const log = [];
+        
+  //       querySnapshot.forEach(documentSnapshot => {
+  //         log.push({
+  //           ...documentSnapshot.data(),
+  //           key: documentSnapshot.id,
+  //         });
+  //       });
+
+  //       setLog(log)
+  //       setLoading(false)
+  //     })
+  //   return () => subscriber();
+  // }, [])
+
+  // if (loading){
+  //   return <ActivityIndicator/>
+  // }
+
   return (
-    <View style={styles.logContainer}>
-      <LogInput onAddLog={addLogHandler} />
-      <View style={styles.transactionsContainer}>
-        <FlatList
-          data={userLogs}
-          renderItem={(itemData) => {
-            return <LogItem
-             text={itemData.item.text}
-             onDeleteItem={deleteLogHandler} />;
-          }}
-        />
-      </View>
-    </View>
+    <SafeAreaView style={styles.background}>
+
+        {/* New transaction button */}
+        <Pressable style={styles.button} onPress={()=> navigation.navigate('New Transaction')}>
+            <Text style={styles.buttonText}>NEW TRANSACTION</Text>
+        </Pressable>
+
+        {/* List of transactions */}
+          <View style={styles.widget}>
+            {/* <FlatList
+              data={log}
+              renderItem={({item}) => (
+                <View style={styles.list}>
+                  <Text>Date: {item.trans_date}</Text>
+                  <Text>Transaction: {item.trans_name}</Text>
+                  <Text>Amount: ${item.trans_type}{item.trans_amount}</Text>
+                </View>
+              )}
+            /> */}
+          </View>
+    </SafeAreaView>
   );
 }
 
 // Styling
 const styles = StyleSheet.create({
-  logContainer: {
-    flex: 1,
-    padding: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#f7d69e", //white with a touch of orange
+  background:{
+      flex:1
+      , paddingTop: '5%'
+      , backgroundColor: '#ffdeb7'
   },
-
-  buttonText: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "white",
+  widget:{
+      marginHorizontal: '5%'
+      , marginVertical: '5%'
+      , borderRadius: 15
+      , width: 370
+      , height: 605
+      , padding: 15
+      , backgroundColor: '#ff8100'
+      , justifyContent: 'space-evenly'
   },
-  transactionsContainer: {
-    flex: 6,
-    width: "130%",
-    marginRight: 10,
+  button:{
+      width: 370
+      , height: 55
+      , borderRadius: 30
+      , marginHorizontal: 20
+      , backgroundColor: '#bd5100'
+      , justifyContent: 'center'
   },
-});
+  buttonText:{
+      textAlign: 'center'
+      , fontSize: 17
+      , fontWeight: 'bold'
+  }
+})

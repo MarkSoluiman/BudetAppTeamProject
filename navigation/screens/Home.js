@@ -11,10 +11,8 @@ import { auth } from '../../firebase.config'
 export default function Home({navigation}){
    
     return(
-        <SafeAreaView style={styles.background}>
-           
+       <SafeAreaView style={styles.background}>
             <ScrollView >
-        
                 {/* Monthly Spending widget */}
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Spending')}>
                     <Text style={styles.text}>Monthly Spending</Text>
@@ -35,7 +33,7 @@ export default function Home({navigation}){
                     <Text style={styles.text}>Goal Bars</Text>
                 </Pressable>
              </ScrollView>
-            </SafeAreaView>
+        </SafeAreaView>
     )
 }
 
@@ -47,10 +45,11 @@ const styles = StyleSheet.create({
         , backgroundColor: '#ffdeb7'
         , alignItems: 'center'
         , justifyContent: 'center'
+        , paddingTop: '5%'
     },
     widget:{
-        marginHorizontal: 20
-        , marginBottom: 20
+        marginHorizontal: '5%'
+        , marginBottom: '5%'
         , borderRadius: 10
         , borderColor: '#ff8100'
         , borderWidth: 8
