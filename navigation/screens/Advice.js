@@ -14,21 +14,21 @@ export default function Advice({navigation}){
                     </Text>
                     <Text style={styles.article}>
                         At Countdown, there are the following deals and more:
-                        {"\n"}- Any 3 for $20 Meat & Seafood
-                        {"\n"}- Beer & Wine Sale: Toi Toi 750ml $15 each
-                        {"\n"}- Freezer Specials: Tip Top Ice Cream 2L $5.90 each
-                        {"\n"}There are also many savings among soft drinks.
+                        {"\n"}- Countdown Fresh NZ Salmon Fillet 1-2 Pack for $42.40
+                        {"\n"}- Sealord Sensations Tuna Smoked 4 for $5.80
+                        {"\n"}- Dove Body Wash for $9.59
+                        {"\n"}Sea Cuisine Prawns Vannamei Raw Cutlets for $20.
                         <Text style={styles.article} onPress={() => Linking.openURL('https://www.countdown.co.nz/shop/specials')}>{"\n"}Visit the website for more information.</Text>
                         {"\n\n"}At PAK'nSAVE, there are the following deals and more:
-                        {"\n"}- Lamb Shoulder Chops $14.99/kg
-                        {"\n"}- Value Canned Tomatoes Whole Peeled 400g $0.89 each
-                        {"\n"}- Value Bread White/Wheatmeal Toast 600g $1.19 each
-                        {"\n"}- Value Table Spread 500g $1.39 each
+                        {"\n"}- Chicken Wings $5.99/kg
+                        {"\n"}- Tip Top Trumpet 4s for $5.99 
+                        {"\n"}- Pams Flour High Grade 1.5kg for $1.99 
+                        {"\n"}- Kingfisher Indian Lager 330ml 12 Pack Bottles $20.99 each
                         <Text style={styles.article} onPress={() => Linking.openURL('https://www.paknsave.co.nz/deals')}>{"\n"}Visit the website for more information.</Text>
                         {"\n\n"}At New World, there are the following deals and more:
-                        {"\n"}- NZ Beef Prime Mince $14.99/kg
-                        {"\n"}- Bluebird Originals Ready Salted Potato Chips $2.79 each
-                        {"\n"}- Royal Gala Apples $3.49/kg
+                        {"\n"}- NZ Chicken Drumsticks for $5.99/kg
+                        {"\n"}- Coca-Cola Soft Drink 2.25l 2 for $6.00
+                        {"\n"}- Brown Onions $2.49/kg
                         <Text style={styles.article} onPress={() => Linking.openURL('https://www.newworld.co.nz/shop/specials')}>{"\n"}Visit the website for more information.</Text>
                     </Text>
                 </View>
@@ -40,18 +40,18 @@ export default function Advice({navigation}){
                     </Text>
                     <Text style={styles.article}>
                         On GrabOne, there are many entertainment deals:
-                        {"\n"}- One Game of Mini Golf from $9 in New Lynn
-                        {"\n"}- One Game of Mini Golf from $9 in Mount Wellington
+                        {"\n"}- Mate Day Double Superpass for Rainbow's End for $80
+                        {"\n"}- Luxury 5-Star Stay for 2 at Cordis Auckland for $299
+                        {"\n"}- Edge Cut Colour & Beauty Hamilton Keratin Hair Straightening Treatment for $99      
                         <Text style={styles.article} onPress={() => Linking.openURL('https://new.grabone.co.nz/activities-events-outdoors/fun-leisure/p/thrill-zone-entertainment-1?region=auckland')}>{"\n"}Visit GrabOne for more information.</Text>
                         {"\n\n"}On BookMe, there are many entertainment deals:
-                        {"\n"}- Crystal Mountain from $12.50
-                        {"\n"}- Auckland Adventure Park - Unlimited Ride Passes from $50
-                        {"\n"}- Paradice Ice Skating Botany from $10.50
-                        {"\n"}- Sky Tower SkySlide Rider Bundle from $40
+                        {"\n"}- Sea Life Kelly Tarltons Aquarium from $20.50
+                        {"\n"}- Hobbiton Day Tour - Late Morning Start from $239
+                        {"\n"}- Skydive Auckland - 13,000ft Tandem from $255
+                        {"\n"}- America's Cup Sailing Experience from $95
                         <Text style={styles.article} onPress={() => Linking.openURL('https://www.bookme.co.nz/things-to-do/auckland/home')}>{"\n"}Visit BookMe for more information.</Text>
                     </Text>
                 </View>
-
                 {/* Academic/Student Deals */}
                 <View style={styles.widget}>
                     <Text style={styles.heading}>
@@ -81,10 +81,33 @@ export default function Advice({navigation}){
                     </Text>
                 </View>
 
+                 {/* How to manage money */}
+                <View style={styles.widget}>
+                    <Text style={styles.heading}>
+                       How Savings Can Save the Economy
+                    </Text>
+                    <Text style={styles.article}>
+                        How Savings Can Save the Economy
+                        {"\n"}- The article argues that in a slow economic recovery, having savings is a blessing. 
+                        {"\n"}- While people tend to spend more during a robust economy, 
+                        it is essential to have money saved up in a recession to cushion against job losses, 
+                        unexpected expenses, and the rising cost of living. 
+                        {"\n"}- This article recommends setting aside a portion of income regularly and prioritizing essential expenses to help build up savings. 
+                        The author emphasizes the importance of creating a budget, reducing expenses, and finding ways to earn extra income to increase savings. 
+                        <Text style={styles.article} onPress={() => Linking.openURL('https://www.investopedia.com/financial-edge/0310/savings-are-a-blessing-in-a-slow-recovery.aspx')}>{"\n"}Visit investopedia for more information.</Text>
+                       
+                    </Text>
+                </View>
+
                 {/* Footer widget showing when the information was last updated */}
                 <View style={styles.footerWidget}>
-                    <Text style={styles.article}>Last updated: Monday 10th April 2023 21:03</Text>
+                    <Text style={styles.article}>Last updated: Friday 5th May 2023 6:30</Text>
                 </View>
+
+               
+
+
+
             </ScrollView>
         </SafeAreaView>
     )
@@ -100,9 +123,9 @@ const styles = StyleSheet.create({
     widget:{
         marginHorizontal: 20
         , marginBottom: 20
-        , borderRadius: 10
+        , borderRadius: 20
         , borderColor: '#ff8100'
-        , borderWidth: 3
+        , borderWidth: 15
         , width: 370
         , padding: 15
         , backgroundColor: '#ffe9de'
