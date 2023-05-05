@@ -7,6 +7,8 @@ import { QuerySnapshot } from '@firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
 // Exported function
+export default function Log({navigation}){
+
 
   // Initialise constants
   const [transList, setTransList] = useState([])
@@ -15,6 +17,7 @@ import { getAuth } from 'firebase/auth'
   // User-specific data fetching, ordered from most recent entries
   const todoRef = firebase.firestore().collection('Logs').where('uid','==',getAuth().currentUser.uid).orderBy('trans_date', 'desc')
   var sign = ''
+
 
   // Use effect for fetching transaction log data
   useEffect( () => {
@@ -80,15 +83,7 @@ import { getAuth } from 'firebase/auth'
         <Pressable style={styles.button} onPress={()=> navigation.navigate('New Transaction')}>
             <Text style={styles.buttonText}>NEW TRANSACTION</Text>
         </Pressable>
-        <Pressable onPress={getTransactionsValues}>
-          <Text>get data</Text>
-        </Pressable>
-        <Pressable onPress={addToArrays}>
-          <Text> add to arrays</Text>
-        </Pressable>
-        <Pressable onPress={calcDifference}>
-          <Text>calculate difference </Text>
-        </Pressable>
+
 
 
 
@@ -115,7 +110,9 @@ import { getAuth } from 'firebase/auth'
           />
         </View>
     </SafeAreaView>
-  );
+  )
+
+ }
 
   
 
