@@ -87,17 +87,48 @@ export default function Advice({navigation}){
                        How Savings Can Save the Economy
                     </Text>
                     <Text style={styles.article}>
-                        How Savings Can Save the Economy
-                        {"\n"}- The article argues that in a slow economic recovery, having savings is a blessing. 
-                        {"\n"}- While people tend to spend more during a robust economy, 
-                        it is essential to have money saved up in a recession to cushion against job losses, 
-                        unexpected expenses, and the rising cost of living. 
-                        {"\n"}- This article recommends setting aside a portion of income regularly and prioritizing essential expenses to help build up savings. 
-                        The author emphasizes the importance of creating a budget, reducing expenses, and finding ways to earn extra income to increase savings. 
+                        {"\n"}- This article talks about that in a slow economic recovery, having savings is a necessary. 
+                        {"\n"}- While people tend to spend more during a robust economy, it is
+                        essential to have money saved up incase of a recession this is a cushion if you lose your job, 
+                        unexpected expenses, and cost of living increase. 
+                        {"\n"}- They recommend setting aside some of your income regularly and 
+                        focusing on your essential expense so that you build up your saving.
+                        The importance of making a budget, lessening expenses, and making extra income on the side.
                         <Text style={styles.article} onPress={() => Linking.openURL('https://www.investopedia.com/financial-edge/0310/savings-are-a-blessing-in-a-slow-recovery.aspx')}>{"\n"}Visit investopedia for more information.</Text>
                        
                     </Text>
                 </View>
+                 
+                 {/* The 50/30/20 Rule*/}
+                <View style={styles.widget}>
+                    <Text style={styles.heading}>
+                       The 50/30/20 Rule
+                    </Text>
+                    <Text style={styles.article}>
+                        {"\n"}- The 50/30/20 rule is an easy budgeting method.
+                        {"\n"}- The basic rule is to divide your income in groups. 
+                        {"\n"}- 50% for needs, 30% for wants and 20% for savings.
+                    
+                        <Text style={styles.article} onPress={() => Linking.openURL('https://n26.com/en-eu/blog/50-30-20-rule')}>{"\n"}Visit for more information.</Text>
+                       
+                    </Text>
+                </View>
+
+                {/* The True Cost Of Eating Out (And How To Save)*/}
+                <View style={styles.widget}>
+                    <Text style={styles.heading}>
+                       The True Cost Of Eating Out (And How To Save)
+                    </Text>
+                    <Text style={styles.article}>
+                        {"\n"}- The article talks about how eating out affects your budget and your health.
+                        {"\n"}- For example: Cooking two or three meals can save you up to $1,000 a year
+                        {"\n"}- And to make a profit most restaurants charge about a 300% more for an item that you can make at home for cheaper.
+                    
+                        <Text style={styles.article} onPress={() => Linking.openURL('https://n26.com/en-eu/blog/50-30-20-rule')}>{"\n"}Visit for more information.</Text>
+                       
+                    </Text>
+                </View>
+
 
                 {/* Footer widget showing when the information was last updated */}
                 <View style={styles.footerWidget}>
