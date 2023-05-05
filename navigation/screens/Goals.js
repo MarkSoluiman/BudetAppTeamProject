@@ -87,13 +87,13 @@ export default function Goals({navigation}){
                         <View style={styles.entry}>
                     
                         {/* Formatting of entries */}
-                            <Text style={styles.textEntry}>{item.day}/{item.month}/{item.year}{'\n'}{item.goal_name}{'\n'}${item.goal_balance}/${item.goal_amount}{'\n'}</Text>
+                            <Text style={styles.textEntry}>Deadline: {item.day}/{item.month}/{item.year}{'\n'}Goal Name: {item.goal_name}{'\n'}Target: ${item.goal_balance}/${item.goal_amount}{'\n'}</Text>
                             <Pressable style={styles.icon} onPress={() => deleteEntry(
                                 item.goal_date
                                 , item.goal_name
                                 , item.goal_amount)}
                             >
-                                <Ionicones name='trash-bin' size={15} color='#682d01'/>
+                                <Ionicones name='trash-bin' size={20} color='#682d01'/>
                             </Pressable>
                         </View>
                     )}
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         , backgroundColor: '#ffdeb7'
     },
     textEntry:{
-        width: 315,
+        width: 280,
         fontWeight: '400'
     },
     widget:{
@@ -125,10 +125,15 @@ const styles = StyleSheet.create({
         , justifyContent: 'space-evenly'
     },
     icon:{
-    paddingVertical: 5,
+        paddingTop: 15,
     },
     entry:{
-    flexDirection: 'row',
+        flexDirection: 'row'
+        , marginBottom: '5%'
+        , backgroundColor: '#ffdeb7'
+        , borderRadius: 10
+        , padding: 15
+        , paddingTop: 25
     },
     button:{
         width: 370

@@ -92,13 +92,13 @@ export default function Log({navigation}) {
               <View style={styles.entry}>
                 
                 {/* Formatting of entries */}
-                <Text style={styles.textEntry}>{item.day}/{item.month}/{item.year}{'\n'}{item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
+                <Text style={styles.textEntry}>Date: {item.day}/{item.month}/{item.year}{'\n'}Transaction: {item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
                 <Pressable style={styles.icon} onPress={() => deleteEntry(
                   item.trans_date
                   , item.trans_name
                   , item.trans_amount)}
                 >
-                  <Ionicones name='trash-bin' size={15} color='#682d01'/>
+                  <Ionicones name='trash-bin' size={20} color='#682d01'/>
                 </Pressable>
               </View>
             )}
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
       , backgroundColor: '#ffdeb7'
   },
   textEntry:{
-    width: 315,
+    width: 280,
     fontWeight: '400'
   },
   widget:{
@@ -133,7 +133,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   entry:{
-    flexDirection: 'row',
+    flexDirection: 'row'
+    , marginBottom: '5%'
+    , backgroundColor: '#ffdeb7'
+    , borderRadius: 10
+    , padding: 15
+    , paddingTop: 25
   },
   button:{
       width: 370
