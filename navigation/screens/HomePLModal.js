@@ -1,8 +1,10 @@
 // Component imports
-import { View, Text, StyleSheet, Pressable} from 'react-native'
+import { View, Text, StyleSheet, Pressable } from 'react-native'
+import React from 'react'
 
 // Exported function
-export default function HomePLModal({navigation}){
+export default function HomePLModal ({navigation}){
+    
     return(
         <View style={styles.background}>
 

@@ -1,11 +1,11 @@
 // Component imports
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Picker } from '@react-native-picker/picker'
-import { collection, addDoc } from 'firebase/firestore/lite'
-import { db } from '../../firebase.config'
+import { collection, addDoc, getDoc, doc, updateDoc, increment } from 'firebase/firestore/lite'
+import { db, firebase } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
 
 // Exported function
@@ -20,6 +20,9 @@ export default function LogModal({navigation}){
     const [selectedType, setSelectedType] = useState('')
     const [selectedCat, setSelectedCat] = useState('')
     const [selectedGoal, setSelectedGoal] = useState('')
+    const [goalsList, setGoalsList] = useState([])
+    const [goalID, setGoalID] = useState('')
+    const todoRef = firebase.firestore().collection('Goals').where('uid', '==', getAuth().currentUser.uid).where('goal_complete', '==', false)
     
     // Initialise date picker for transaction date
     const toggleDatepicker = () => {
@@ -48,6 +51,28 @@ export default function LogModal({navigation}){
                     if (selectedType.length > 0){
                         if (selectedCat.length > 0){
                             if (selectedGoal == null || selectedGoal.length > 0){
+                                if (selectedGoal != null && selectedType === 'Income'){  // Deduce from goal, if there is an income association
+                                    firebase.firestore().collection("Goals").where('goal_name', '==', selectedGoal).get()
+                                        .then(querySnapshot => {
+                                            querySnapshot.forEach(documentSnapshot => {
+                                                setGoalID(documentSnapshot.id)
+                                            })
+                                        })
+                                        .catch(error => {
+                                            console.error(error)
+                                        })
+                                    
+                                    const goalDocRef = doc(db, "Goals", goalID)
+                                    const data = { goal_balance: increment(tranAmount) }
+                                    updateDoc(goalDocRef, data)
+                                    .then(goalDocRef => {
+                                        console.log("Field has been updated")
+                                    })
+                                    .catch(error => {
+                                        console.log(error)
+                                    })
+        
+                                }
                                 Alert.alert('Transaction saved')
                                 console.log(selectedType)
                                 navigation.navigate('Log')
@@ -61,7 +86,6 @@ export default function LogModal({navigation}){
                                     , trans_goal: selectedGoal
                                 });
                                 console.log('Document written with ID: ', docRef.id)
-                                // Deduce from goal
                             } else {
                                 Alert.alert('Error: A transaction goal association needs to be selected')
                             }
@@ -82,6 +106,27 @@ export default function LogModal({navigation}){
             Alert.alert('Error: Date must be selected')
         }
     }
+
+    // Use effect for fetching goals
+    useEffect( () => {
+        async function fetchData(){
+            todoRef
+            .onSnapshot(
+                querySnapshot => {
+                    const list = []
+                    querySnapshot.forEach((doc) => {
+                        const { goal_name } = doc.data()
+                        list.push({
+                            goal_name,
+                        })
+                    })
+                    setGoalsList(list)
+                }
+            )
+        }
+        fetchData()
+    }, [])
+
 
     // Exported function
     return(
@@ -159,6 +204,9 @@ export default function LogModal({navigation}){
                 >
                     <Picker.Item label="Select transaction goal association..." value=""/>
                     <Picker.Item label="Independent of Goal" value={null}/>
+                    {goalsList.map(item => {
+                        return <Picker.Item label={item.goal_name} value={item.goal_name}/>
+                    })}
                 </Picker>
             </View>
 
