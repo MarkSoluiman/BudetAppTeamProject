@@ -205,7 +205,7 @@ export default function LogModal({navigation}){
                     }
                 >
                     <Picker.Item label="Select transaction goal association..." value=""/>
-                    <Picker.Item label="Independent of Goal" value={null}/>
+                    <Picker.Item label="No association" value={null}/>
                     {goalsList.map(item => {
                         return <Picker.Item label={item.goal_name} value={item.goal_name}/>
                     })}
