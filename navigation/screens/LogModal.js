@@ -144,7 +144,7 @@ export default function LogModal({navigation}){
             {showPicker && (
                 <DateTimePicker
                     mode="date"
-                    display="spinner"
+                    display="default"
                     value={date}
                     onChange={onChange}
                 />
