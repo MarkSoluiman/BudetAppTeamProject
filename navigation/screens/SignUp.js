@@ -1,10 +1,11 @@
 // Components import
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React,{useState} from 'react'; 
 import { View, Text, StyleSheet, Button, TextInput, Alert, TouchableOpacity} from 'react-native'
 import { auth } from '../../firebase.config';
 
 //import firebase from 'firebase'
+import { firebase } from '../../firebase.config';
 
 // Exported function
 export default function SignUp({navigation}){
@@ -20,6 +21,15 @@ export default function SignUp({navigation}){
             if(email && password){
                 try{
                     await createUserWithEmailAndPassword(auth, email, password)
+                    console.log(getAuth().currentUser.uid)
+                    firebase.firestore().collection('Profile').add({
+                        uid: getAuth().currentUser.uid,
+                        email: getAuth().currentUser.email,
+                        password: password,
+                        primaryLocation: null,
+                        student: null,
+                        transportMeans: null,
+                    })
                    
     
                 }catch(err) {
