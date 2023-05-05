@@ -33,29 +33,29 @@ export default function Profile({navigation}){
 
     return(
         <View style={styles.background}>
-            
+            <View style={styles.semiWidget} >
             <View style={styles.widget}> 
             
              <View style = {{  alignItems : 'center'}} >
-            <Text>Email</Text>
+            <Text style ={styles.textStyle} >Email</Text>
             <TextInput style ={styles.textInput} 
             value={email}
             onChangeText={value => setEmail(value)}
             placeholder='Email'/>
 
-             <Text>Password</Text>
+             <Text  style ={styles.textStyle} >Password</Text>
              <TextInput style ={styles.textInput} 
               value={password}
               onChangeText={value => setPassword(value)}
               placeholder='Password'/>
 
-             <Text>Are you a Student ?</Text>
+             <Text  style ={styles.textStyle} >Are you a Student ?</Text>
              <TextInput style ={styles.textInput} 
               value={student}
               onChangeText={value => setStudent(value)}
               placeholder='Yes/No'/>
 
-               <Text>Primary Location</Text>
+               <Text  style ={styles.textStyle} >Primary Location</Text>
              <TextInput  style ={styles.textInput} 
               value={primaryLocation}
               onChangeText={value => setPrimaryLocation(value)}
@@ -63,21 +63,19 @@ export default function Profile({navigation}){
 
 
 
-              <Text>Transport Means</Text>
+              <Text  style ={styles.textStyle} >Transport Means</Text>
              <TextInput  style ={styles.textInput} 
               value={transportMeans}
               onChangeText={value => setTransportMeans(value)}
               placeholder='Transport means '/>
              </View>
 
-             <TouchableOpacity style = {{
-                backgroundColor : '#ffe9df',
+             <TouchableOpacity style = {{backgroundColor : '#ff8100',
                 height : 50,
                 margin: 20, 
                 borderRadius: 20,
                 justifyContent : 'center',
-                alignItems : 'center'
-             }}
+                alignItems : 'center'}}
              onPress ={()=> saveData()}
              >   
                 <Text style= {{
@@ -86,12 +84,19 @@ export default function Profile({navigation}){
                     SAVE
                 </Text>
              </TouchableOpacity>
-            
-            </View>
-            <TouchableOpacity 
+
+             <TouchableOpacity style = {{backgroundColor : '#bd5100',
+                height : 30,
+                margin: 10, 
+                borderRadius: 20,
+                justifyContent : 'center',
+                alignItems : 'center'}}
                 onPress={handleLogout}>
                     <Text> LOG OUT </Text>
                 </TouchableOpacity>
+
+            </View>
+            </View>
 
               
             
@@ -108,23 +113,42 @@ const styles = StyleSheet.create({
         , justifyContent: 'space-evenly'
     },
     widget:{
-        marginHorizontal: 20
+        marginHorizontal: 10
         , marginVertical: 20
         , borderRadius: 15
-        , width: 370
-        , height: 505
+        , width: 350
+        , height: 625
+        , padding: 15
+        , backgroundColor: '#ffdeb7'
+        , justifyContent: 'center'
+        
+    },
+    semiWidget:{
+        marginHorizontal: 10
+        , marginVertical: 20
+        , borderRadius: 15
+        , width: 400
+        , height: 675
         , padding: 15
         , backgroundColor: '#ff8100'
         , justifyContent: 'center'
         
     },
 
+    textStyle: {
+        textAlign: 'center'
+        , fontWeight: 'bold'
+        , fontSize: 17
+
+    },
+
+
     textInput: {
         padding : 3,
-        borderWidth: 1,
+        borderWidth: 5,
         fontSize: 20,
-        borderColor:'#ffdeb7',
-        backgroundColor : '#ffdeb7',
+        borderColor:'#ff8100',
+        backgroundColor : '#ffe9df',
         borderRadius: 9,
         width: '80%',
         marginVertical : 10,
