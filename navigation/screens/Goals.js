@@ -5,6 +5,7 @@ import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
 import { QuerySnapshot } from '@firebase/firestore'
 import { getAuth } from 'firebase/auth'
+import Ionicones from 'react-native-vector-icons/Ionicons'
 
 // Exported function
 export default function Goals({navigation}){
@@ -83,18 +84,18 @@ export default function Goals({navigation}){
                     data={goalsList}
                     numColumns={1}
                     renderItem={({item}) => (
-                    <TouchableOpacity
-                        onPress={() => deleteEntry(
-                            item.goal_date
-                            , item.goal_name
-                            , item.goal_amount)}
-                    >
-                        <View>
-                        
+                        <View style={styles.entry}>
+                    
                         {/* Formatting of entries */}
-                        <Text>{item.day}/{item.month}/{item.year}{'\n'}{item.goal_name}{'\n'}${item.goal_balance}/${item.goal_amount}{'\n'}</Text>
+                            <Text style={styles.textEntry}>{item.day}/{item.month}/{item.year}{'\n'}{item.goal_name}{'\n'}${item.goal_balance}/${item.goal_amount}{'\n'}</Text>
+                            <Pressable style={styles.icon} onPress={() => deleteEntry(
+                                item.goal_date
+                                , item.goal_name
+                                , item.goal_amount)}
+                            >
+                                <Ionicones name='trash-bin' size={15} color='#682d01'/>
+                            </Pressable>
                         </View>
-                    </TouchableOpacity>
                     )}
                 />
             </View>
@@ -109,6 +110,10 @@ const styles = StyleSheet.create({
         , paddingTop: '5%'
         , backgroundColor: '#ffdeb7'
     },
+    textEntry:{
+        width: 315,
+        fontWeight: '400'
+    },
     widget:{
         marginHorizontal: '5%'
         , marginVertical: '5%'
@@ -118,6 +123,12 @@ const styles = StyleSheet.create({
         , padding: 15
         , backgroundColor: '#ff8100'
         , justifyContent: 'space-evenly'
+    },
+    icon:{
+    paddingVertical: 5,
+    },
+    entry:{
+    flexDirection: 'row',
     },
     button:{
         width: 370

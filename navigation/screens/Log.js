@@ -5,6 +5,7 @@ import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
 import { QuerySnapshot } from '@firebase/firestore'
 import { getAuth } from 'firebase/auth'
+import Ionicones from 'react-native-vector-icons/Ionicons'
 
 // Exported function
 export default function Log({navigation}) {  
@@ -71,7 +72,7 @@ export default function Log({navigation}) {
     firebase.firestore()
       .collection('Logs')
       .doc(selectionID).delete()
-    setSelectionID(0)
+    setSelectionID("")
   }
 
   return (
@@ -88,18 +89,18 @@ export default function Log({navigation}) {
             data={transList}
             numColumns={1}
             renderItem={({item}) => (
-              <TouchableOpacity
-                onPress={() => deleteEntry(
+              <View style={styles.entry}>
+                
+                {/* Formatting of entries */}
+                <Text style={styles.textEntry}>{item.day}/{item.month}/{item.year}{'\n'}{item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
+                <Pressable style={styles.icon} onPress={() => deleteEntry(
                   item.trans_date
                   , item.trans_name
                   , item.trans_amount)}
-              >
-                <View>
-                  
-                  {/* Formatting of entries */}
-                  <Text>{item.day}/{item.month}/{item.year}{'\n'}{item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
-                </View>
-              </TouchableOpacity>
+                >
+                  <Ionicones name='trash-bin' size={15} color='#682d01'/>
+                </Pressable>
+              </View>
             )}
           />
         </View>
@@ -114,6 +115,10 @@ const styles = StyleSheet.create({
       , paddingTop: '5%'
       , backgroundColor: '#ffdeb7'
   },
+  textEntry:{
+    width: 315,
+    fontWeight: '400'
+  },
   widget:{
       marginHorizontal: '5%'
       , marginVertical: '5%'
@@ -123,6 +128,12 @@ const styles = StyleSheet.create({
       , padding: 15
       , backgroundColor: '#ff8100'
       , justifyContent: 'space-evenly'
+  },
+  icon:{
+    paddingVertical: 5,
+  },
+  entry:{
+    flexDirection: 'row',
   },
   button:{
       width: 370
