@@ -1,8 +1,8 @@
 // Component imports
-import { Alert, TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import { TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { app, auth, db, firebase } from '../../firebase.config'
-import { collection, getDoc } from 'firebase/firestore/lite'
+import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
 import { QuerySnapshot } from '@firebase/firestore'
 import { getAuth } from 'firebase/auth'
 
@@ -11,6 +11,7 @@ export default function Log({navigation}) {
 
   // Initialise constants
   const [transList, setTransList] = useState([])
+  const [selectionID, setSelectionID] = useState([])
 
   // User-specific data fetching, ordered from most recent entries
   const todoRef = firebase.firestore().collection('Logs').where('uid','==',getAuth().currentUser.uid).orderBy('trans_date', 'desc')
@@ -38,7 +39,7 @@ export default function Log({navigation}) {
               day: trans_date.toDate().getDate().toString().padStart(2, '0'),
               month: (trans_date.toDate().getMonth() + 1).toString().padStart(2, '0'),
               year: trans_date.toDate().getFullYear().toString().slice(-2),
-              
+              trans_date,
               trans_name,
               sign,
               trans_amount,
@@ -50,6 +51,28 @@ export default function Log({navigation}) {
     }
     fetchData()
   }, [])
+
+  function deleteEntry(selectedTransDate, selectedTransName, selectedTransAmount){
+    firebase.firestore()
+      .collection('Logs')
+      .where('uid', '==', getAuth().currentUser.uid)
+      .where('trans_date', '==', selectedTransDate)
+      .where('trans_name', '==', selectedTransName)
+      .where('trans_amount', '==', selectedTransAmount)
+      .get()
+    .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+            setSelectionID(documentSnapshot.id)
+        })
+    })
+    .catch(error => {
+        console.error(error)
+    })
+    firebase.firestore()
+      .collection('Logs')
+      .doc(selectionID).delete()
+    setSelectionID(0)
+  }
 
   return (
     <SafeAreaView style={styles.background}>
@@ -66,7 +89,10 @@ export default function Log({navigation}) {
             numColumns={1}
             renderItem={({item}) => (
               <TouchableOpacity
-                onPress={() => Alert.alert('Coming soon:', 'Monitoring and editing transactions')}
+                onPress={() => deleteEntry(
+                  item.trans_date
+                  , item.trans_name
+                  , item.trans_amount)}
               >
                 <View>
                   
