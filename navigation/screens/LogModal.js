@@ -51,7 +51,9 @@ export default function LogModal({navigation}){
                     if (selectedType.length > 0){
                         if (selectedCat.length > 0){
                             if (selectedGoal == null || selectedGoal.length > 0){
-                                if (selectedGoal != null && selectedType === 'Income'){  // Deduce from goal, if there is an income association
+
+                                // Deduce from goal, if there is an income association
+                                if (selectedGoal != null && selectedType === 'Income'){  
                                     firebase.firestore().collection("Goals").where('goal_name', '==', selectedGoal).get()
                                         .then(querySnapshot => {
                                             querySnapshot.forEach(documentSnapshot => {
@@ -61,7 +63,6 @@ export default function LogModal({navigation}){
                                         .catch(error => {
                                             console.error(error)
                                         })
-                                    
                                     const goalDocRef = doc(db, "Goals", goalID)
                                     const data = { goal_balance: increment(tranAmount) }
                                     updateDoc(goalDocRef, data)
@@ -71,8 +72,9 @@ export default function LogModal({navigation}){
                                     .catch(error => {
                                         console.log(error)
                                     })
-        
                                 }
+
+                                // Save transaction and upload as new document to firebase
                                 Alert.alert('Transaction saved')
                                 console.log(selectedType)
                                 navigation.navigate('Log')

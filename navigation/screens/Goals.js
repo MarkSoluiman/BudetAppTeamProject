@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import { Alert, TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc } from 'firebase/firestore/lite'
@@ -57,17 +57,17 @@ export default function Goals({navigation}){
                     data={goalsList}
                     numColumns={1}
                     renderItem={({item}) => (
-                    <Pressable
+                    <TouchableOpacity
+                        onPress={() => Alert.alert('Coming soon:', 'Monitoring and editing goals')}
                     >
                         <View>
                         
                         {/* Formatting of entries */}
                         <Text>{item.day}/{item.month}/{item.year}{'\n'}{item.goal_name}{'\n'}${item.goal_balance}/${item.goal_amount}{'\n'}</Text>
                         </View>
-                    </Pressable>
+                    </TouchableOpacity>
                     )}
-                >
-                </FlatList>
+                />
             </View>
         </SafeAreaView>
     )

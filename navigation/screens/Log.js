@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import { Alert, TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc } from 'firebase/firestore/lite'
@@ -65,17 +65,17 @@ export default function Log({navigation}) {
             data={transList}
             numColumns={1}
             renderItem={({item}) => (
-              <Pressable
+              <TouchableOpacity
+                onPress={() => Alert.alert('Coming soon:', 'Monitoring and editing transactions')}
               >
                 <View>
                   
                   {/* Formatting of entries */}
                   <Text>{item.day}/{item.month}/{item.year}{'\n'}{item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
                 </View>
-              </Pressable>
+              </TouchableOpacity>
             )}
-          >
-          </FlatList>
+          />
         </View>
     </SafeAreaView>
   );
