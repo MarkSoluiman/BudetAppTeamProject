@@ -4,6 +4,7 @@ import React from 'react'
 
 // Exported function
 export default function HomePLModal ({navigation}){
+    const priceHistory = usePriceHistory('ethereum')
     
     return(
         <View style={styles.background}>

@@ -46,9 +46,6 @@ export default function Goals({navigation}){
     }, [])
 
     function deleteEntry(selectedGoalDate, selectedGoalName, selectedGoalAmount){
-        console.log(selectedGoalDate)
-        console.log(selectedGoalName)
-        console.log(selectedGoalAmount)
         firebase.firestore()
           .collection('Goals')
           .where('uid', '==', getAuth().currentUser.uid)
@@ -56,18 +53,30 @@ export default function Goals({navigation}){
           .where('goal_name', '==', selectedGoalName)
           .where('goal_amount', '==', selectedGoalAmount)
           .get()
-        .then(querySnapshot => {
+          .then(querySnapshot => {
+            const selectionIDs = []
             querySnapshot.forEach(documentSnapshot => {
-                setSelectionID(documentSnapshot.id)
+              selectionIDs.push(documentSnapshot.id)
             })
+            if (selectionIDs.length === 0){
+              Alert.alert("No goals found")
+            }
+            const batch = firebase.firestore().batch()
+            selectionIDs.forEach(selectionID => {
+              const docRef = firebase.firestore().collection('Goals').doc(selectionID)
+              batch.delete(docRef)
+            })
+            batch.commit()
+              .then(() => {
+                setSelectionID("")
+              })
+              .catch((error) => {
+                console.log("Error removing documents: ", error)
+              })
+          })
+          .catch(error => {
+            console.log(error)
         })
-        .catch(error => {
-            console.error(error)
-        })
-        firebase.firestore()
-          .collection('Goals')
-          .doc(selectionID).delete()
-        setSelectionID(0)
       }
 
     return(

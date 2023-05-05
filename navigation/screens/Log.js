@@ -61,19 +61,32 @@ export default function Log({navigation}) {
       .where('trans_name', '==', selectedTransName)
       .where('trans_amount', '==', selectedTransAmount)
       .get()
-    .then(querySnapshot => {
+      .then(querySnapshot => {
+        const selectionIDs = []
         querySnapshot.forEach(documentSnapshot => {
-            setSelectionID(documentSnapshot.id)
+          selectionIDs.push(documentSnapshot.id)
         })
+        if (selectionIDs.length === 0){
+          Alert.alert("No transactions found")
+        }
+        const batch = firebase.firestore().batch()
+        selectionIDs.forEach(selectionID => {
+          const docRef = firebase.firestore().collection('Logs').doc(selectionID)
+          batch.delete(docRef)
+        })
+        batch.commit()
+          .then(() => {
+            setSelectionID("")
+          })
+          .catch((error) => {
+            console.log("Error removing documents: ", error)
+          })
+      })
+      .catch(error => {
+        console.log(error)
     })
-    .catch(error => {
-        console.error(error)
-    })
-    firebase.firestore()
-      .collection('Logs')
-      .doc(selectionID).delete()
-    setSelectionID("")
   }
+  
 
   return (
     <SafeAreaView style={styles.background}>
