@@ -1,65 +1,77 @@
 // Component imports
-import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import { TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { db } from '../../firebase.config'
-import { collection, getDocs } from '@firebase/firestore'
-
-
-
-
+import { app, auth, db, firebase } from '../../firebase.config'
+import { collection, getDoc, deleteDoc } from 'firebase/firestore'
+import { QuerySnapshot } from '@firebase/firestore'
+import { getAuth } from 'firebase/auth'
 
 // Exported function
 
+  // Initialise constants
+  const [transList, setTransList] = useState([])
+  const [selectionID, setSelectionID] = useState([])
 
- export default function Log({navigation}) {  
+  // User-specific data fetching, ordered from most recent entries
+  const todoRef = firebase.firestore().collection('Logs').where('uid','==',getAuth().currentUser.uid).orderBy('trans_date', 'desc')
+  var sign = ''
 
-  const logsCollectionRef=collection(db,"Logs")
-  var expences=[]
-  var earnings=[]
-  var expencesFloat=[]
-  var earningsFloat=[]
-  const [logs,setLogs]=useState([])
+  // Use effect for fetching transaction log data
+  useEffect( () => {
+    async function fetchData(){
+      todoRef
+      .onSnapshot(
+        querySnapshot => {
+          const transList = []
+          querySnapshot.forEach((doc) => {
+            const { day, month, year, trans_date, trans_name, trans_amount, trans_type } = doc.data()
+            
+            // Add a negative sign to expenditure entries
+            if(trans_type==='Expenditure'){
+              sign = '-'
+            } else {
+              sign = ''
+            }
+            transList.push({
 
-const getTransactionsValues=async()=>{
- const data=await getDocs(logsCollectionRef)
- setLogs(data.docs.map((doc)=>({...doc.data(),id:doc.id})))
-
- logs.map((log)=>{
-  console.log(log.trans_amount)
- })
-}
-
- addToArrays=()=>{
-  logs.map((log)=>{
-    if(log.trans_type=="Expenditure"){
-      expences.push(log.trans_amount)
-    }else{
-      earnings.push(log.trans_amount)
+              // Formatting date, converting from Firestore TIMESTAMP to DD/MM/YYYY
+              day: trans_date.toDate().getDate().toString().padStart(2, '0'),
+              month: (trans_date.toDate().getMonth() + 1).toString().padStart(2, '0'),
+              year: trans_date.toDate().getFullYear().toString().slice(-2),
+              trans_date,
+              trans_name,
+              sign,
+              trans_amount,
+            })
+          }) 
+          setTransList(transList)
+        }
+      )
     }
+    fetchData()
+  }, [])
 
-   })
-
-   expencesFloat=expences.map(function(str){
-    return parseFloat(str)
-   })
-   earningsFloat=earnings.map(function(str){
-    return parseFloat(str)
-   })
-
-   console.log(expencesFloat)
-   console.log(earningsFloat)
-
-}
-
- this.calcDifference=()=>{
-  let income=0
-  let expence=0
-  earningsFloat.forEach(n =>income+=n)
-  expencesFloat.forEach(n=> expence+=n)
-  return(income-expence)
-}
-
-
+  function deleteEntry(selectedTransDate, selectedTransName, selectedTransAmount){
+    firebase.firestore()
+      .collection('Logs')
+      .where('uid', '==', getAuth().currentUser.uid)
+      .where('trans_date', '==', selectedTransDate)
+      .where('trans_name', '==', selectedTransName)
+      .where('trans_amount', '==', selectedTransAmount)
+      .get()
+    .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+            setSelectionID(documentSnapshot.id)
+        })
+    })
+    .catch(error => {
+        console.error(error)
+    })
+    firebase.firestore()
+      .collection('Logs')
+      .doc(selectionID).delete()
+    setSelectionID(0)
+  }
 
   return (
     <SafeAreaView style={styles.background}>
@@ -82,23 +94,31 @@ const getTransactionsValues=async()=>{
 
 
         {/* List of transactions */}
-          <View style={styles.widget}>
-            {/* <FlatList
-              data={log}
-              renderItem={({item}) => (
-                <View style={styles.list}>
-                  <Text>Date: {item.trans_date}</Text>
-                  <Text>Transaction: {item.trans_name}</Text>
-                  <Text>Amount: ${item.trans_type}{item.trans_amount}</Text>
+        <View style={styles.widget}>
+          <FlatList
+            data={transList}
+            numColumns={1}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                onPress={() => deleteEntry(
+                  item.trans_date
+                  , item.trans_name
+                  , item.trans_amount)}
+              >
+                <View>
+                  
+                  {/* Formatting of entries */}
+                  <Text>{item.day}/{item.month}/{item.year}{'\n'}{item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
                 </View>
-              )}
-            /> */}
-          </View>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
     </SafeAreaView>
   );
 
   
-}
+
 
 // Styling
 const styles = StyleSheet.create({

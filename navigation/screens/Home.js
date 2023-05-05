@@ -16,6 +16,11 @@ export default function Home({navigation}){
        <SafeAreaView style={styles.background}>
             <ScrollView >
                 {/* Monthly Spending widget */}
+                <Pressable style={styles.widget} onPress={()=> navigation.navigate('Current Balance')}>
+                    <Text style={styles.text}>Current Balance</Text>
+                </Pressable>
+
+                {/* Monthly Spending widget */}
                 <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Spending')}>
                     <Text style={styles.text}>Monthly Spending</Text>
                 </Pressable>
@@ -51,6 +56,7 @@ const styles = StyleSheet.create({
         , alignItems: 'center'
         , justifyContent: 'center'
         , paddingTop: '5%'
+        , alignItems: 'center'
     },
     widget:{
         marginHorizontal: '5%'
@@ -59,7 +65,7 @@ const styles = StyleSheet.create({
         , borderColor: '#ff8100'
         , borderWidth: 8
         , width: 370
-        , height: 250
+        , height: 60
         , backgroundColor: '#ffe9de'
         , justifyContent: 'space-evenly'
         , fontWeight: 'bold'
