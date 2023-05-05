@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { View, Text, Pressable,StyleSheet, Button , Alert} from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import { collection, addDoc } from "firebase/firestore"; 
-import { auth , db } from '../../firebase.config';
+import { auth , db, firebase, app} from '../../firebase.config';
 import { signOut, getAuth } from 'firebase/auth';
 // Exported function
 export default function Profile({navigation}){
@@ -13,7 +13,7 @@ export default function Profile({navigation}){
     const [primaryLocation, setPrimaryLocation] = useState('');
     const [transportMeans, setTransportMeans] = useState('');
     const saveData = async()=> {
-        const docRef = await addDoc(collection(db, "Profile"), {
+        const docRef = await addDoc(collection(db, "Profile"), {  
             uid: getAuth().currentUser.uid,
             Email : email,
             Password : password,
@@ -76,7 +76,7 @@ export default function Profile({navigation}){
                 borderRadius: 20,
                 justifyContent : 'center',
                 alignItems : 'center'}}
-             onPress ={()=> saveData()}
+               onPress ={()=> saveData()}
              >   
                 <Text style= {{
                     color : 'black'
@@ -146,13 +146,14 @@ const styles = StyleSheet.create({
     textInput: {
         padding : 3,
         borderWidth: 5,
-        fontSize: 20,
+        fontSize: 15,
         borderColor:'#ff8100',
         backgroundColor : '#ffe9df',
         borderRadius: 9,
         width: '80%',
         marginVertical : 10,
         marginBottom: 15,
-        alignItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
     },
 })
