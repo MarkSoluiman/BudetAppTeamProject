@@ -47,7 +47,7 @@ export default function HomeBalanceModal({ navigation }) {
         </View>
       </Pressable>
     </View>
-  );
+  )
 }
 
 // Styling
@@ -70,5 +70,5 @@ const styles = StyleSheet.create({
     width: 90,
     margin: 20,
     alignSelf: "center",
-  },
-});
+  }
+})

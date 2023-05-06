@@ -40,7 +40,7 @@ const data = {
     [30, 30],
     
   ],
-  barColors: ["#dfe4ea", "#ced6e0", "#a4b0be"],
+  barColors: ["#f2f25a", "#e3e31e", "#fa1eca"],
   
 };
 // Exported function
@@ -58,7 +58,7 @@ export default function HomeGoalsModal({ navigation }) {
             backgroundGradientFromOpacity: 1,
             backgroundGradientTo: '#07a0f2',
             backgroundGradientToOpacity: 1,
-            color: (opacity = 1) => `rgba(211, 211, 211, 1)`,
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             strokeWidth: 2, // optional, default 3
             barPercentage: 0.5,
             useShadowColorFromDataset: false // optional
@@ -76,7 +76,7 @@ export default function HomeGoalsModal({ navigation }) {
         </View>
       </Pressable>
     </View>
-  );
+  )
 }
 
 // Styling
@@ -99,5 +99,5 @@ const styles = StyleSheet.create({
     width: 90,
     margin: 20,
     alignSelf: "center",
-  },
-});
+  }
+})

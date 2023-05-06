@@ -14,14 +14,14 @@ const data = [
   {
     name: "- Profit",
     population: 250,
-    color: "#80FF00",
+    color: "#919090",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15,
   },
   {
     name: "- Loss",
     population: 90,
-    color: "#00CCCC",
+    color: "#141313",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15,
   },
@@ -63,7 +63,7 @@ export default function HomePLModal({ navigation }) {
         </View>
       </Pressable>
     </View>
-  );
+  )
 }
 
 // Styling
@@ -86,5 +86,5 @@ const styles = StyleSheet.create({
     width: 90,
     margin: 50,
     alignSelf: "center",
-  },
-});
+  }
+})
