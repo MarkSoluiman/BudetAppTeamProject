@@ -14,6 +14,47 @@ export default function News({navigation}){
                 <View style={styles.widget}>
                     <Text 
                         style={styles.heading} 
+                        onPress={() => Linking.openURL('https://www.rnz.co.nz/news/sport/489339/nz-to-host-inaugural-international-women-s-rugby-tournment')}
+                    >
+                        NZ to host inaugural international women's rugby tournment
+                    </Text>
+                    <Image source={require('../../assets/rugby.jpeg')} style={styles.images} />
+                    <Text style={styles.article}>
+                    New Zealand will host the inaugural women's top six rugby series in October. In January World Rugby announced an annual sixteen-team, three-tier global competition. The top six teams in WXV1 will compete in New Zealand in a nine test series. England, France and Wales, who finished top of the recent Six Nations will be joined by the top three teams from the Pacific Four Series. The Black Ferns first test against Australia in June and then tests against Canada and the USA in early July will count towards qualification. WXV 1 is the top tier of World Rugby's inaugural three-tiered global initiative aimed at increasing the competitiveness, reach, value and impact of the elite women's game. New Zealand Rugby's head of professional rugby Chris Lendrum said the tournament provides an opportunity to further bolster the momentum in the woman's game following the 2022 Rugby World Cup. "To bring the likes of England and France down to New Zealand and see some of the rugby again that we saw last year is tremendously exciting."
+                    </Text>
+                </View>
+
+                {/* Article 2 */}
+                <View style={styles.widget}>
+                    <Text 
+                        style={styles.heading} 
+                        onPress={() => Linking.openURL('https://www.stuff.co.nz/business/131955950/anz-posts-halfyear-profit-of-more-than-1-billion-up-14')}
+                    >
+                        ANZ posts half-year profit of more than $1 billion, up 14%
+                    </Text>
+                    <Image source={require('../../assets/anz.jpg')} style={styles.images} />
+                    <Text style={styles.article}>
+                    ANZ has recorded a 14%​ increase in half-year profits compared to the same time a year earlier. Chief executive Antonia Watson said the bank had made an after-tax cash profit of $1.107 billion in the six months ending March 31, compared to $968 million in the same period last year. It was up 1% comapred to the profit made in the six months to September. It follows BNZ’s announcement on Thursday of a 13.5% rise in profit for the same six-month period. The massive leap in BNZ profit was noticed in the Beehive, but Commerce and Consumer Affairs Minister Duncan Webb has so far not decided whether to order the Commerce Commission to investigate the state of competition in the banking industry.                </Text>
+                </View>
+
+                {/* Article 3 */}
+                <View style={styles.widget}>
+                    <Text 
+                        style={styles.heading} 
+                        onPress={() => Linking.openURL('https://www.stuff.co.nz/business/131961297/heres-what-the-nzuk-free-trade-agreement-means-for-you')}
+                    >
+                        Here's what the NZ-UK free trade agreement means for you
+                    </Text>
+                    <Image source={require('../../assets/choc.jpg')} style={styles.images} />
+                    <Text style={styles.article}>
+                        News that New Zealand’s free trade agreement with the United Kingdom had been fast tracked had politicians and exporters all aflutter on Friday. The deal, struck in March 2022, is expected to deliver a $1 billion boost to New Zealand’s GDP, but what even is a free-trade agreement? And why should the average Kiwi care? Often abbreviated to FTA, a free-trade agreement sets the rules for how countries treat each other when doing business – importing and exporting goods or services and investing. The main focus of an FTA is on economic benefits and encouraging trade between the countries by making it easier and cheaper to do business.
+                    </Text>
+                </View>
+
+                {/* Article 1 */}
+                <View style={styles.widget}>
+                    <Text 
+                        style={styles.heading} 
                         onPress={() => Linking.openURL('https://www.rnz.co.nz/news/business/487394/reserve-bank-raises-ocr-to-5-point-25-percent')}
                     >
                         Reserve Bank raises OCR to 5.25%
@@ -68,7 +109,7 @@ export default function News({navigation}){
 
                 {/* Footer view to show last updated time */}
                 <View style={styles.footerWidget}>
-                    <Text style={styles.article}>Last updated: Wednesday 5th April 2023 15:08</Text>
+                    <Text style={styles.article}>Last updated: Friday 5th May 2023 18:26</Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -108,7 +149,7 @@ const styles = StyleSheet.create({
         fontSize: 14
     },
     images: {
-        width: '95%'
+        width: '90%'
         , height: 200
         , borderColor: '#ff8100'
         , borderWidth: 3

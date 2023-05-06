@@ -20,6 +20,7 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@react-navigation/stack": "^6.3.16",
+    "@shopify/react-native-skia": "^0.1.188",
     "android": "^0.0.8",
     "androidsdk": "^1.0.0",
     "assets": "^3.0.1",

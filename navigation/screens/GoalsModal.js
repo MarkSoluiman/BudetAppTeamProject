@@ -86,7 +86,7 @@ export default function GoalsModal({navigation}){
             {showPicker && (
                 <DateTimePicker
                     mode="date"
-                    display="spinner"
+                    display="default"
                     value={date}
                     onChange={onChange}
                 />
