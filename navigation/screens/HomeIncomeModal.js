@@ -63,9 +63,9 @@ export default function HomeIncomeModal({ navigation }) {
               borderRadius: 20,
             },
             propsForDots: {
-              r: "2",
-              strokeWidth: "7",
-              stroke: "#daf52c",
+              r: "3",
+              strokeWidth: "4",
+              stroke: "#faf5f5",
             },
           }}
           style={{
