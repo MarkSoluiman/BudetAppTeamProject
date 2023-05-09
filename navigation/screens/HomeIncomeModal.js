@@ -16,7 +16,7 @@ export default function HomeIncomeModal({ navigation }) {
       {/* Heading */}
       <Text style={styles.prompts}>Monthly Income</Text>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Text>Bezier Line Chart</Text>
+        <Text>Line Chart</Text>
         <LineChart
           data={{
             labels: [

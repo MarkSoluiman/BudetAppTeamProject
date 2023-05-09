@@ -56,13 +56,14 @@ export default function HomePLModal({ navigation }) {
         absolute
       />
 
-      {/* Button to return to home page */}
-      <Pressable onPress={() => navigation.navigate("Home")}>
-        <View style={styles.button}>
-          <Text style={styles.prompts}>GO BACK</Text>
+            {/* Button to return to home page */}
+            <Pressable onPress={()=> navigation.navigate('Home')}>
+                <View style={styles.button}>
+                    <Text style={styles.prompts}>GO BACK</Text>
+                </View>
+            </Pressable>
         </View>
-      </Pressable>
-    </View>
+      
   )
 }
 
