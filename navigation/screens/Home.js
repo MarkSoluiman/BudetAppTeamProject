@@ -27,10 +27,10 @@ export default function Home({ navigation }) {
         strokeWidth={16}
         radius={32}
         const chartConfig = {{
-            backgroundGradientFrom: "#f7831e",
-            backgroundGradientFromOpacity: 0,
-            backgroundGradientTo: "#f7831e",
-            backgroundGradientToOpacity: 0.5,
+            backgroundGradientFrom: "#f09013",
+            backgroundGradientFromOpacity: 1,
+            backgroundGradientTo: "#f09013",
+            backgroundGradientToOpacity: 1,
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             strokeWidth: 2, // optional, default 3
             barPercentage: 0.5,
