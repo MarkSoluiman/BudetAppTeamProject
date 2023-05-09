@@ -1,4 +1,3 @@
-// Component imports
 import { useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";

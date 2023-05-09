@@ -7,6 +7,7 @@ import { Picker } from '@react-native-picker/picker'
 import { collection, addDoc, getDoc, doc, updateDoc, increment } from 'firebase/firestore/lite'
 import { db, firebase } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
+import FontAwesome from 'react-native-vector-icons/Ionicons'
 
 // Exported function
 export default function LogModal({navigation}){
@@ -221,6 +222,7 @@ export default function LogModal({navigation}){
                     <Text style={styles.prompts}>SAVE</Text>
                 </Pressable>
             </View>
+            <FontAwesome name  = "camera"/>
         </View>
     )
 }
