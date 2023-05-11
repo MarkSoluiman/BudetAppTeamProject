@@ -4,8 +4,9 @@ import { View, Text, StyleSheet, Alert } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { doc, collection, addDoc, updateDoc } from "firebase/firestore/lite";
 import { auth, db, firebase } from "../../firebase.config";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut, updateEmail, updatePassword } from "firebase/auth";
 import { Picker } from "@react-native-picker/picker";
+import { Switch } from '@rneui/themed'
 
 // Exported function
 export default function Profile({ navigation }) {
@@ -15,6 +16,7 @@ export default function Profile({ navigation }) {
   const [primaryLocation, setPrimaryLocation] = useState("");
   const [transportMeans, setTransportMeans] = useState("");
   const [profileID, setProfileID] = useState("");
+  const [checked, setChecked] = useState(false);
 
   // Function to save data
   const saveData = async () => {
@@ -27,82 +29,104 @@ export default function Profile({ navigation }) {
       .then((querySnapshot) => {
         querySnapshot.forEach((documentSnapshot) => {
           setProfileID(documentSnapshot.id);
+          const profileDocRef = doc(db, "Profile", profileID);
+
+          // Document will be updating as the following. Done individually as users don't have to change all fields.
+          const dataEmail = {
+            email: email,
+          };
+          const dataPass = {
+            password: password,
+          };
+          const dataLocation = {
+            primaryLocation: primaryLocation,
+          };
+          const dataStudent = {
+            student: student,
+          };
+          const dataTransport = {
+            transportMeans: transportMeans,
+          };
+          const dataNotifs = {
+            notifications: checked,
+          }
+
+          updateDoc(profileDocRef, dataNotifs).then(() => {
+            console.log("Goal Notifications has been updated")
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      
+          // Input validation
+          if (email.length > 0) {
+            updateDoc(profileDocRef, dataEmail)
+              .then(() => {
+                console.log("Email has been updated");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            updateEmail(getAuth().currentUser, email)
+              .then(() => {
+                console.log("Email updated")
+              }).catch((error) => {
+                console.log("Updating email",error)
+              })
+          }
+          if (password.length > 5) {
+            updateDoc(profileDocRef, dataPass)
+              .then(() => {
+                console.log("Password has been updated");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+              updatePassword(getAuth().currentUser, password)
+              .then(() => {
+                console.log("Password updated")
+              }).catch((error) => {
+                console.log("Updating password",error)
+              })
+          }
+          if (primaryLocation.length > 1) {
+            updateDoc(profileDocRef, dataLocation)
+              .then((profileDocRef) => {
+                console.log("Primary Location has been updated");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+          if (student.length > 0) {
+            updateDoc(profileDocRef, dataStudent)
+              .then((profileDocRef) => {
+                console.log("Student Status has been updated");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+          if (transportMeans.length > 0) {
+            updateDoc(profileDocRef, dataTransport)
+              .then((profileDocRef) => {
+                console.log("Transport Means has been updated");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
         });
       })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    // Document will be updating as the following. Done individually as users don't have to change all fields.
-    const profileDocRef = doc(db, "Profile", profileID);
-    const dataEmail = {
-      email: email,
-    };
-    const dataPass = {
-      password: password,
-    };
-    const dataLocation = {
-      primaryLocation: primaryLocation,
-    };
-    const dataStudent = {
-      student: student,
-    };
-    const dataTransport = {
-      transportMeans: transportMeans,
-    };
-
-    // Input validation
-    if (email.length > 0) {
-      updateDoc(profileDocRef, dataEmail)
-        .then((profileDocRef) => {
-          console.log("Field has been updated");
-          Alert.alert("Saved");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    if (password.length > 5) {
-      updateDoc(profileDocRef, dataPass)
-        .then((profileDocRef) => {
-          console.log("Field has been updated");
-          Alert.alert("Saved");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    if (primaryLocation.length > 1) {
-      updateDoc(profileDocRef, dataLocation)
-        .then((profileDocRef) => {
-          console.log("Field has been updated");
-          Alert.alert("Saved");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    if (student.length > 0) {
-      updateDoc(profileDocRef, dataStudent)
-        .then((profileDocRef) => {
-          console.log("Field has been updated");
-          Alert.alert("Saved");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    if (transportMeans.length > 0) {
-      updateDoc(profileDocRef, dataTransport)
-        .then((profileDocRef) => {
-          console.log("Field has been updated");
-          Alert.alert("Saved");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    .catch((error) => {
+      console.error(error);
+    });
   };
+
+  // Switch
+  const toggleSwitch = () => {
+    setChecked(!checked)
+  }
 
   // Logout
   const handleLogout = async () => {
@@ -113,12 +137,12 @@ export default function Profile({ navigation }) {
     <View style={styles.background}>
       <View style={styles.widget}>
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.textStyle}>Email</Text>
+          <Text style={styles.prompts}>Email</Text>
           <TextInput
             style={styles.entry}
             value={email}
             onChangeText={(value) => setEmail(value)}
-            placeholder="Email"
+            placeholder= {getAuth().currentUser.email}
           />
 
           {/* Password prompt and entry */}
@@ -131,7 +155,7 @@ export default function Profile({ navigation }) {
           />
 
           {/* Student prompt and picker */}
-          <Text style={styles.prompts}>Are you a Student?</Text>
+          <Text style={styles.prompts}>Student Status</Text>
           <View style={styles.drop}>
             <Picker
               selectedValue={student}
@@ -173,28 +197,23 @@ export default function Profile({ navigation }) {
           </View>
         </View>
 
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#ffe9df",
-            height: 50,
-            margin: 20,
-            borderRadius: 20,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={() => saveData()}
-        >
-          <Text
-            style={{
-              color: "black",
-            }}
-          >
-            SAVE
-          </Text>
+        {/* Notifications Switch */}
+        <View style={styles.switchView}>
+          <Text style={styles.sidePrompts}>Goal Notifications</Text>
+          <Switch 
+            style={styles.switch}
+            color='#ff8100' 
+            value={checked} 
+            onValueChange={(value) => setChecked(value)} 
+          />
+        </View>
+
+        <TouchableOpacity style={styles.saveButton} onPress={() => saveData()}>
+          <Text style={styles.prompts}>SAVE</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={handleLogout}>
-        <Text> LOG OUT </Text>
+      <TouchableOpacity style={styles.logButton} onPress={handleLogout}>
+        <Text style={styles.prompts}>LOG OUT</Text>
       </TouchableOpacity>
     </View>
   );
@@ -211,7 +230,6 @@ const styles = StyleSheet.create({
   },
   widget: {
     marginHorizontal: 10,
-    marginVertical: 20,
     borderRadius: 15,
     width: 350,
     height: 625,
@@ -246,6 +264,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 17,
   },
+  sidePrompts: {
+    fontWeight: "bold",
+    fontSize: 17,
+    verticalAlign: 'middle'
+  },
   drop: {
     borderRadius: 15,
     borderColor: "#ff8100",
@@ -272,4 +295,26 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start",
   },
+  switchView: {
+    flexDirection: 'row',
+    verticalAlign: 'middle',
+    alignSelf: 'center',
+    justifyContent: 'flex-end'
+  },
+  saveButton: {
+    backgroundColor: "#ff8100",
+    height: 50,
+    marginTop: '5%',
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  logButton: {
+    backgroundColor: "#ff8100",
+    height: 40,
+    width: 200,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });
