@@ -43,6 +43,7 @@ const profileName = 'Profile'
 const loginName = 'Login'
 const signUpName = 'Sign Up'
 
+
 // Login navigation, initial navigation accessed: login, sign up, and home (access to the full application)
 const LoginStack = createStackNavigator()
 export default function LoginStackScreen(){
@@ -134,6 +135,8 @@ function LogStackScreen(){
         >
             <LogStack.Screen name={logName} component={Log}/>
             <LogStack.Screen name={logModalName} component={LogModal}/>
+            
+
         </LogStack.Navigator>
     )
 }
