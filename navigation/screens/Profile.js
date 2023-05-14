@@ -117,7 +117,7 @@ export default function Profile({ navigation }) {
             style={styles.entry}
             value={email}
             onChangeText={(value) => setEmail(value)}
-            placeholder="Email"
+            placeholder={getAuth().currentUser.email}
           />
 
           {/* Password prompt and entry */}
@@ -127,6 +127,7 @@ export default function Profile({ navigation }) {
             value={password}
             onChangeText={(value) => setPassword(value)}
             placeholder={getAuth().currentUser.password}
+            secureTextEntry = {true}
           />
 
           {/* Student prompt and picker */}
