@@ -1,14 +1,14 @@
 // Component imports
-import { TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { app, auth, db, firebase } from '../../firebase.config'
-import { collection, getDoc, deleteDoc } from 'firebase/firestore'
+import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
 import { QuerySnapshot } from '@firebase/firestore'
 import { getAuth } from 'firebase/auth'
+import Ionicones from 'react-native-vector-icons/Ionicons'
 
 // Exported function
-export default function Log({navigation}){
-
+export default function Log({navigation}) {  
 
   // Initialise constants
   const [transList, setTransList] = useState([])
@@ -17,7 +17,6 @@ export default function Log({navigation}){
   // User-specific data fetching, ordered from most recent entries
   const todoRef = firebase.firestore().collection('Logs').where('uid','==',getAuth().currentUser.uid).orderBy('trans_date', 'desc')
   var sign = ''
-
 
   // Use effect for fetching transaction log data
   useEffect( () => {
@@ -62,19 +61,32 @@ export default function Log({navigation}){
       .where('trans_name', '==', selectedTransName)
       .where('trans_amount', '==', selectedTransAmount)
       .get()
-    .then(querySnapshot => {
+      .then(querySnapshot => {
+        const selectionIDs = []
         querySnapshot.forEach(documentSnapshot => {
-            setSelectionID(documentSnapshot.id)
+          selectionIDs.push(documentSnapshot.id)
         })
+        if (selectionIDs.length === 0){
+          Alert.alert("No transactions found")
+        }
+        const batch = firebase.firestore().batch()
+        selectionIDs.forEach(selectionID => {
+          const docRef = firebase.firestore().collection('Logs').doc(selectionID)
+          batch.delete(docRef)
+        })
+        batch.commit()
+          .then(() => {
+            setSelectionID("")
+          })
+          .catch((error) => {
+            console.log("Error removing documents: ", error)
+          })
+      })
+      .catch(error => {
+        console.log(error)
     })
-    .catch(error => {
-        console.error(error)
-    })
-    firebase.firestore()
-      .collection('Logs')
-      .doc(selectionID).delete()
-    setSelectionID(0)
   }
+  
 
   return (
     <SafeAreaView style={styles.background}>
@@ -84,38 +96,30 @@ export default function Log({navigation}){
             <Text style={styles.buttonText}>NEW TRANSACTION</Text>
         </Pressable>
 
-
-
-
-
         {/* List of transactions */}
         <View style={styles.widget}>
           <FlatList
             data={transList}
             numColumns={1}
             renderItem={({item}) => (
-              <TouchableOpacity
-                onPress={() => deleteEntry(
+              <View style={styles.entry}>
+                
+                {/* Formatting of entries */}
+                <Text style={styles.textEntry}>Date: {item.day}/{item.month}/{item.year}{'\n'}Transaction: {item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
+                <Pressable style={styles.icon} onPress={() => deleteEntry(
                   item.trans_date
                   , item.trans_name
                   , item.trans_amount)}
-              >
-                <View>
-                  
-                  {/* Formatting of entries */}
-                  <Text>{item.day}/{item.month}/{item.year}{'\n'}{item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
-                </View>
-              </TouchableOpacity>
+                >
+                  <Ionicones name='trash-bin' size={20} color='#682d01'/>
+                </Pressable>
+              </View>
             )}
           />
         </View>
     </SafeAreaView>
-  )
-
- }
-
-  
-
+  );
+}
 
 // Styling
 const styles = StyleSheet.create({
@@ -123,6 +127,10 @@ const styles = StyleSheet.create({
       flex:1
       , paddingTop: '5%'
       , backgroundColor: '#ffdeb7'
+  },
+  textEntry:{
+    width: 280,
+    fontWeight: '400'
   },
   widget:{
       marginHorizontal: '5%'
@@ -133,6 +141,17 @@ const styles = StyleSheet.create({
       , padding: 15
       , backgroundColor: '#ff8100'
       , justifyContent: 'space-evenly'
+  },
+  icon:{
+    paddingVertical: 5,
+  },
+  entry:{
+    flexDirection: 'row'
+    , marginBottom: '5%'
+    , backgroundColor: '#ffdeb7'
+    , borderRadius: 10
+    , padding: 15
+    , paddingTop: 25
   },
   button:{
       width: 370
@@ -148,4 +167,3 @@ const styles = StyleSheet.create({
       , fontWeight: 'bold'
   }
 })
-

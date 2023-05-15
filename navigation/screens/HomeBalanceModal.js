@@ -1,83 +1,44 @@
 // Component imports
-// Component imports
+import { View, Text, StyleSheet, Pressable, Dimensions  } from "react-native";
 import {
-  TouchableOpacity,
-  View,
-  Text,
-  SafeAreaView,
-  FlatList,
-  StyleSheet,
-  Pressable,
-} from "react-native";
-import React, { useState, useEffect } from "react";
-import { app, auth, db, firebase } from "../../firebase.config";
-import { collection, getDoc, deleteDoc } from "firebase/firestore";
-import { QuerySnapshot } from "@firebase/firestore";
-import { getAuth } from "firebase/auth";
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart,
+} from "react-native-chart-kit";
+
+const data = {
+  labels: ["Income", "Expenditure", "Current Balance"], // optional
+  data: [0.8, 0.3, 0.5],
+  barColors: ["#47e6e6", "#e846e3","#e846e3"],
+};
 
 // Exported function
 export default function HomeBalanceModal({ navigation }) {
-  const [expences, setExpences] = useState([]);
-  const [incomes, setIncomes] = useState([]);
-  const [balance, setBalance] = useState();
-  const expencesRef = firebase
-    .firestore()
-    .collection("Logs")
-    .where("uid", "==", getAuth().currentUser.uid)
-    .where("trans_type", "==", "Expenditure");
-  const incomeRef = firebase
-    .firestore()
-    .collection("Logs")
-    .where("uid", "==", getAuth().currentUser.uid)
-    .where("trans_type", "==", "Income");
-  useEffect(() => {
-    async function fetchTransactionValues() {
-      expencesRef.onSnapshot((QuerySnapshot) => {
-        const expences = [];
-        QuerySnapshot.forEach((doc) => {
-          const trans_amount = doc.data();
-
-          expences.push(trans_amount);
-          
-        });
-        setExpences(expences.map(parseFloat))
-
-      });
-
-      incomeRef.onSnapshot((QuerySnapshot)=>{
-        const incomes=[]
-        QuerySnapshot.forEach((doc)=>{
-            const trans_amount=doc.data()
-            incomes.push(trans_amount)
-        })
-        setIncomes(incomes.map(parseFloat))
-      })
-
-      
-      function calcBalance(){
-        income=0
-        expence=0
-        incomes.forEach(i => income+=i)
-        expences.forEach(e=> expences+=e)
-
-        return(i-e)
-
-      }
-
-      setBalance(calcBalance)
-
-      
-
-
-      
-      
-    }
-  });
-
   return (
     <View style={styles.background}>
       {/* Heading */}
       <Text style={styles.prompts}>Current Balance</Text>
+      <ProgressChart
+        data={data}
+        width={Dimensions.get("window").width}
+        height={220}
+        strokeWidth={16}
+        radius={32}
+        chartConfig = {{
+            backgroundGradientFrom: '#ffa600',
+            backgroundGradientFromOpacity: 1,
+            backgroundGradientTo: '#ff6361',
+            backgroundGradientToOpacity: 1,
+            color: (opacity = 1) => `rgba(211, 211, 211, ${opacity})`,
+            strokeWidth: 2, // optional, default 3
+            barPercentage: 0.5,
+            useShadowColorFromDataset: false // optional
+          }}
+          style= {{borderRadius: 10, alignSelf: 'center'}}
+      />
 
       {/* Button to return to home page */}
       <Pressable onPress={() => navigation.navigate("Home")}>
@@ -86,7 +47,7 @@ export default function HomeBalanceModal({ navigation }) {
         </View>
       </Pressable>
     </View>
-  );
+  )
 }
 
 // Styling
@@ -109,5 +70,5 @@ const styles = StyleSheet.create({
     width: 90,
     margin: 20,
     alignSelf: "center",
-  },
-});
+  }
+})
