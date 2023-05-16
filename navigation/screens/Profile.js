@@ -12,24 +12,31 @@ import { Switch } from '@rneui/themed'
 export default function Profile({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [student, setStudent] = useState("");
+  const [student, setStudent] = useState();
   const [primaryLocation, setPrimaryLocation] = useState("");
   const [transportMeans, setTransportMeans] = useState("");
-  const [profileID, setProfileID] = useState("");
   const [checked, setChecked] = useState(false);
 
   // Function to save data
   const saveData = async () => {
+    const currentUser = getAuth().currentUser;
+    if (!currentUser) {
+      console.log("User is not authenticated");
+      return;
+    }
+
+  // Refresh user token
+  const idToken = await currentUser.getIdToken(true);
+
     // Find document for authenticated user
     firebase
       .firestore()
       .collection("Profile")
-      .where("uid", "==", getAuth().currentUser.uid)
+      .where("uid", "==", currentUser.uid)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((documentSnapshot) => {
-          setProfileID(documentSnapshot.id);
-          const profileDocRef = doc(db, "Profile", profileID);
+          const profileDocRef = doc(db, "Profile", documentSnapshot.id);
 
           // Document will be updating as the following. Done individually as users don't have to change all fields.
           const dataEmail = {
@@ -60,30 +67,31 @@ export default function Profile({ navigation }) {
       
           // Input validation
           if (email.length > 0) {
-            updateDoc(profileDocRef, dataEmail)
-              .then(() => {
-                console.log("Email has been updated");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+            
             updateEmail(getAuth().currentUser, email)
               .then(() => {
+                updateDoc(profileDocRef, dataEmail)
+                .then(() => {
+                  console.log("Email has been updated");
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
                 console.log("Email updated")
               }).catch((error) => {
                 console.log("Updating email",error)
               })
           }
           if (password.length > 5) {
-            updateDoc(profileDocRef, dataPass)
-              .then(() => {
-                console.log("Password has been updated");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
               updatePassword(getAuth().currentUser, password)
               .then(() => {
+                updateDoc(profileDocRef, dataPass)
+                .then(() => {
+                  console.log("Password has been updated");
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
                 console.log("Password updated")
               }).catch((error) => {
                 console.log("Updating password",error)
@@ -91,16 +99,16 @@ export default function Profile({ navigation }) {
           }
           if (primaryLocation.length > 1) {
             updateDoc(profileDocRef, dataLocation)
-              .then((profileDocRef) => {
+              .then(() => {
                 console.log("Primary Location has been updated");
               })
               .catch((error) => {
                 console.log(error);
               });
           }
-          if (student.length > 0) {
+          if (student != "") {
             updateDoc(profileDocRef, dataStudent)
-              .then((profileDocRef) => {
+              .then(() => {
                 console.log("Student Status has been updated");
               })
               .catch((error) => {
@@ -109,7 +117,7 @@ export default function Profile({ navigation }) {
           }
           if (transportMeans.length > 0) {
             updateDoc(profileDocRef, dataTransport)
-              .then((profileDocRef) => {
+              .then(() => {
                 console.log("Transport Means has been updated");
               })
               .catch((error) => {
@@ -164,8 +172,8 @@ export default function Profile({ navigation }) {
               }}
             >
               <Picker.Item label="Select student status type..." value="" />
-              <Picker.Item label="Student" value="true" />
-              <Picker.Item label="Not a student" value="false" />
+              <Picker.Item label="Student" value={true} />
+              <Picker.Item label="Not a student" value={false} />
             </Picker>
           </View>
 
@@ -208,7 +216,7 @@ export default function Profile({ navigation }) {
           />
         </View>
 
-        <TouchableOpacity style={styles.saveButton} onPress={() => saveData()}>
+        <TouchableOpacity style={styles.saveButton} onPress={saveData}>
           <Text style={styles.prompts}>SAVE</Text>
         </TouchableOpacity>
       </View>

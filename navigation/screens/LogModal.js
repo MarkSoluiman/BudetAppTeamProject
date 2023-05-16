@@ -43,6 +43,35 @@ export default function LogModal({navigation}){
         }
     }
 
+    const goalNotifications = () => {
+
+    }
+
+    // Deduce from goal, if there is an income association
+    const deduceGoal = () => {
+        if (selectedGoal != null && selectedType === 'Income'){  
+            firebase.firestore().collection("Goals").where('goal_name', '==', selectedGoal).get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(documentSnapshot => {
+                        setGoalID(documentSnapshot.id)
+                    })
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+            const goalDocRef = doc(db, "Goals", goalID)
+            const data = { goal_balance: increment(tranAmount) }
+            
+            updateDoc(goalDocRef, data)
+            .then(goalDocRef => {
+                console.log("Field has been updated")
+            })
+            .catch(error => {
+                console.log(error)
+            })
+        }
+    }
+
     // Validate entry input, if successful... write to firebase
     const handleSubmit = async () => {
         if(date){
@@ -52,27 +81,7 @@ export default function LogModal({navigation}){
                         if (selectedCat.length > 0){
                             if (selectedGoal == null || selectedGoal.length > 0){
 
-                                // Deduce from goal, if there is an income association
-                                if (selectedGoal != null && selectedType === 'Income'){  
-                                    firebase.firestore().collection("Goals").where('goal_name', '==', selectedGoal).get()
-                                        .then(querySnapshot => {
-                                            querySnapshot.forEach(documentSnapshot => {
-                                                setGoalID(documentSnapshot.id)
-                                            })
-                                        })
-                                        .catch(error => {
-                                            console.error(error)
-                                        })
-                                    const goalDocRef = doc(db, "Goals", goalID)
-                                    const data = { goal_balance: increment(tranAmount) }
-                                    updateDoc(goalDocRef, data)
-                                    .then(goalDocRef => {
-                                        console.log("Field has been updated")
-                                    })
-                                    .catch(error => {
-                                        console.log(error)
-                                    })
-                                }
+                                {deduceGoal}
 
                                 // Save transaction and upload as new document to firebase
                                 Alert.alert('Transaction saved')
