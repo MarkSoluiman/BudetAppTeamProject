@@ -73,6 +73,9 @@ export default function Log({navigation}) {
         selectionIDs.forEach(selectionID => {
           const docRef = firebase.firestore().collection('Logs').doc(selectionID)
           batch.delete(docRef)
+
+          // Deduce from goal balance, if associated to a goal
+
         })
         batch.commit()
           .then(() => {

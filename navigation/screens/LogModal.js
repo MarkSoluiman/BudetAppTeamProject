@@ -22,6 +22,8 @@ export default function LogModal({navigation}){
     const [selectedGoal, setSelectedGoal] = useState('')
     const [goalsList, setGoalsList] = useState([])
     const [goalID, setGoalID] = useState('')
+    const [notifsOn, setNotifsOn] = useState(false)
+    const [goalMet, setGoalMet] = useState(false)
     const todoRef = firebase.firestore().collection('Goals').where('uid', '==', getAuth().currentUser.uid).where('goal_complete', '==', false)
     
     // Initialise date picker for transaction date
@@ -45,30 +47,85 @@ export default function LogModal({navigation}){
 
     const goalNotifications = () => {
 
-    }
+        // Find if goal notifications are on, if yes, set local constant notifsOn to true
+        firebase.firestore().collection("Profile").where('uid', '==', getAuth().currentUser.uid).where("notifications", "==", true).get()
+            .then(querySnapshot => {
+                querySnapshot.forEach(documentSnapshot => {
+                    if (documentSnapshot.data()['notifications'] === true){
+                        setNotifsOn(true)
+                    }
+                })
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error)
+            })
 
-    // Deduce from goal, if there is an income association
-    const deduceGoal = () => {
-        if (selectedGoal != null && selectedType === 'Income'){  
-            firebase.firestore().collection("Goals").where('goal_name', '==', selectedGoal).get()
+        // Find if goal met, goal_balance >= goal_met
+        firebase.firestore().collection("Goals").where('uid', '==', getAuth().currentUser.uid).where('goal_name', '==', selectedGoal).get()
                 .then(querySnapshot => {
                     querySnapshot.forEach(documentSnapshot => {
-                        setGoalID(documentSnapshot.id)
+                        if (documentSnapshot.data().goal_balance >= documentSnapshot.data().goal_amount){
+                            firebase.firestore().collection("Goals")
+                                .where('uid', '==', getAuth().currentUser.uid)
+                                .where('goal_name', '==', selectedGoal)
+                                .get()
+                                .then(querySnapshot => {
+                                    querySnapshot.forEach(documentSnapshot => {
+
+                                        const goalDocRef = doc(db, "Goals", documentSnapshot.id)
+                                        const data = { goal_complete: true }
+                                        
+                                        updateDoc(goalDocRef, data)
+                                        .then((error) => {
+                                            console.log("Error while attempting to complete goal, ",error)
+                                        })
+                                        .catch((error) => {
+                                            console.log(error)
+                                        })
+                                    })
+                                })
+                                .catch((error) => {
+                                    console.log(error)
+                                })
+
+                            // When notifsOn and associated goal balance >= goal amount, display notification
+                            if(notifsOn){
+                                Alert.alert("Goal completed!")
+                                console.log("Goal completed as a console log")
+                            }       
+                        }
                     })
                 })
-                .catch(error => {
-                    console.error(error)
+                .catch((error) => {
+                    console.log(error)
+                })        
+    }
+
+    // Add to goal balance, if there is an income association
+    const increaseGoal = async () => {
+        if (selectedGoal != null && selectedType === 'Income'){  
+            firebase.firestore().collection("Goals")
+                .where('uid', '==', getAuth().currentUser.uid)
+                .where('goal_name', '==', selectedGoal)
+                .get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(documentSnapshot => {
+
+                        const goalDocRef = doc(db, "Goals", documentSnapshot.id)
+                        const data = { goal_balance: increment(tranAmount) }
+                        
+                        updateDoc(goalDocRef, data)
+                        .then(() => {
+                            console.log("Goal field has been updated with income association")
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+                    })
                 })
-            const goalDocRef = doc(db, "Goals", goalID)
-            const data = { goal_balance: increment(tranAmount) }
-            
-            updateDoc(goalDocRef, data)
-            .then(goalDocRef => {
-                console.log("Field has been updated")
-            })
-            .catch(error => {
-                console.log(error)
-            })
+                .catch((error) => {
+                    console.log(error)
+                })
         }
     }
 
@@ -81,11 +138,8 @@ export default function LogModal({navigation}){
                         if (selectedCat.length > 0){
                             if (selectedGoal == null || selectedGoal.length > 0){
 
-                                {deduceGoal}
-
                                 // Save transaction and upload as new document to firebase
                                 Alert.alert('Transaction saved')
-                                console.log(selectedType)
                                 navigation.navigate('Log')
                                 const docRef = addDoc(collection(db, "Logs"), {
                                     uid: getAuth().currentUser.uid
@@ -96,7 +150,13 @@ export default function LogModal({navigation}){
                                     , trans_category: selectedCat
                                     , trans_goal: selectedGoal
                                 });
-                                console.log('Document written with ID: ', docRef.id)
+
+                                increaseGoal()
+                                goalNotifications()
+
+                                console.log('Document written with ID: ', (await docRef).id)
+
+                            // If unsuccessul... present user alert
                             } else {
                                 Alert.alert('Error: A transaction goal association needs to be selected')
                             }
@@ -137,7 +197,6 @@ export default function LogModal({navigation}){
         }
         fetchData()
     }, [])
-
 
     // Exported function
     return(
