@@ -1,60 +1,140 @@
 // Component imports
+import { DocumentSnapshot, QuerySnapshot, query } from "@firebase/firestore";
 import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+import { PieChart } from "react-native-chart-kit";
+import { getAuth } from 'firebase/auth'
+import { db, firebase } from '../../firebase.config'
+import React, { useState, useEffect } from 'react'
+
+// HELP https://blog.logrocket.com/using-react-native-chart-kit-visualize-data/ 
 
 // Exported functions
 export default function HomeSpendingModal({ navigation }) {
+
+  let [foodCount, transportCount, healthCount, utilitiesCount, housingCount, enterCount, workCount, schoolCount, miscCount] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+  const [data, setData] = useState([])
+
+    // Use effect for fetching spending data
+    useEffect( () => {
+      async function fetchData(){
+          firebase.firestore().collection("Logs")
+            .where('uid', '==', getAuth().currentUser.uid)
+            .where('trans_type', '==', 'Expenditure')
+            // .where() // month
+            .where('trans_category', '==', 'Food') // category
+            .get()
+            .then(querySnapshot => {
+              querySnapshot.forEach(documentSnapshot => {
+                console.log(documentSnapshot.data().trans_amount)
+                foodCount += parseInt(documentSnapshot.data().trans_amount)
+                console.log(foodCount)
+              })
+            })
+      }
+      fetchData()
+
+      setData([
+        {
+          name: "Food",
+          population: foodCount,
+          color: "#D73310",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15
+        },
+        {
+          name: "Transport",
+          population: transportCount,
+          color: "#FB5734",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15
+        },
+        {
+          name: "Health",
+          population: healthCount,
+          color: "#A44B38",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15
+        },
+        {
+          name: "Utilities",
+          population: utilitiesCount,
+          color: "#FFA10A",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15
+        },
+        {
+          name: "Housing",
+          population: housingCount,
+          color: "#BD7B5C",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15
+        },
+        {
+          name: "Entertainment",
+          population: enterCount,
+          color: "#FFC772",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15
+        },
+        {
+          name: "Work",
+          population: workCount,
+          color: "#FFE572",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15
+        },
+        {
+          name: "Schooling",
+          population: schoolCount,
+          color: "#FFF4C3",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15
+        },
+        {
+          name: "Miscellaneous",
+          population: miscCount,
+          color: "#DFE823",
+          legendFontColor: "#7F7F7F",
+          legendFontSize: 15
+        }
+      ])
+
+  }, [])
+
+  const screenWidth = Dimensions.get("window").width;
+
+  const chartConfig = {
+    backgroundGradientFrom: "#1E2923",
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: "#08130D",
+    backgroundGradientToOpacity: 0.5,
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false // optional
+  };
+
+  
+
   return (
     <View style={styles.background}>
       {/* Heading */}
       <Text style={styles.prompts}>Monthly Spending</Text>
 
       <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Text>Bezier Line Chart</Text>
-        <LineChart
-          data={{
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [
-              {
-                data: [
-                  Math.random() * 2,
-                  Math.random() * 2,
-                  Math.random() * 2,
-                  Math.random() * 2,
-                  Math.random() * 2,
-                  Math.random() * 2,
-                ],
-              },
-            ],
-          }}
-          width={Dimensions.get("window").width} // from react-native
-          height={220}
-          yAxisLabel="$"
-          yAxisSuffix="k"
-          yAxisInterval={1} // optional, defaults to 1
-          chartConfig={{
-            backgroundColor: "#e26a00",
-            backgroundGradientFrom: "#fb8c00",
-            backgroundGradientTo: "#ffa726",
-            decimalPlaces: 2, // optional, defaults to 2dp
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 16,
-            },
-            propsForDots: {
-              r: "6",
-              strokeWidth: "2",
-              stroke: "#ffa726",
-            },
-          }}
-          bezier
-          style={{
-            marginVertical: 8,
-            borderRadius: 16,
-          }}
+        <PieChart
+          data={data}
+          width={screenWidth-30}
+          height={300}
+          chartConfig={chartConfig}
+          accessor={"population"}
+          backgroundColor={"transparent"}
+          paddingLeft={"10"}
+          center={[10,10]}
+          absolute
         />
       </View>
+      <Text>{foodCount}</Text>
 
       {/* Button to return to home page */}
       <Pressable onPress={() => navigation.navigate("Home")}>
