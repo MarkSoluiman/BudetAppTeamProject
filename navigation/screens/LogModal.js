@@ -22,8 +22,6 @@ export default function LogModal({navigation}){
     const [selectedGoal, setSelectedGoal] = useState('')
     const [goalsList, setGoalsList] = useState([])
     const [goalID, setGoalID] = useState('')
-    const [notifsOn, setNotifsOn] = useState(false)
-    const [goalMet, setGoalMet] = useState(false)
     const todoRef = firebase.firestore().collection('Goals').where('uid', '==', getAuth().currentUser.uid).where('goal_complete', '==', false)
     
     // Initialise date picker for transaction date
@@ -45,20 +43,7 @@ export default function LogModal({navigation}){
         }
     }
 
-    const goalNotifications = () => {
-
-        // Find if goal notifications are on, if yes, set local constant notifsOn to true
-        firebase.firestore().collection("Profile").where('uid', '==', getAuth().currentUser.uid).where("notifications", "==", true).get()
-            .then(querySnapshot => {
-                querySnapshot.forEach(documentSnapshot => {
-                    if (documentSnapshot.data()['notifications'] === true){
-                        setNotifsOn(true)
-                    }
-                })
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error)
-            })
+    const goalNotifications = async () => {
 
         // Find if goal met, goal_balance >= goal_met
         firebase.firestore().collection("Goals").where('uid', '==', getAuth().currentUser.uid).where('goal_name', '==', selectedGoal).get()
@@ -72,12 +57,29 @@ export default function LogModal({navigation}){
                                 .then(querySnapshot => {
                                     querySnapshot.forEach(documentSnapshot => {
 
+                                        console.log('balance>goal')
+
                                         const goalDocRef = doc(db, "Goals", documentSnapshot.id)
                                         const data = { goal_complete: true }
                                         
                                         updateDoc(goalDocRef, data)
-                                        .then((error) => {
-                                            console.log("Error while attempting to complete goal, ",error)
+                                        .then(() => {
+                                            console.log("Goal document updated")
+
+                                            // Find if goal notifications are on, if yes, alert user of goal completion
+                                            firebase.firestore().collection("Profile").where('uid', '==', getAuth().currentUser.uid).where("notifications", "==", true).get()
+                                            .then(querySnapshot => {
+                                                querySnapshot.forEach(documentSnapshot => {
+                                                    if (documentSnapshot.data()['notifications'] === true){
+                                                        Alert.alert("Goal completed!")
+                                                        console.log("Goal completed as a console log")
+                                                    }
+                                                })
+                                            })
+                                            .catch((error) => {
+                                                console.log("Error getting documents: ", error)
+                                            })
+
                                         })
                                         .catch((error) => {
                                             console.log(error)
@@ -86,13 +88,7 @@ export default function LogModal({navigation}){
                                 })
                                 .catch((error) => {
                                     console.log(error)
-                                })
-
-                            // When notifsOn and associated goal balance >= goal amount, display notification
-                            if(notifsOn){
-                                Alert.alert("Goal completed!")
-                                console.log("Goal completed as a console log")
-                            }       
+                                })   
                         }
                     })
                 })
@@ -117,6 +113,7 @@ export default function LogModal({navigation}){
                         updateDoc(goalDocRef, data)
                         .then(() => {
                             console.log("Goal field has been updated with income association")
+                            goalNotifications()
                         })
                         .catch((error) => {
                             console.log(error)
@@ -152,7 +149,6 @@ export default function LogModal({navigation}){
                                 });
 
                                 increaseGoal()
-                                goalNotifications()
 
                                 console.log('Document written with ID: ', (await docRef).id)
 
