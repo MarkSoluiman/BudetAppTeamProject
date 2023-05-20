@@ -72,7 +72,7 @@ export default function Profile({ navigation }) {
         });
     }
     if (primaryLocation.length > 1) {
-      updateDoc(profileDocRef, dataLocation)
+      addDoc(profileDocRef, dataLocation)
         .then((profileDocRef) => {
           console.log("Field has been updated");
           Alert.alert("Saved");
@@ -82,7 +82,7 @@ export default function Profile({ navigation }) {
         });
     }
     if (student.length > 0) {
-      updateDoc(profileDocRef, dataStudent)
+      addDoc(profileDocRef, dataStudent)
         .then((profileDocRef) => {
           console.log("Field has been updated");
           Alert.alert("Saved");
@@ -92,7 +92,7 @@ export default function Profile({ navigation }) {
         });
     }
     if (transportMeans.length > 0) {
-      updateDoc(profileDocRef, dataTransport)
+      addDoc(profileDocRef, dataTransport)
         .then((profileDocRef) => {
           console.log("Field has been updated");
           Alert.alert("Saved");

@@ -23,7 +23,7 @@ export default function HomeBalanceModal({ navigation }) {
       <Text style={styles.prompts}>Current Balance</Text>
       <ProgressChart
         data={data}
-        width={Dimensions.get("window").width}
+        width={Dimensions.get("window").width -30}
         height={220}
         strokeWidth={16}
         radius={32}
