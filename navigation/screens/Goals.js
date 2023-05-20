@@ -45,6 +45,8 @@ export default function Goals({navigation}){
         fetchData()
     }, [])
 
+    
+
     function deleteEntry(selectedGoalDate, selectedGoalName, selectedGoalAmount){
         firebase.firestore()
           .collection('Goals')

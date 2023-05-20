@@ -21,10 +21,12 @@
     "@react-navigation/native-stack": "^6.9.12",
     "@react-navigation/stack": "^6.3.16",
     "@shopify/react-native-skia": "^0.1.188",
+    "@vseslav/react-native-horizontal-picker": "^0.1.1",
     "android": "^0.0.8",
     "androidsdk": "^1.0.0",
     "assets": "^3.0.1",
     "expo": "^48.0.16",
+    "expo-barcode-scanner": "~12.3.2",
     "expo-status-bar": "~1.4.4",
     "firebase": "^9.21.0",
     "react": "18.2.0",
@@ -39,8 +41,8 @@
     "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
     "react-native-vector-icons": "^9.2.0",
-    "sdk": "^0.1.1",
-    "expo-barcode-scanner": "~12.3.2"
+    "react-quantity-picker": "^1.0.3",
+    "sdk": "^0.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
