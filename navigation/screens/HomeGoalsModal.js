@@ -105,12 +105,12 @@ export default function HomeGoalsModal({ navigation }) {
     fetchData()
 }, [] )
 
-function deleteEntry(yearPicker, month, selectedGoalBalance){
+function deleteEntry(yearPicker, month_in_number, selectedGoalBalance){
   firebase.firestore()
     .collection('Goals')
     .where('uid', '==', getAuth().currentUser.uid)
-    .where('year', '==', yearPicker)
-    .where('month', '==', month)
+    .where('year', '==', yearPicker.toString())
+    .where('month', '==', month_in_number)
     .where('goal_balance', '==', selectedGoalBalance)
     .get()
     .then(querySnapshot => {
@@ -121,6 +121,14 @@ function deleteEntry(yearPicker, month, selectedGoalBalance){
       if (selectionIDs.length === 0){
         Alert.alert("No goals found")
       }
+
+      // balance on jan 
+      if(month_in_number = "01" && year == yearPicker.toString()){
+
+      console.log(selectedGoalBalance)
+      }
+
+
       const batch = firebase.firestore().batch()
       selectionIDs.forEach(selectionID => {
         const docRef = firebase.firestore().collection('Goals').doc(selectionID)
