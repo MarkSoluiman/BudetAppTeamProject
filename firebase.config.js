@@ -13,7 +13,7 @@ import 'firebase/compat/firestore'
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDAPI468Wl9HNGcU3KJVtmMVq_Jy_DGEno",
+  apiKey: "AIzaSyAg3ZUXj6uDLk-3Ej3pLfwlmwCFD1r9FGM",
   authDomain: "mobile-budgeting-app.firebaseapp.com",
   projectId: "mobile-budgeting-app",
   storageBucket: "mobile-budgeting-app.appspot.com",
