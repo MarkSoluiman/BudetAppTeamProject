@@ -5,33 +5,58 @@ import { PieChart } from "react-native-chart-kit";
 import { getAuth } from 'firebase/auth'
 import { db, firebase } from '../../firebase.config'
 import React, { useState, useEffect } from 'react'
+import { reduceEachLeadingCommentRange } from "typescript";
 
 // HELP https://blog.logrocket.com/using-react-native-chart-kit-visualize-data/ 
 
 // Exported functions
 export default function HomeSpendingModal({ navigation }) {
 
+
   let [foodCount, transportCount, healthCount, utilitiesCount, housingCount, enterCount, workCount, schoolCount, miscCount] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
   const [data, setData] = useState([])
 
-    // Use effect for fetching spending data
-    useEffect( () => {
-      async function fetchData(){
-          firebase.firestore().collection("Logs")
-            .where('uid', '==', getAuth().currentUser.uid)
-            .where('trans_type', '==', 'Expenditure')
-            // .where() // month
-            .where('trans_category', '==', 'Food') // category
-            .get()
-            .then(querySnapshot => {
-              querySnapshot.forEach(documentSnapshot => {
-                console.log(documentSnapshot.data().trans_amount)
-                foodCount += parseInt(documentSnapshot.data().trans_amount)
-                console.log(foodCount)
-              })
-            })
-      }
-      fetchData()
+  function getCurrentMonth(){
+    currentDate = new Date()
+    return currentDate.getMonth()
+  }
+
+  function getCurrentYear(){
+    currentDate = new Date()
+    return currentDate.getYear()
+  }
+
+  function setCount(category, categoryCount){
+    firebase.firestore().collection("Logs")
+      .where('uid', '==', getAuth().currentUser.uid)
+      .where('trans_type', '==', 'Expenditure')
+      .where('trans_date', '>=', new Date()) // month
+      .where('trans_category', '==', category) // category
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          categoryCount += parseInt(documentSnapshot.data().trans_amount)
+          console.log(category, ': ', categoryCount)
+        })
+      })
+  }
+
+  // Use effect for fetching spending data
+  useEffect( () => {
+    async function fetchData(){
+      console.log('Year: ', getCurrentYear())
+      console.log('Month: ', getCurrentMonth())
+      setCount('Food', foodCount)
+      setCount('Transport', transportCount)
+      setCount('Health', healthCount)
+      setCount('Utilities', utilitiesCount)
+      setCount('Housing', housingCount)
+      setCount('Entertainment', enterCount)
+      setCount('Work', workCount)
+      setCount('Schooling', schoolCount)
+      setCount('Miscellaneous', miscCount)
+    }
+    fetchData()
 
       setData([
         {
