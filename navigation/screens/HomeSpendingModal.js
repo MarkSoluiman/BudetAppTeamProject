@@ -30,7 +30,7 @@ export default function HomeSpendingModal({ navigation }) {
     firebase.firestore().collection("Logs")
       .where('uid', '==', getAuth().currentUser.uid)
       .where('trans_type', '==', 'Expenditure')
-      .where('trans_date', '>=', new Date()) // month
+      // .where('trans_date', '>=', new Date()) // month
       .where('trans_category', '==', category) // category
       .get()
       .then(querySnapshot => {
