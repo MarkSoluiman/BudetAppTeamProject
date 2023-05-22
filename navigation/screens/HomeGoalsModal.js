@@ -20,45 +20,12 @@ import {
 } from "react-native-chart-kit";
 
 
-
-const data = {
-  labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
-  legend: ["G1, G2, G3"],
-  data: [
-    [60, 60, 30], // balance on Jan  
-    [30, 30 , 30], // balance on feb 
-    [60, 60, 30],  // balance on March 
-    [30, 30],
-    [60, 60],
-    [30, 30],
-    [60, 60],
-    [30, 30],
-    [30, 30],
-    [30, 30],
-    [60, 60],
-    [30, 30],
-    
-  ],
-  barColors: ["#f2f25a", "#e3e31e", "#fa1eca"],
-  
-};
 // Exported function
 export default function HomeGoalsModal({ navigation }) {
 
   const [goalsList, setGoalsList] = useState([])
+  const [transList, setTransList] = useState([])
+
   var [yearPicker, setYearPicker] = useState(2023)
 
 
@@ -105,48 +72,82 @@ export default function HomeGoalsModal({ navigation }) {
     fetchData()
 }, [] )
 
-function deleteEntry(yearPicker, month_in_number, selectedGoalBalance){
-  firebase.firestore()
-    .collection('Goals')
-    .where('uid', '==', getAuth().currentUser.uid)
-    .where('year', '==', yearPicker.toString())
-    .where('month', '==', month_in_number)
-    .where('goal_balance', '==', selectedGoalBalance)
-    .get()
-    .then(querySnapshot => {
-      const selectionIDs = []
-      querySnapshot.forEach(documentSnapshot => {
-        selectionIDs.push(documentSnapshot.id)
-      })
-      if (selectionIDs.length === 0){
-        Alert.alert("No goals found")
+const TransRef = firebase.firestore().collection('Logs').where('uid','==',getAuth().currentUser.uid).orderBy('trans_date', 'desc')
+var sign = ''
+
+// Use effect for fetching transaction log data
+useEffect( () => {
+  async function fetchData(){
+    TransRef
+    .onSnapshot(
+      querySnapshot => {
+        const transList = []
+        querySnapshot.forEach((doc) => {
+          const { day, month, year, trans_date, trans_name, trans_amount, trans_type } = doc.data()
+          
+          // Add a negative sign to expenditure entries
+          if(trans_type==='Expenditure'){
+            sign = '-'
+          } else {
+            sign = ''
+          }
+          transList.push({
+            // Formatting date, converting from Firestore TIMESTAMP to DD/MM/YYYY
+            day: trans_date.toDate().getDate().toString().padStart(2, '0'),
+            month: (trans_date.toDate().getMonth() + 1).toString().padStart(2, '0'),
+            year: trans_date.toDate().getFullYear().toString().slice(-2),
+            trans_date,
+            trans_name,
+            sign,
+            trans_amount,
+          })
+        }) 
+        setTransList(transList)
       }
-
-      // balance on jan 
-      if(month_in_number = "01" && year == yearPicker.toString()){
-
-      console.log(selectedGoalBalance)
-      }
+    )
+  }
+  fetchData()
+}, [])
 
 
-      const batch = firebase.firestore().batch()
-      selectionIDs.forEach(selectionID => {
-        const docRef = firebase.firestore().collection('Goals').doc(selectionID)
-        //batch.delete(docRef)
-      })
-      batch.commit()
-        .then(() => {
-          setSelectionID("")
-        })
-        .catch((error) => {
-          console.log("Error removing documents: ", error)
-        })
-    })
-    .catch(error => {
-      console.log(error)
-  })
-}
+const generateDataForChart = () => {
+  const data = {
+    labels: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
+    legend: goalsList.map((goal) => goal.goal_name),
+    data: [],
+    barColors: ['#f2f25a', '#e3e31e', '#fa1eca', '#e3e31e','#f2f25a' ],
+  };
 
+  const goalBalancesByMonth = Array(12).fill().map(() => Array(data.legend.length).fill(0));
+
+  for (const goal of goalsList) {
+    const goalYear = parseInt(goal.year, 10);
+    if (goalYear === yearPicker) {
+      const monthIndex = parseInt(goal.month, 10) - 1;
+      const goalIndex = data.legend.indexOf(goal.goal_name);
+      goalBalancesByMonth[monthIndex][goalIndex] += goal.goal_balance;
+    }
+  }
+
+  data.data = goalBalancesByMonth;
+
+  return data;
+};
+
+const data = generateDataForChart();
 
 
   return (
@@ -156,7 +157,7 @@ function deleteEntry(yearPicker, month_in_number, selectedGoalBalance){
       <StackedBarChart
         data={data}
         width={Dimensions.get("window").width-30}
-        height={220}
+        height={350}
         chartConfig = {{
             backgroundGradientFrom: '#ff8100',
             backgroundGradientFromOpacity: 1,
