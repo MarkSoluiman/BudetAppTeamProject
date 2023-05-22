@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image,Dimensions} from 'react-native';
 import { Card } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,7 +26,10 @@ export default function News({ navigation }) {
         {Object.keys(data).length > 0 && (
           <View style={styles.container}>
             {data.articles.map((article, index) => (
-              <Card key={index}>
+              <Card key={index}
+               width={Dimensions.get("window").width -30}
+               >
+               
                 <View style={styles.articleContainer}>
                   <Text style={styles.title}>{article.title}</Text>
                   <TouchableOpacity>
@@ -51,17 +54,26 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: '#ffdeb7',
+    
+ 
+    
   },
   container: {
     flex: 1,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    
+ 
   },
   articleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 15,
+    borderColor: "#ff8100",
+    borderWidth: 6,
+    borderRadius: 8
+   
   },
   title: {
     fontSize: 18,
@@ -71,7 +83,7 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 150,
-    borderRadius: 10,
+    borderRadius: 15,
   },
   description: {
     fontSize: 16,
