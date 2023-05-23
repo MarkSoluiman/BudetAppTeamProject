@@ -29,7 +29,6 @@ export default function News({ navigation }) {
               <Card key={index}
                width={Dimensions.get("window").width -30}
                >
-               
                 <View style={styles.articleContainer}>
                   <Text style={styles.title}>{article.title}</Text>
                   <TouchableOpacity>
@@ -54,8 +53,6 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: '#ffdeb7',
-    
- 
     
   },
   container: {
