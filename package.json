@@ -26,7 +26,6 @@
     "androidsdk": "^1.0.0",
     "assets": "^3.0.1",
     "expo": "^48.0.16",
-    "expo-barcode-scanner": "~12.3.2",
     "expo-status-bar": "~1.4.4",
     "firebase": "^9.21.0",
     "react": "18.2.0",
