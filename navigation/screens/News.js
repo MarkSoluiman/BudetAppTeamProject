@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image,Dimensions} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { Card } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,7 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function News({ navigation }) {
   const [data, setData] = useState([]);
 
-  const url = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=044175598afd464db1a017c29900c328";
+  const url =
+    'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=044175598afd464db1a017c29900c328';
 
   const getArticles = () => {
     fetch(url)
@@ -26,25 +27,14 @@ export default function News({ navigation }) {
         {Object.keys(data).length > 0 && (
           <View style={styles.container}>
             {data.articles.map((article, index) => (
-              
-              <Card 
-              key={index}
-               width={Dimensions.get("window").width -10}
-               styles={styles.card}
-               >
+              <Card key={index} style={styles.card}>
+                <Image source={{ uri: article.urlToImage }} style={styles.image} />
                 <View style={styles.articleContainer}>
                   <Text style={styles.title}>{article.title}</Text>
-                  <TouchableOpacity>
-                    <Image
-                      source={{ uri: article.urlToImage }}
-                      style={styles.image}
-                    />
-                  </TouchableOpacity>
                 </View>
                 <Text style={styles.description}>{article.description}</Text>
                 <Text>{article.publishedAt}</Text>
               </Card>
-
             ))}
           </View>
         )}
@@ -57,31 +47,24 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: '#ffdeb7',
-    
   },
   container: {
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical 10;
+  
   },
-
-  card:{
-       marginBottom: 20,  //margin between the cards
-       borderColor: "#ff8100",
-       borderWidth: 6, // How thick the border is 
-       borderRadius: 10  // corner of the border
+  card: {
+    marginBottom: 10,
+    borderColor: '#ff8100',
+    borderWidth: 6,
+    borderRadius: 5,
   },
   articleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 20,
-    borderColor: "#ff8100", //colour of the border
-    borderWidth: 6, // How thick the border is 
-    borderRadius: 10,  // corner of the border
-    Padding: 10
-   
+    borderColor: '#ff8100',
   },
   title: {
     fontSize: 18,
@@ -89,11 +72,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 15,
+    width: 400,
+    height: 200,
+    borderRadius: 0,
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
   },
 });
