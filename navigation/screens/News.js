@@ -27,7 +27,7 @@ export default function News({ navigation }) {
           <View style={styles.container}>
             {data.articles.map((article, index) => (
               <Card key={index}
-               width={Dimensions.get("window").width -30}
+               width={Dimensions.get("window").width -10}
                >
                 <View style={styles.articleContainer}>
                   <Text style={styles.title}>{article.title}</Text>
@@ -59,17 +59,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    
- 
+  },
+
+  card:{
+       marginBottom: 30,  //margin between the cards
   },
   articleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 15,
-    borderColor: "#ff8100",
-    borderWidth: 6,
-    borderRadius: 8
+    marginVertical: 20,
+    borderColor: "#ff8100", //colour of the border
+    borderWidth: 6, // How thick the border is 
+    borderRadius: 10  // corner of the border
    
   },
   title: {
@@ -78,8 +80,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 15,
   },
   description: {
