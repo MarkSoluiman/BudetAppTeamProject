@@ -21,6 +21,17 @@ export default function News({ navigation }) {
     getArticles();
   }, []);
 
+  const SearchBar =() =>{
+    return(
+      <View>
+        <TextInput placeholder="Search News" 
+         style={styles.input}
+        />
+      </View>
+
+    )
+  }
+
   return (
     <SafeAreaView style={styles.background}>
       <ScrollView>
@@ -52,6 +63,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
+
   
   },
   card: {
@@ -67,16 +79,33 @@ const styles = StyleSheet.create({
     borderColor: '#ff8100',
   },
   title: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    marginTop: 1,
+    fontSize:18,
+    fontWeight: "600",
     flex: 1,
   },
   image: {
     width: 400,
     height: 200,
-    borderRadius: 0,
+    alignItems: 'center',
+
   },
   description: {
-    fontSize: 15,
+    fontSize: 16,
+    fontweight:"400",
+    marginTop: 10,
   },
+
+  input:{
+    backgroundColor: '#ff8100',
+    padding:10,
+  },
+  container:{
+    margin: 10,
+    padding: 10,
+    borderRadius: 10,
+    color: "#ff8100",
+    borderWidth: 5,
+
+  }
 });
