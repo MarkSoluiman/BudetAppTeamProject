@@ -5,126 +5,137 @@ import { PieChart } from "react-native-chart-kit";
 import { getAuth } from 'firebase/auth'
 import { db, firebase } from '../../firebase.config'
 import React, { useState, useEffect } from 'react'
-// import { reduceEachLeadingCommentRange } from "typescript";
 
 // HELP https://blog.logrocket.com/using-react-native-chart-kit-visualize-data/ 
 
 // Exported functions
 export default function HomeSpendingModal({ navigation }) {
 
+  const [categoryCounts, setCategoryCounts] = useState({
+    Food: 0,
+    Transport: 0,
+    Health: 0,
+    Utilities: 0,
+    Housing: 0,
+    Entertainment: 0,
+    Work: 0,
+    Schooling: 0,
+    Miscellaneous: 0
+  });
 
-  let [foodCount, transportCount, healthCount, utilitiesCount, housingCount, enterCount, workCount, schoolCount, miscCount] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-  const [data, setData] = useState([])
+  const currentDate = new Date()
+  const currentMonth = currentDate.getMonth() + 1
+  const firstDayofMonth = new Date(currentDate.getFullYear(), currentMonth - 1, 1)
+  const firstDayOfNextMonth = new Date(currentDate.getFullYear(), currentMonth, 1)
 
-  function getCurrentMonth(){
-    currentDate = new Date()
-    return currentDate.getMonth()
-  }
-
-  function getCurrentYear(){
-    currentDate = new Date()
-    return currentDate.getYear()
-  }
-
-  function setCount(category, categoryCount){
-    firebase.firestore().collection("Logs")
+  function setCount(category) {
+    return firebase.firestore()
+      .collection("Logs")
       .where('uid', '==', getAuth().currentUser.uid)
       .where('trans_type', '==', 'Expenditure')
-      // .where('trans_date', '>=', new Date()) // month
-      .where('trans_category', '==', category) // category
+      .where('trans_date', '>=', firstDayofMonth)
+      .where('trans_date', '<', firstDayOfNextMonth)
+      .where('trans_category', '==', category)
       .get()
       .then(querySnapshot => {
+        let categoryCount = 0;
         querySnapshot.forEach(documentSnapshot => {
-          categoryCount += parseInt(documentSnapshot.data().trans_amount)
-          console.log(category, ': ', categoryCount)
-        })
-      })
+          categoryCount += parseInt(documentSnapshot.data().trans_amount);
+        });
+        return categoryCount;
+      });
   }
 
   // Use effect for fetching spending data
-  useEffect( () => {
-    async function fetchData(){
-      console.log('Year: ', getCurrentYear())
-      console.log('Month: ', getCurrentMonth())
-      setCount('Food', foodCount)
-      setCount('Transport', transportCount)
-      setCount('Health', healthCount)
-      setCount('Utilities', utilitiesCount)
-      setCount('Housing', housingCount)
-      setCount('Entertainment', enterCount)
-      setCount('Work', workCount)
-      setCount('Schooling', schoolCount)
-      setCount('Miscellaneous', miscCount)
+useEffect(() => {
+    async function fetchData() {
+      const promises = Object.keys(categoryCounts).map(category => {
+        return setCount(category)
+          .then(categoryCount => ({ category, categoryCount }));
+      });
+
+      Promise.all(promises)
+        .then(results => {
+          const updatedCounts = {};
+          results.forEach(({ category, categoryCount }) => {
+            updatedCounts[category] = categoryCount;
+          });
+          setCategoryCounts(updatedCounts);
+        })
+        .catch(error => {
+          console.error('Error fetching spending data:', error);
+        });
     }
-    fetchData()
 
-      setData([
-        {
-          name: "Food",
-          population: foodCount,
-          color: "#D73310",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Transport",
-          population: transportCount,
-          color: "#FB5734",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Health",
-          population: healthCount,
-          color: "#A44B38",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Utilities",
-          population: utilitiesCount,
-          color: "#FFA10A",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Housing",
-          population: housingCount,
-          color: "#BD7B5C",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Entertainment",
-          population: enterCount,
-          color: "#FFC772",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Work",
-          population: workCount,
-          color: "#FFE572",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Schooling",
-          population: schoolCount,
-          color: "#FFF4C3",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        },
-        {
-          name: "Miscellaneous",
-          population: miscCount,
-          color: "#DFE823",
-          legendFontColor: "#7F7F7F",
-          legendFontSize: 15
-        }
-      ])
+    fetchData();
+  }, []);
 
-  }, [])
+
+  graphData = [
+    {
+      name: "Food",
+      population: categoryCounts.Food,
+      color: "#D73310",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 15
+    },
+    {
+      name: "Transport",
+      population: categoryCounts.Transport,
+      color: "#FB5734",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 15
+    },
+    {
+      name: "Health",
+      population: categoryCounts.Health,
+      color: "#A44B38",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 15
+    },
+    {
+      name: "Utilities",
+      population: categoryCounts.Utilities,
+      color: "#FFA10A",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 15
+    },
+    {
+      name: "Housing",
+      population: categoryCounts.Housing,
+      color: "#BD7B5C",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 15
+    },
+    {
+      name: "Entertainment",
+      population: categoryCounts.Entertainment,
+      color: "#FFC772",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 15
+    },
+    {
+      name: "Work",
+      population: categoryCounts.Work,
+      color: "#FFE572",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 15
+    },
+    {
+      name: "Schooling",
+      population: categoryCounts.Schooling,
+      color: "#FFF4C3",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 15
+    },
+    {
+      name: "Miscellaneous",
+      population: categoryCounts.Miscellaneous,
+      color: "#DFE823",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 15
+    }
+  ]
 
   const screenWidth = Dimensions.get("window").width;
 
@@ -148,7 +159,7 @@ export default function HomeSpendingModal({ navigation }) {
 
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <PieChart
-          data={data}
+          data={graphData}
           width={screenWidth-30}
           height={300}
           chartConfig={chartConfig}
@@ -159,7 +170,7 @@ export default function HomeSpendingModal({ navigation }) {
           absolute
         />
       </View>
-      <Text>{foodCount}</Text>
+      <Text>{categoryCounts.Housing}</Text>
 
       {/* Button to return to home page */}
       <Pressable onPress={() => navigation.navigate("Home")}>
