@@ -67,9 +67,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    marginBottom: 10,
+    marginBottom: 20,
     borderColor: '#ff8100',
-    borderWidth: 6,
+    borderWidth: 5,
     borderRadius: 5,
   },
   articleContainer: {
@@ -79,30 +79,31 @@ const styles = StyleSheet.create({
     borderColor: '#ff8100',
   },
   title: {
-    width: Dimensions.get('window').width - 20,
     marginTop: 1,
     fontSize: 18,
     fontWeight: '600',
     flex: 1,
   },
   image: {
-    width: Dimensions.get('window').width - 20,
     height: 200,
     alignItems: 'center',
   },
   description: {
-    width: Dimensions.get('window').width - 20,
+    alignItems: 'center',
     fontSize: 16,
     fontWeight: '400',
     marginTop: 10,
   },
   input: {
-    width: Dimensions.get('window').width - 20,
+    width: Dimensions.get('window').width - 30,
     height: 40,
-    backgroundColor: '#ff8100',
+    backgroundColor: '#ffdeb7',
     paddingVertical: 10,
-    paddingHorizontal: 15,
-    
+    paddingHorizontal: 10,
+    borderColor: '#ff8100',
+    borderWidth: 5,
     borderRadius: 5,
+    marginBottom: 10,
+    marginTop: 10,
   },
 });
