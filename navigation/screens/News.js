@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, Dimensions, TextInput } from 'react-native';
 import { Card } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,34 +21,36 @@ export default function News({ navigation }) {
     getArticles();
   }, []);
 
-  const SearchBar =() =>{
-    return(
+  const SearchBar = () => {
+    return (
       <View>
-        <TextInput placeholder="Search News" 
-         style={styles.input}
-        />
+        <TextInput placeholder="Search News" style={styles.input} />
       </View>
-
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.background}>
       <ScrollView>
-        {Object.keys(data).length > 0 && (
-          <View style={styles.container}>
-            {data.articles.map((article, index) => (
-              <Card key={index} style={styles.card}>
-                <Image source={{ uri: article.urlToImage }} style={styles.image} />
-                <View style={styles.articleContainer}>
-                  <Text style={styles.title}>{article.title}</Text>
-                </View>
-                <Text style={styles.description}>{article.description}</Text>
-                <Text>{article.publishedAt}</Text>
-              </Card>
+        <View style={styles.container}>
+          <SearchBar />
+          {Object.keys(data).length > 0 &&
+            data.articles.map((article, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => navigation.navigate('ArticleDetail', { article })}
+              >
+                <Card style={styles.card}>
+                  <Image source={{ uri: article.urlToImage }} style={styles.image} />
+                  <View style={styles.articleContainer}>
+                    <Text style={styles.title}>{article.title}</Text>
+                  </View>
+                  <Text style={styles.description}>{article.description}</Text>
+                  <Text>{article.publishedAt}</Text>
+                </Card>
+              </TouchableOpacity>
             ))}
-          </View>
-        )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -60,13 +62,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffdeb7',
   },
   container: {
+    width:Dimensions.get('window').width -20,
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-
-  
   },
   card: {
+    width:Dimensions.get('window').width -20,
     marginBottom: 10,
     borderColor: '#ff8100',
     borderWidth: 6,
@@ -79,33 +81,33 @@ const styles = StyleSheet.create({
     borderColor: '#ff8100',
   },
   title: {
+    width:Dimensions.get('window').width -20,
     marginTop: 1,
-    fontSize:18,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: '600',
     flex: 1,
   },
   image: {
-    width: 400,
+    width:Dimensions.get('window').width -20,
     height: 200,
     alignItems: 'center',
-
   },
   description: {
+    width:Dimensions.get('window').width -20,
     fontSize: 16,
-    fontweight:"400",
+    fontWeight: '400',
     marginTop: 10,
   },
-
-  input:{
-    backgroundColor: '#ff8100',
-    padding:10,
+  input: {
+   width:Dimensions.get('window').width -20,
+   height: 40,
+   backgroundColor: '#ff8100',
+   paddingVertical: 10,
+   paddingHorizontal: 15,
+  marginTop: 10,
+  marginBottom: 10,
+  marginLeft: 10,
+  marginRight: 10,
+  borderRadius: 5,
   },
-  container:{
-    margin: 10,
-    padding: 10,
-    borderRadius: 10,
-    color: "#ff8100",
-    borderWidth: 5,
-
-  }
 });
