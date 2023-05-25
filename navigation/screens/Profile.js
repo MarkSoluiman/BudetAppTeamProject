@@ -160,6 +160,7 @@ export default function Profile({ navigation }) {
             value={password}
             onChangeText={(value) => setPassword(value)}
             placeholder={getAuth().currentUser.password}
+            secureTextEntry = {true}
           />
 
           {/* Student prompt and picker */}

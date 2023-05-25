@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, StyleSheet, Pressable, Alert } from 'react-native'
+import { View, Text, StyleSheet, Pressable, Alert , Button} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -7,6 +7,7 @@ import { Picker } from '@react-native-picker/picker'
 import { collection, addDoc, getDoc, doc, updateDoc, increment } from 'firebase/firestore/lite'
 import { db, firebase } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
+
 
 // Exported function
 export default function LogModal({navigation}){
@@ -285,6 +286,7 @@ export default function LogModal({navigation}){
                     <Text style={styles.prompts}>SAVE</Text>
                 </Pressable>
             </View>
+            
         </View>
     )
 }

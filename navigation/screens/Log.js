@@ -5,6 +5,7 @@ import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
 import { QuerySnapshot } from '@firebase/firestore'
 import { getAuth } from 'firebase/auth'
+import FontAwesome from 'react-native-vector-icons/Ionicons'
 import Ionicones from 'react-native-vector-icons/Ionicons'
 
 // Exported function
