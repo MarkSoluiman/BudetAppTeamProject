@@ -157,11 +157,11 @@ useEffect(() => {
       {/* Heading */}
       <Text style={styles.prompts}>Monthly Spending</Text>
 
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
+      <View style={{ justifyContent: "center", alignItems: "center", marginTop: 20 }}>
         <PieChart
           data={graphData}
           width={screenWidth-30}
-          height={300}
+          height={250}
           chartConfig={chartConfig}
           accessor={"population"}
           backgroundColor={"transparent"}
@@ -170,7 +170,6 @@ useEffect(() => {
           absolute
         />
       </View>
-      <Text>{categoryCounts.Housing}</Text>
 
       {/* Button to return to home page */}
       <Pressable onPress={() => navigation.navigate("Home")}>
@@ -188,6 +187,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffe9df",
     padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   prompts: {
     textAlign: "center",
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 10,
     height: 50,
-    width: 90,
+    width: 110,
     margin: 20,
     alignSelf: "center",
   }
