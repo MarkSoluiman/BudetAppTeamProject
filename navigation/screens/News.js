@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function News({ navigation }) {
   const [data, setData] = useState([]);
+  const[searchQuery,setSearchQuery]=useState('');
 
   const url =
     'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=044175598afd464db1a017c29900c328';
@@ -21,10 +22,21 @@ export default function News({ navigation }) {
     getArticles();
   }, []);
 
+  const handleSearch =() =>{
+    const filteredArticles = data.articles.filter(
+      article=>article.title)
+
+      return filteredArticles;
+    )
+  }
+
   const SearchBar = () => {
     return (
       <View>
-        <TextInput placeholder="Search News" style={styles.input} />
+        <TextInput placeholder="Search News" style={styles.input} 
+        style={styles.input}
+        Text => setSearchQuery(TextInput)}
+        />
       </View>
     );
   };
