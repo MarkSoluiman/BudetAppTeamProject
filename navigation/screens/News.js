@@ -46,10 +46,12 @@ export default function News({ navigation }) {
                     <Text style={styles.title}>{article.title}</Text>
                   </View>
                   <Text style={styles.description}>{article.description}</Text>
-                 < styles={styles.heading}>
-                 <Text style={styles.source}> {article.source.name}</Text>
-                 </Text>
-                  <Text>{article.publishedAt}</Text>
+                  <View style={styles.heading}>
+                    <Text style={styles.source}>{article.source.name}</Text>
+                  </View>
+                   <View style={styles.heading}>
+                    <Text style={styles.date}>{article.publishedAt}</Text>
+                  </View>
                 </Card>
               </TouchableOpacity>
             ))}
@@ -109,9 +111,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
   },
-
-  source:{
-    fontSize: 13,
-    fontWeight: '400',
+  heading: {
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  source: {
+    fontSize: 14,
+    fontWeight: '600',
+    alignItems: 'center',
+  },
+  date:
+  {
+    fontSize: 14,
+    fontWeight: '600',
+    alignItems: 'center', 
   }
 });
