@@ -5,7 +5,7 @@ import { PieChart } from "react-native-chart-kit";
 import { getAuth } from 'firebase/auth'
 import { db, firebase } from '../../firebase.config'
 import React, { useState, useEffect } from 'react'
-import { reduceEachLeadingCommentRange } from "typescript";
+// import { reduceEachLeadingCommentRange } from "typescript";
 
 // HELP https://blog.logrocket.com/using-react-native-chart-kit-visualize-data/ 
 
