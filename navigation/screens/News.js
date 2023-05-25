@@ -49,7 +49,7 @@ export default function News({ navigation }) {
                   <View style={styles.heading}>
                     <Text style={styles.source}>{article.source.name}</Text>
                   </View>
-                   <View style={styles.heading}>
+                  <View style={styles.heading}>
                     <Text style={styles.date}>{article.publishedAt}</Text>
                   </View>
                 </Card>
@@ -67,40 +67,46 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffdeb7',
   },
   container: {
+    width: Dimensions.get('window').width,
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   card: {
+    width: Dimensions.get('window').width,
     marginBottom: 20,
     borderColor: '#ff8100',
     borderWidth: 5,
     borderRadius: 5,
   },
   articleContainer: {
+    width: Dimensions.get('window').width,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#ff8100',
   },
   title: {
+    width: Dimensions.get('window').width -10,
     marginTop: 1,
     fontSize: 18,
     fontWeight: '600',
     flex: 1,
   },
   image: {
+    width: Dimensions.get('window').width-10,
     height: 200,
     alignItems: 'center',
   },
   description: {
+    width: Dimensions.get('window').width - 10,
     alignItems: 'center',
     fontSize: 16,
     fontWeight: '400',
     marginTop: 10,
   },
   input: {
-    width: Dimensions.get('window').width - 30,
+    width: Dimensions.get('window').width,
     height: 40,
     backgroundColor: '#ffdeb7',
     paddingVertical: 5,
@@ -112,18 +118,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   heading: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginTop: 5,
   },
   source: {
     fontSize: 14,
     fontWeight: '600',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
-  date:
-  {
+  date: {
     fontSize: 14,
     fontWeight: '600',
-    alignItems: 'center', 
-  }
+    alignItems: 'flex-start',
+  },
 });
