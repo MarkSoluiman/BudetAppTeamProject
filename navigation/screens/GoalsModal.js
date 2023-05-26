@@ -4,11 +4,11 @@ import React, { useState } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TextInput } from 'react-native-gesture-handler'
 import { collection, addDoc } from 'firebase/firestore/lite'
-import { db } from '../../firebase.config'
+import { db, firebase } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
 
 // Exported function
-export default function GoalsModal({navigation}){
+export default function GoalsModal({navigation, route}){
 
     // Initialise constants
     const [date, setDate] = useState(new Date())
@@ -16,6 +16,29 @@ export default function GoalsModal({navigation}){
     const [newAmount, setAmount] = useState()
     const [showPicker, setShowPicker] = useState(false)
     const [goalDate, setGoalDate] = useState("Select your goal completion date")
+
+    if (route.params) {
+        const { goalID } = route.params;
+        firebase
+          .firestore()
+          .collection('Goals')
+          .doc(goalID)
+          .get()
+          .then((documentSnapshot) => {
+            if (documentSnapshot.exists) {
+              console.log(documentSnapshot.data());
+              setDate(new Date(documentSnapshot.data().goal_date));
+              setName(documentSnapshot.data().goal_name);
+              setAmount(documentSnapshot.data().goal_amount);
+            //   setGoalDate(new Date(documentData.goal_date));
+            } else {
+              console.log('Document not found!');
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
  
     // Initialise date picker for goal completed by date
     const toggleDatepicker = () => {
@@ -66,17 +89,28 @@ export default function GoalsModal({navigation}){
         }
     }
 
+    const shouldRenderName = route.params; 
+    const shouldRenderAmount = route.params;
+
     // Exported function
     return(
         <View style={styles.background}>
 
             {/* Goal name prompt and entry */}
             <Text style={styles.prompts}>GOAL NAME</Text>
-            <TextInput placeholder="Write your goal name" onChangeText={newName => setName(newName)} style={styles.entry}/>
+            {shouldRenderName ? (
+                <TextInput value={newName} onChangeText={newName => setName(newName)} style={styles.entry}/>
+            ) : (
+                <TextInput placeholder="Write your goal name" onChangeText={newName => setName(newName)} style={styles.entry}/>
+            )}
 
             {/* Goal amount prompt and entry */}
             <Text style={styles.prompts}>SAVING AMOUNT</Text>
-            <TextInput placeholder="Write your saving amount" keyboardType='numeric' onChangeText={newAmount => setAmount(newAmount)} style={styles.entry}/>
+            {shouldRenderAmount ? (
+                <TextInput value={parseInt(newAmount)} keyboardType='numeric' onChangeText={newAmount => setAmount(newAmount)} style={styles.entry}/>
+            ) : (
+                <TextInput placeholder="Write your saving amount" keyboardType='numeric' onChangeText={newAmount => setAmount(newAmount)} style={styles.entry}/>
+            )}
             
             {/* Completed  by date prompt and picker */}
             <Text style={styles.prompts}>COMPLETED BY DATE</Text>
