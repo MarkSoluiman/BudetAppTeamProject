@@ -45,9 +45,10 @@ export default function Goals({navigation}){
         fetchData()
     }, [])
 
-    
-
+    // Delete function called when user presses the trash bin icon next to an entry
     function deleteEntry(selectedGoalDate, selectedGoalName, selectedGoalAmount){
+
+        // Query to find selected entry
         firebase.firestore()
           .collection('Goals')
           .where('uid', '==', getAuth().currentUser.uid)
@@ -60,6 +61,8 @@ export default function Goals({navigation}){
             querySnapshot.forEach(documentSnapshot => {
               selectionIDs.push(documentSnapshot.id)
             })
+
+            // Delete goal
             if (selectionIDs.length === 0){
               Alert.alert("No goals found")
             }
@@ -72,6 +75,8 @@ export default function Goals({navigation}){
               .then(() => {
                 setSelectionID("")
               })
+
+            //   Catches for errors
               .catch((error) => {
                 console.log("Error removing documents: ", error)
               })
@@ -79,8 +84,9 @@ export default function Goals({navigation}){
           .catch(error => {
             console.log(error)
         })
-      }
+    }
 
+    // Returned function
     return(
         <SafeAreaView style={styles.background}>
 
@@ -99,6 +105,8 @@ export default function Goals({navigation}){
                     
                         {/* Formatting of entries */}
                             <Text style={styles.textEntry}>Deadline: {item.day}/{item.month}/{item.year}{'\n'}Goal Name: {item.goal_name}{'\n'}Target: ${item.goal_balance}/${item.goal_amount}{'\n'}</Text>
+                            
+                            {/* Trash icon to delete an entry */}
                             <Pressable style={styles.icon} onPress={() => deleteEntry(
                                 item.goal_date
                                 , item.goal_name
@@ -116,6 +124,8 @@ export default function Goals({navigation}){
 
 // Styling
 const styles = StyleSheet.create({
+
+    // Page styling
     background:{
         flex:1
         , paddingTop: '5%'
@@ -135,6 +145,8 @@ const styles = StyleSheet.create({
         , backgroundColor: '#ff8100'
         , justifyContent: 'space-evenly'
     },
+
+    // Entry styling
     icon:{
         paddingTop: 15,
     },
@@ -146,6 +158,8 @@ const styles = StyleSheet.create({
         , padding: 15
         , paddingTop: 25
     },
+
+    // Button styling
     button:{
         width: 370
         , height: 55
