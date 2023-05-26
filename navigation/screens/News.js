@@ -26,8 +26,8 @@ export default function News({ navigation }) {
     setSearchQuery(text);
   };
 
-  const filteredArticles = data.filter(article =>
-    article.title.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredArticles = data.filter(article =>
+    article.title.toLowerCase().includes(searchQuery.toLowerCase())   ////https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/events/UrlFilter
   );
 
   const SearchBar = () => {
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderColor: '#ff8100',
     borderWidth: 5,
-    borderRadius: 5,
+    borderRadius: ,
     marginBottom: 10,
     marginTop: 10,
   },
