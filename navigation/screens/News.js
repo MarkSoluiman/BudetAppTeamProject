@@ -64,7 +64,6 @@ export default function News({ navigation }) {
           {filteredArticles.map((article, index) => (
             <TouchableOpacity
               key={index}
-              onPress={() => navigation.navigate('ArticleDetail', { article })}
             >
               <Card style={styles.card}>
                 <Image
