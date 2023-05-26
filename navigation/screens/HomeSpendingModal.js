@@ -6,11 +6,15 @@ import { getAuth } from 'firebase/auth'
 import { db, firebase } from '../../firebase.config'
 import React, { useState, useEffect } from 'react'
 
-// HELP https://blog.logrocket.com/using-react-native-chart-kit-visualize-data/ 
-
 // Exported functions
 export default function HomeSpendingModal({ navigation }) {
 
+  // Initialising constants
+
+  // Screen width to ensure responsive design
+  const screenWidth = Dimensions.get("window").width;
+
+  // Spending category counts
   const [categoryCounts, setCategoryCounts] = useState({
     Food: 0,
     Transport: 0,
@@ -23,11 +27,17 @@ export default function HomeSpendingModal({ navigation }) {
     Miscellaneous: 0
   });
 
+  // Use state to find the total monthly spending - used to calculate the percentages in the legend
+  const [calctotal, setCalcTotal] = useState(0);
+
+  // Date constants - used to filter transactions to be in the current month
   const currentDate = new Date()
   const currentMonth = currentDate.getMonth() + 1
   const firstDayofMonth = new Date(currentDate.getFullYear(), currentMonth - 1, 1)
   const firstDayOfNextMonth = new Date(currentDate.getFullYear(), currentMonth, 1)
 
+
+  // Function to query firestore - retreives expenditure records belonging to the user in the current month for a specified category
   function setCount(category) {
     return firebase.firestore()
       .collection("Logs")
@@ -38,22 +48,27 @@ export default function HomeSpendingModal({ navigation }) {
       .where('trans_category', '==', category)
       .get()
       .then(querySnapshot => {
+
+        // Initialise category spending count = 0
         let categoryCount = 0;
+
+        // Add to category spending amount with each returned record
         querySnapshot.forEach(documentSnapshot => {
           categoryCount += parseInt(documentSnapshot.data().trans_amount);
         });
+
+        // Return total category count
         return categoryCount;
       });
   }
 
   // Use effect for fetching spending data
-useEffect(() => {
+  useEffect(() => {
     async function fetchData() {
       const promises = Object.keys(categoryCounts).map(category => {
         return setCount(category)
           .then(categoryCount => ({ category, categoryCount }));
       });
-
       Promise.all(promises)
         .then(results => {
           const updatedCounts = {};
@@ -61,135 +76,167 @@ useEffect(() => {
             updatedCounts[category] = categoryCount;
           });
           setCategoryCounts(updatedCounts);
+          
+          const total = Object.values(updatedCounts).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+          setCalcTotal(total);
         })
         .catch(error => {
           console.error('Error fetching spending data:', error);
         });
     }
-
     fetchData();
+  
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000); // Update every 3 seconds
+  
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
+  
 
-
+  // Initialise graph data and count (population)
   graphData = [
     {
       name: "Food",
       population: categoryCounts.Food,
       color: "#D73310",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "black",
       legendFontSize: 15
     },
     {
       name: "Transport",
       population: categoryCounts.Transport,
       color: "#FB5734",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "black",
       legendFontSize: 15
     },
     {
       name: "Health",
       population: categoryCounts.Health,
       color: "#A44B38",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "black",
       legendFontSize: 15
     },
     {
       name: "Utilities",
       population: categoryCounts.Utilities,
       color: "#FFA10A",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "black",
       legendFontSize: 15
     },
     {
       name: "Housing",
       population: categoryCounts.Housing,
       color: "#BD7B5C",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "black",
       legendFontSize: 15
     },
     {
       name: "Entertainment",
       population: categoryCounts.Entertainment,
       color: "#FFC772",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "black",
       legendFontSize: 15
     },
     {
       name: "Work",
       population: categoryCounts.Work,
       color: "#FFE572",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "black",
       legendFontSize: 15
     },
     {
       name: "Schooling",
       population: categoryCounts.Schooling,
       color: "#FFF4C3",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "black",
       legendFontSize: 15
     },
     {
       name: "Miscellaneous",
       population: categoryCounts.Miscellaneous,
       color: "#DFE823",
-      legendFontColor: "#7F7F7F",
+      legendFontColor: "black",
       legendFontSize: 15
     }
   ]
 
-  const screenWidth = Dimensions.get("window").width;
-
+  // Chart configuration sets properties of monthly spending pie chart
   const chartConfig = {
-    backgroundGradientFrom: "#1E2923",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#08130D",
-    backgroundGradientToOpacity: 0.5,
     color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false // optional
   };
 
-  
-
+  // Return function
   return (
     <View style={styles.background}>
-      {/* Heading */}
-      <Text style={styles.prompts}>Monthly Spending</Text>
+      <View style={styles.widget}>
 
-      <View style={{ justifyContent: "center", alignItems: "center", marginTop: 20 }}>
+        {/* Heading */}
+        <Text style={styles.prompts}>Monthly Spending</Text>
+    
+        {/* Monthly spending pie chart */}
         <PieChart
           data={graphData}
-          width={screenWidth-30}
-          height={250}
+          width={screenWidth}
+          height={350}
+          paddingLeft={screenWidth / 6.5}
           chartConfig={chartConfig}
-          accessor={"population"}
-          backgroundColor={"transparent"}
-          paddingLeft={"10"}
-          center={[10,10]}
-          absolute
+          accessor="population"
+          hasLegend={false}
         />
-      </View>
 
-      {/* Button to return to home page */}
-      <Pressable onPress={() => navigation.navigate("Home")}>
-        <View style={styles.button}>
-          <Text style={styles.prompts}>GO BACK</Text>
+        {/* Legend */}
+        <View style={styles.legendContainer}>
+          {graphData.map((data, index) => (
+            <View style={styles.legendItem} key={index}>
+
+              {/* Data colour bullet point */}
+              <View style={[styles.legendColor, { backgroundColor: data.color }]} />
+
+              {/* Data label, value, and percentage */}
+              <Text style={styles.legendLabel}>
+                {data.name}, ${data.population} (
+                {calctotal !== 0 ? ((data.population / calctotal) * 100).toFixed(2) : 0}
+                %)
+              </Text>
+            </View>
+          ))}
         </View>
-      </Pressable>
+    
+        {/* Button to return to home page */}
+        <Pressable onPress={() => navigation.navigate('Home')}>
+          <View style={styles.button}>
+            <Text style={styles.prompts}>GO BACK</Text>
+          </View>
+        </Pressable>
+      </View>
     </View>
-  )
+  ); 
 }
 
 // Styling
 const styles = StyleSheet.create({
+
+  // Page styling
   background: {
     flex: 1,
-    backgroundColor: "#ffe9df",
+    backgroundColor: "#ffdeb7",
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center'
   },
+  widget:{
+    marginHorizontal: 20
+    , borderRadius: 10
+    , borderColor: '#ff8100'
+    , borderWidth: 3
+    , width: 370
+    , padding: 15
+    , backgroundColor: '#ffe9de'
+    , justifyContent: 'space-evenly'
+},
   prompts: {
     textAlign: "center",
     fontWeight: "bold",
@@ -203,5 +250,26 @@ const styles = StyleSheet.create({
     width: 110,
     margin: 20,
     alignSelf: "center",
-  }
+  },
+
+  // Legend styling
+  legendContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'baseline',
+    marginHorizontal: '15%'
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  legendColor: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: 5,
+  },
+  legendLabel: {
+    fontSize: 15,
+  },
 })
