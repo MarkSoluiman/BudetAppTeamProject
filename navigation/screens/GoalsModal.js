@@ -13,7 +13,7 @@ export default function GoalsModal({navigation}){
     // Initialise constants
     const [date, setDate] = useState(new Date())
     const [newName, setName] = useState('')
-    const [newAmount, setAmount] = useState('')
+    const [newAmount, setAmount] = useState()
     const [showPicker, setShowPicker] = useState(false)
     const [goalDate, setGoalDate] = useState("Select your goal completion date")
  
@@ -41,17 +41,20 @@ export default function GoalsModal({navigation}){
         if(newName.length > 0){
             if (Number.isInteger(parseInt(newAmount)) && parseInt(newAmount) > 0) {
                 if(date > new Date()){
-                    Alert.alert('Goal saved')
+                    amount = parseInt(newAmount, 10)
+
                     navigation.navigate('Goals')
+
                     const docRef = addDoc(collection(db, "Goals"),{
                         uid: getAuth().currentUser.uid
                         , goal_name: newName
-                        , goal_amount: newAmount
+                        , goal_amount: amount
                         , goal_date: date
                         , goal_balance: 0
                         , goal_complete: false
                     });
-                    console.log('Document written with ID: ', docRef.id)
+                    console.log('Document written with ID: ', (await docRef).id)
+                    Alert.alert('Goal saved')
                 } else {
                     Alert.alert('Error: Goal date must be in the future')
                 }

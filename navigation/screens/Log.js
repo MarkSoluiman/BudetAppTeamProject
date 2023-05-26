@@ -5,6 +5,7 @@ import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
 import { QuerySnapshot } from '@firebase/firestore'
 import { getAuth } from 'firebase/auth'
+import FontAwesome from 'react-native-vector-icons/Ionicons'
 import Ionicones from 'react-native-vector-icons/Ionicons'
 
 // Exported function
@@ -73,6 +74,9 @@ export default function Log({navigation}) {
         selectionIDs.forEach(selectionID => {
           const docRef = firebase.firestore().collection('Logs').doc(selectionID)
           batch.delete(docRef)
+
+          // Deduce from goal balance, if associated to a goal
+
         })
         batch.commit()
           .then(() => {

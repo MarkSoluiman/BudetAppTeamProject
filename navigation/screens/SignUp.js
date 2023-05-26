@@ -29,6 +29,7 @@ export default function SignUp({navigation}){
                         primaryLocation: null,
                         student: null,
                         transportMeans: null,
+                        notifications: true,
                     })
                    
     

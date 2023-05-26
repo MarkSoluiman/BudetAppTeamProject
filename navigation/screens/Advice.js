@@ -40,7 +40,7 @@ export default function Advice({navigation}){
                     </Text>
                     <Text style={styles.article}>
                         On GrabOne, there are many entertainment deals:
-                        {"\n"}- Rainbow;s End Grab a Mate Double Superpass from $80
+                        {"\n"}- Rainbow's End Grab a Mate Double Superpass from $80
                         {"\n"}- One Game of Mini Golf from $9 in Mount Wellington
                         <Text style={styles.article} onPress={() => Linking.openURL('https://new.grabone.co.nz/activities-events-outdoors/fun-leisure/p/thrill-zone-entertainment-1?region=auckland')}>{"\n"}Visit GrabOne for more information.</Text>
                         {"\n\n"}On BookMe, there are many entertainment deals:
