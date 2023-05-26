@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffdeb7',
   },
   container: {
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width ,
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderColor: '#ff8100',
     borderWidth: 5,
-    borderRadius: ,
     marginBottom: 10,
     marginTop: 10,
   },
