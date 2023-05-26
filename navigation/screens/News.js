@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, Dimensions, TextInput } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  TextInput,
+  Linking,
+} from 'react-native';
 import { Card } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,17 +26,17 @@ export default function News({ navigation }) {
 
   const getArticles = () => {
     fetch(url)
-      .then(res => res.json())
-      .then(json => setData(json.articles))
-      .catch(err => console.log(err));
+      .then((res) => res.json())
+      .then((json) => setData(json.articles))
+      .catch((err) => console.log(err));
   };
 
-  const handleSearch = text => {
+  const handleSearch = (text) => {
     setSearchQuery(text);
   };
 
-    const filteredArticles = data.filter(article =>
-    article.title.toLowerCase().includes(searchQuery.toLowerCase())   ////https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/events/UrlFilter
+  const filteredArticles = data.filter((article) =>
+    article.title.includes(searchQuery)
   );
 
   const SearchBar = () => {
@@ -43,6 +52,10 @@ export default function News({ navigation }) {
     );
   };
 
+  const handleSourcePress = (sourceUrl) => {
+    Linking.openURL(sourceUrl);
+  };
+
   return (
     <SafeAreaView style={styles.background}>
       <ScrollView>
@@ -54,14 +67,23 @@ export default function News({ navigation }) {
               onPress={() => navigation.navigate('ArticleDetail', { article })}
             >
               <Card style={styles.card}>
-                <Image source={{ uri: article.urlToImage }} style={styles.image} />
+                <Image
+                  source={{ uri: article.urlToImage }}
+                  style={styles.image}
+                />
                 <View style={styles.articleContainer}>
                   <Text style={styles.title}>{article.title}</Text>
                 </View>
                 <Text style={styles.description}>{article.description}</Text>
-                <View style={styles.heading}>
-                  <Text style={styles.source}>{article.source.name}</Text>
-                </View>
+                <TouchableOpacity
+                  onPress={() => handleSourcePress(article.url)}
+                >
+                  <View style={styles.heading}>
+                    <Text style={styles.sourceButton}>
+                      Source: <Text style={styles.source}>{article.source.name}</Text>
+                    </Text>
+                  </View>
+                </TouchableOpacity>
                 <View style={styles.heading}>
                   <Text style={styles.date}>{article.publishedAt}</Text>
                 </View>
@@ -80,66 +102,94 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffdeb7',
   },
   container: {
-    width: Dimensions.get('window').width ,
     flex: 1,
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    width: Dimensions.get('window').width,
   },
   card: {
-    width: Dimensions.get('window').width,
     marginBottom: 20,
+    borderWidth: 10,
+    borderRadius: 20,
     borderColor: '#ff8100',
-    borderWidth: 5,
-    borderRadius: 5,
+    width: Dimensions.get('window').width - 50,
   },
   articleContainer: {
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width - 50,
+    borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#ff8100',
   },
   title: {
-    width: Dimensions.get('window').width - 10,
-    marginTop: 1,
-    fontSize: 18,
+    width: Dimensions.get('window').width - 90,
+    marginTop: 2,
+    marginBottom: 2,
+    marginHorizontal:16,
+    marginVertical: 20,
+    fontSize: 20,
     fontWeight: '600',
     flex: 1,
   },
   image: {
-    width: Dimensions.get('window').width - 10,
+    width: Dimensions.get('window').width - 70,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     height: 200,
     alignItems: 'center',
   },
   description: {
-    width: Dimensions.get('window').width - 10,
+    marginTop: 5,
+    marginBottom: 1,
+    marginHorizontal: 10,
+    width: Dimensions.get('window').width - 70,
     alignItems: 'center',
     fontSize: 16,
     fontWeight: '400',
-    marginTop: 10,
   },
   input: {
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width - 40,
     height: 40,
     backgroundColor: '#ffdeb7',
-    paddingVertical: 5,
-    paddingHorizontal: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
     borderColor: '#ff8100',
     borderWidth: 5,
+    borderRadius: 5,
     marginBottom: 10,
     marginTop: 10,
   },
   heading: {
     alignItems: 'flex-start',
     marginTop: 5,
+    flexDirection: 'row',
   },
   source: {
-    fontSize: 14,
+    marginTop: 1,
+    marginBottom: 1,
+    marginHorizontal: 10,
+    marginVertical:10,
+    fontSize: 17,
     fontWeight: '600',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    color: 'black'
+  },
+  sourceButton: {
+    marginTop: 1,
+    marginBottom: 1,
+    marginHorizontal: 5,
+    marginVertical:5,
+    fontSize: 17,
+    fontWeight: '600',
+    color: 'black',
+    backgroundColor:'#ffdeb7',
   },
   date: {
-    fontSize: 14,
+    marginBottom: 10,
+    marginHorizontal: 5,
+    marginVertical:5,
+    fontSize: 15,
     fontWeight: '600',
     alignItems: 'flex-start',
   },
