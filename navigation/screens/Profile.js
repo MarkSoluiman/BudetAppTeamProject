@@ -1,4 +1,3 @@
-// Component imports
 import { useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
@@ -126,9 +125,79 @@ export default function Profile({ navigation }) {
           }
         });
       })
-    .catch((error) => {
-      console.error(error);
-    });
+      .catch((error) => {
+        console.error(error);
+      });
+
+    // Document will be updating as the following. Done individually as users don't have to change all fields.
+    const profileDocRef = doc(db, "Profile", profileID);
+    const dataEmail = {
+      email: email,
+    };
+    const dataPass = {
+      password: password,
+    };
+    const dataLocation = {
+      primaryLocation: primaryLocation,
+    };
+    const dataStudent = {
+      student: student,
+    };
+    const dataTransport = {
+      transportMeans: transportMeans,
+    };
+
+    // Input validation
+    if (email.length > 0) {
+      updateDoc(profileDocRef, dataEmail)
+        .then((profileDocRef) => {
+          console.log("Field has been updated");
+          Alert.alert("Saved");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    if (password.length > 5) {
+      updateDoc(profileDocRef, dataPass)
+        .then((profileDocRef) => {
+          console.log("Field has been updated");
+          Alert.alert("Saved");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    if (primaryLocation.length > 1) {
+      addDoc(profileDocRef, dataLocation)
+        .then((profileDocRef) => {
+          console.log("Field has been updated");
+          Alert.alert("Saved");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    if (student.length > 0) {
+      addDoc(profileDocRef, dataStudent)
+        .then((profileDocRef) => {
+          console.log("Field has been updated");
+          Alert.alert("Saved");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    if (transportMeans.length > 0) {
+      addDoc(profileDocRef, dataTransport)
+        .then((profileDocRef) => {
+          console.log("Field has been updated");
+          Alert.alert("Saved");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   // Switch
@@ -150,7 +219,7 @@ export default function Profile({ navigation }) {
             style={styles.entry}
             value={email}
             onChangeText={(value) => setEmail(value)}
-            placeholder= {getAuth().currentUser.email}
+            placeholder={getAuth().currentUser.email}
           />
 
           {/* Password prompt and entry */}

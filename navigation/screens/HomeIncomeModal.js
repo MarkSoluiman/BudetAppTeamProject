@@ -172,7 +172,6 @@ export default function HomeIncomeModal({ navigation }) {
   return (
     <View style={styles.background}>
       <View style={styles.widget}>
-
         {/* Heading */}
         <Text style={styles.prompts}>Monthly Income</Text>
     
