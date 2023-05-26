@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react
 import React, { useState, useEffect } from 'react'
 import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
-import { QuerySnapshot } from '@firebase/firestore'
+import { QuerySnapshot, updateDoc } from '@firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import FontAwesome from 'react-native-vector-icons/Ionicons'
 import Ionicones from 'react-native-vector-icons/Ionicons'
@@ -54,41 +54,100 @@ export default function Log({navigation}) {
     fetchData()
   }, [])
 
-  function deleteEntry(selectedTransDate, selectedTransName, selectedTransAmount){
-    firebase.firestore()
-      .collection('Logs')
-      .where('uid', '==', getAuth().currentUser.uid)
-      .where('trans_date', '==', selectedTransDate)
-      .where('trans_name', '==', selectedTransName)
-      .where('trans_amount', '==', selectedTransAmount)
+  function deleteEntry(selectedTransDate, selectedTransName, selectedTransAmount) {
+    console.log(selectedTransDate, selectedTransName, selectedTransAmount);
+  
+    firebase
+      .firestore()
+      .collection("Logs")
+      .where("uid", "==", getAuth().currentUser.uid)
+      .where("trans_date", "==", selectedTransDate)
+      .where("trans_name", "==", selectedTransName)
+      .where("trans_amount", "==", selectedTransAmount)
       .get()
-      .then(querySnapshot => {
-        const selectionIDs = []
-        querySnapshot.forEach(documentSnapshot => {
-          selectionIDs.push(documentSnapshot.id)
-        })
-        if (selectionIDs.length === 0){
-          Alert.alert("No transactions found")
+      .then((querySnapshot) => {
+        const selectionIDs = [];
+        querySnapshot.forEach((documentSnapshot) => {
+          selectionIDs.push(documentSnapshot.id);
+  
+          // Deduce from goal balance, if associated with a goal
+          if (documentSnapshot.data().trans_goal != null) {
+            const goalName = documentSnapshot.data().trans_goal;
+            const deductAmount = documentSnapshot.data().trans_amount;
+            console.log(goalName, deductAmount);
+  
+            firebase
+              .firestore()
+              .collection("Goals")
+              .where("uid", "==", getAuth().currentUser.uid)
+              .where("goal_name", "==", goalName)
+              .get()
+              .then((querySnapshot) => {
+                querySnapshot.forEach((documentSnapshot) => {
+                  const goalDocRef = firebase.firestore().collection("Goals").doc(documentSnapshot.id);
+                  const decrement = firebase.firestore.FieldValue.increment(-deductAmount);
+                  const dataBalance = { goal_balance: decrement };
+  
+                  updateDoc(goalDocRef, dataBalance) // Use the updateDoc function
+                    .then(() => {
+                      console.log("Goal field has been updated with income association");
+  
+                      // Change goal met status if necessary
+                      firebase
+                        .firestore()
+                        .collection("Goals")
+                        .where("uid", "==", getAuth().currentUser.uid)
+                        .where("goal_name", "==", goalName)
+                        .get()
+                        .then((querySnapshot) => {
+                          querySnapshot.forEach((documentSnapshot) => {
+                            if (documentSnapshot.data().goal_balance >= documentSnapshot.data().goal_amount) {
+                              const dataComplete = { goal_complete: true };
+                              updateDoc(goalDocRef, dataComplete); // Use the updateDoc function
+                              console.log('Goal true');
+                            } else {
+                              const dataComplete = { goal_complete: false };
+                              updateDoc(goalDocRef, dataComplete); // Use the updateDoc function
+                              console.log('Goal false');
+                            }
+                          });
+                        })
+                        .catch((error) => {
+                          console.log(error);
+                        });
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        });
+  
+        if (selectionIDs.length === 0) {
+          Alert.alert("No transactions found");
         }
-        const batch = firebase.firestore().batch()
-        selectionIDs.forEach(selectionID => {
-          const docRef = firebase.firestore().collection('Logs').doc(selectionID)
-          batch.delete(docRef)
-
-          // Deduce from goal balance, if associated to a goal
-
-        })
+  
+        const batch = firebase.firestore().batch();
+        selectionIDs.forEach((selectionID) => {
+          const docRef = firebase.firestore().collection("Logs").doc(selectionID);
+          batch.delete(docRef);
+        });
+  
         batch.commit()
           .then(() => {
-            setSelectionID("")
+            setSelectionID("");
           })
           .catch((error) => {
-            console.log("Error removing documents: ", error)
-          })
+            console.log("Error removing documents: ", error);
+          });
       })
-      .catch(error => {
-        console.log(error)
-    })
+      .catch((error) => {
+        console.log(error);
+      });
   }
   
 
