@@ -1,6 +1,6 @@
 // Component imports
 import { View, Text, StyleSheet, Pressable, Platform, Alert } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TextInput } from 'react-native-gesture-handler'
 import { collection, addDoc } from 'firebase/firestore/lite'
@@ -13,32 +13,40 @@ export default function GoalsModal({navigation, route}){
     // Initialise constants
     const [date, setDate] = useState(new Date())
     const [newName, setName] = useState('')
-    const [newAmount, setAmount] = useState()
+    const [newAmount, setAmount] = useState(route.params?.goal_amount || '');
     const [showPicker, setShowPicker] = useState(false)
     const [goalDate, setGoalDate] = useState("Select your goal completion date")
 
-    if (route.params) {
-        const { goalID } = route.params;
-        firebase
-          .firestore()
-          .collection('Goals')
-          .doc(goalID)
-          .get()
-          .then((documentSnapshot) => {
-            if (documentSnapshot.exists) {
-              console.log(documentSnapshot.data());
-              setDate(new Date(documentSnapshot.data().goal_date));
-              setName(documentSnapshot.data().goal_name);
-              setAmount(documentSnapshot.data().goal_amount);
-            //   setGoalDate(new Date(documentData.goal_date));
-            } else {
-              console.log('Document not found!');
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+    useEffect(() => {
+        if (route.params) {
+            const { goalID } = route.params;
+            console.log(goalID);
+            firebase
+                .firestore()
+                .collection('Goals')
+                .doc(goalID)
+                .get()
+                .then((documentSnapshot) => {
+                    console.log(documentSnapshot);
+                    if (documentSnapshot.exists) {
+                        console.log('exists', documentSnapshot.data());
+                        setName(documentSnapshot.data().goal_name);
+                        setAmount(documentSnapshot.data().goal_amount);
+                        const goalDateTimestamp = documentSnapshot.data().goal_date;
+                        const goalDate = goalDateTimestamp.toDate(); // Convert timestamp to Date object
+                        setDate(goalDate);
+                        setGoalDate(goalDate.toDateString());
+                        console.log('date', goalDate, 'name', newName, 'amount', newAmount);
+                    } else {
+                        console.log('Document not found!');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, []);
+    
  
     // Initialise date picker for goal completed by date
     const toggleDatepicker = () => {
@@ -90,7 +98,7 @@ export default function GoalsModal({navigation, route}){
     }
 
     const shouldRenderName = route.params; 
-    const shouldRenderAmount = route.params;
+    const shouldRenderAmount = !!route.params;
 
     // Exported function
     return(
@@ -107,10 +115,11 @@ export default function GoalsModal({navigation, route}){
             {/* Goal amount prompt and entry */}
             <Text style={styles.prompts}>SAVING AMOUNT</Text>
             {shouldRenderAmount ? (
-                <TextInput value={parseInt(newAmount)} keyboardType='numeric' onChangeText={newAmount => setAmount(newAmount)} style={styles.entry}/>
+                <TextInput value={newAmount.toString()} keyboardType='numeric' onChangeText={newAmount => setAmount(newAmount)} style={styles.entry}/>
             ) : (
                 <TextInput placeholder="Write your saving amount" keyboardType='numeric' onChangeText={newAmount => setAmount(newAmount)} style={styles.entry}/>
             )}
+
             
             {/* Completed  by date prompt and picker */}
             <Text style={styles.prompts}>COMPLETED BY DATE</Text>

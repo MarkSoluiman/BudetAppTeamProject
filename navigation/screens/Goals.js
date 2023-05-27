@@ -87,7 +87,6 @@ export default function Goals({navigation}){
     }
 
     const navigateToGoalsModal = (selectedGoalDate, selectedGoalName, selectedGoalAmount) => {
-
         firebase.firestore()
           .collection('Goals')
           .where('uid', '==', getAuth().currentUser.uid)
@@ -97,15 +96,14 @@ export default function Goals({navigation}){
           .get()
           .then(querySnapshot => {
             querySnapshot.forEach(documentSnapshot => {
-              goalID = documentSnapshot.id
-              console.log(goalID)
-            })
+              const goalID = documentSnapshot.id;
+              navigation.navigate('New Goal', { goalID });
+            });
           })
           .catch(error => {
-            console.log(error)
-        })
-        navigation.navigate('New Goal', { goalID });
-        }
+            console.log(error);
+          });
+    };      
 
     // Returned function
     return(
