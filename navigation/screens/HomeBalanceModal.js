@@ -1,5 +1,6 @@
 // Component imports
 import { View, Text, StyleSheet, Pressable, Dimensions  } from "react-native";
+import { useState , useEffect } from "react";
 import {
   LineChart,
   BarChart,
@@ -17,13 +18,15 @@ const data = {
 
 // Exported function
 export default function HomeBalanceModal({ navigation }) {
+
+
   return (
     <View style={styles.background}>
       {/* Heading */}
       <Text style={styles.prompts}>Current Balance</Text>
       <ProgressChart
         data={data}
-        width={Dimensions.get("window").width -30}
+        width={Dimensions.get("window").width}
         height={220}
         strokeWidth={16}
         radius={32}
