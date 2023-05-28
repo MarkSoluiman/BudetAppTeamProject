@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, StyleSheet, Pressable, Alert , Button} from 'react-native'
+import { View, Text, StyleSheet, Pressable, Alert , Button, route} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -23,6 +23,49 @@ export default function LogModal({navigation}){
     const [selectedGoal, setSelectedGoal] = useState('')
     const [goalsList, setGoalsList] = useState([])
     const [goalID, setGoalID] = useState('')
+   
+    // useEffect(() => {
+    //     if (route.params) {
+
+    //         // Assign parameter as goal document ID
+    //         const {logID } = route.params;
+
+    //         // Query to find goal document in firebase from assigned ID
+    //         firebase
+    //             .firestore()
+    //             .collection('Goals')
+    //             .doc(logID)
+    //             .get()
+    //             .then((documentSnapshot) => {
+    //                 if (documentSnapshot.exists) {
+
+    //                     // Set entry field variables to corresponding values in firebase
+    //                     setName(documentSnapshot.data().trans_name);
+    //                     setAmount(documentSnapshot.data().trans_amount);
+    //                     const logDateTimestamp = documentSnapshot.data().trans_date;
+    //                     const logDate = logDateTimestamp.toDate(); // Convert timestamp to Date object
+    //                     setDate(logDate);
+    //                     setGoalDate(logDate.toDateString());
+
+    //                 // Possible error messages
+    //                 } else {
+    //                     console.log('Document not found!');
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //             });
+    //     }
+    // }, []);
+
+    // // Constants used to determine if app should render components for a new goal to add, or an existing goal to update
+    // const shouldRenderName = route.params; 
+    // const shouldRenderAmount = !!route.params;
+ 
+
+
+
+
     const todoRef = firebase.firestore().collection('Goals').where('uid', '==', getAuth().currentUser.uid).where('goal_complete', '==', false)
     
     // Initialise date picker for transaction date
