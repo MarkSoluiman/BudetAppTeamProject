@@ -198,13 +198,13 @@ export default function Log({navigation}) {
             renderItem={({item}) => (
               <View style={styles.entry}>
 
-                <Pressable onPress={() => navigateToGoalsModal(item.trans_date
+                <Pressable onPress={() => navigateToLogModal(item.trans_date
                                 , item.trans_name
-                                , item.trans_amount)}></Pressable>
+                                , item.trans_amount)}>
                 
                 {/* Formatting of entries */}
                 <Text style={styles.textEntry}>Date: {item.day}/{item.month}/{item.year}{'\n'}Transaction: {item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
-                
+                </Pressable>
                 {/* Trash icon to delete an entry */}
                 <Pressable style={styles.icon} onPress={() => deleteEntry(
                   item.trans_date
