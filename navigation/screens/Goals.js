@@ -1,5 +1,5 @@
 // Component imports
-import { TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import { TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
@@ -45,9 +45,10 @@ export default function Goals({navigation}){
         fetchData()
     }, [])
 
-    
-
+    // Delete function called when user presses the trash bin icon next to an entry
     function deleteEntry(selectedGoalDate, selectedGoalName, selectedGoalAmount){
+
+        // Query to find selected entry
         firebase.firestore()
           .collection('Goals')
           .where('uid', '==', getAuth().currentUser.uid)
@@ -60,6 +61,8 @@ export default function Goals({navigation}){
             querySnapshot.forEach(documentSnapshot => {
               selectionIDs.push(documentSnapshot.id)
             })
+
+            // Delete goal
             if (selectionIDs.length === 0){
               Alert.alert("No goals found")
             }
@@ -72,6 +75,8 @@ export default function Goals({navigation}){
               .then(() => {
                 setSelectionID("")
               })
+
+            //   Catches for errors
               .catch((error) => {
                 console.log("Error removing documents: ", error)
               })
@@ -79,13 +84,33 @@ export default function Goals({navigation}){
           .catch(error => {
             console.log(error)
         })
-      }
+    }
 
+    const navigateToGoalsModal = (selectedGoalDate, selectedGoalName, selectedGoalAmount) => {
+        firebase.firestore()
+          .collection('Goals')
+          .where('uid', '==', getAuth().currentUser.uid)
+          .where('goal_date', '==', selectedGoalDate)
+          .where('goal_name', '==', selectedGoalName)
+          .where('goal_amount', '==', selectedGoalAmount)
+          .get()
+          .then(querySnapshot => {
+            querySnapshot.forEach(documentSnapshot => {
+              const goalID = documentSnapshot.id;
+              navigation.navigate('New Goal', { goalID });
+            });
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    };      
+
+    // Returned function
     return(
         <SafeAreaView style={styles.background}>
 
             {/* New goal button */}
-            <Pressable style={styles.button} onPress={()=> navigation.navigate('New Goal')}>
+            <Pressable style={styles.button} onPress={()=> navigation.navigate('New Goal', null)}>
                 <Text style={styles.buttonText}>NEW GOAL</Text>
             </Pressable>
 
@@ -98,7 +123,14 @@ export default function Goals({navigation}){
                         <View style={styles.entry}>
                     
                         {/* Formatting of entries */}
-                            <Text style={styles.textEntry}>Deadline: {item.day}/{item.month}/{item.year}{'\n'}Goal Name: {item.goal_name}{'\n'}Target: ${item.goal_balance}/${item.goal_amount}{'\n'}</Text>
+                            <Pressable onPress={() => navigateToGoalsModal(item.goal_date
+                                , item.goal_name
+                                , item.goal_amount)}
+                            >
+                                <Text style={styles.textEntry}>Deadline: {item.day}/{item.month}/{item.year}{'\n'}Goal Name: {item.goal_name}{'\n'}Target: ${item.goal_balance}/${item.goal_amount}{'\n'}</Text>
+                            </Pressable>
+                            
+                            {/* Trash icon to delete an entry */}
                             <Pressable style={styles.icon} onPress={() => deleteEntry(
                                 item.goal_date
                                 , item.goal_name
@@ -116,6 +148,8 @@ export default function Goals({navigation}){
 
 // Styling
 const styles = StyleSheet.create({
+
+    // Page styling
     background:{
         flex:1
         , paddingTop: '5%'
@@ -135,6 +169,8 @@ const styles = StyleSheet.create({
         , backgroundColor: '#ff8100'
         , justifyContent: 'space-evenly'
     },
+
+    // Entry styling
     icon:{
         paddingTop: 15,
     },
@@ -146,6 +182,8 @@ const styles = StyleSheet.create({
         , padding: 15
         , paddingTop: 25
     },
+
+    // Button styling
     button:{
         width: 370
         , height: 55

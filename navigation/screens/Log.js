@@ -182,6 +182,7 @@ export default function Log({navigation}) {
 }; 
   
   // Returned function
+  // Returned function
   return (
     <SafeAreaView style={styles.background}>
 
@@ -204,7 +205,7 @@ export default function Log({navigation}) {
                 
                 {/* Formatting of entries */}
                 <Text style={styles.textEntry}>Date: {item.day}/{item.month}/{item.year}{'\n'}Transaction: {item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
-                </Pressable>
+                
                 {/* Trash icon to delete an entry */}
                 <Pressable style={styles.icon} onPress={() => deleteEntry(
                   item.trans_date
@@ -223,6 +224,8 @@ export default function Log({navigation}) {
 
 // Styling
 const styles = StyleSheet.create({
+
+  // Page styling
 
   // Page styling
   background:{
@@ -246,6 +249,8 @@ const styles = StyleSheet.create({
   },
 
   // Entry styling
+
+  // Entry styling
   icon:{
     paddingVertical: 5,
   },
@@ -257,6 +262,8 @@ const styles = StyleSheet.create({
     , padding: 15
     , paddingTop: 25
   },
+
+  // Button styling
 
   // Button styling
   button:{
