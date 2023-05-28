@@ -18,7 +18,7 @@ To access our app, use the Expo Go application on an Android mobile device/emula
 There are 8 main pages for you to navigate in our app:
 
 ### 1. Log-in
-![Log-in page](assets/login.png)
+<img src="assets/login.png" alt="Log-in page" width="300">
 The app begins on the Log-in page. The can fill in the account related entry prompts and press the 'log in' button to access the app. If the user doesn't have an account, there's a 'sign up' button that can navigate the user to the Sign-up page. 
 
 ### 2. Sign-up
