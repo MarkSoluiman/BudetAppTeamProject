@@ -1,13 +1,16 @@
 // Component imports
 import React from 'react';
 import { SafeAreaView, ScrollView, View, StyleSheet} from 'react-native';
+import ChatGPT from './Chatbox';
 
 // Exported function
 export default function Advice({navigation}) {
     return (
         <SafeAreaView style={styles.background}>
             <ScrollView>
-                <View style={styles.container}></View>
+                <View style={styles.container}>
+                    <ChatGPT />
+                </View>
             </ScrollView>
         </SafeAreaView>
     );
