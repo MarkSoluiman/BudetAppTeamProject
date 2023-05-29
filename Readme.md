@@ -34,7 +34,6 @@ The home page displays several buttons that when pressed, show the user the spec
 * Current Balance
 * Monthly Spending
 * Monthly Income
-* Profit and Loss
 * Goal Bars
 
 ### 4. Profile
