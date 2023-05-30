@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-import { OpenAI } from 'openai';
+import { Configuration, OpenAI } from 'openai';
+import { configure } from '@testing-library/react-native';
 
-const openai = new OpenAI({
+const openai = new Configuration({
   apiKey: process.env.OPEN_API_KEY,
 });
 
