@@ -49,7 +49,7 @@ Financial articles are displayed and updated on the news page. To filter recent 
 Users can add, track, edit, and delete their transactions on the log page. The 'new transaction' button at the top of the page takes the user to a modal to input a new transactions details and save it to the log. Within the log, transactions are ordered chronologically, with recent transactions being at the top. To delete a transaction, the user can press the bin emoticon next to their desired transaction. To edit a transaction, the user can press the transaction.
 
 ### 8. Goals
-Users can add, track, edit, and delete their goals on the goals page. The 'new goal' button at the top of the page takes the user to a modal to input a new goals details and save it to the goals log. Within the log, goals are ordered chronologically, with sooner due goals being at the top. To delete a goal, the user can press the bin emoticon next to their desired goal. To edit a goal, the user can press the entry in the log. HI
+Users can add, track, edit, and delete their goals on the goals page. The 'new goal' button at the top of the page takes the user to a modal to input a new goals details and save it to the goals log. Within the log, goals are ordered chronologically, with sooner due goals being at the top. To delete a goal, the user can press the bin emoticon next to their desired goal. To edit a goal, the user can press the entry in the log.
 
 ## Authors
 Auckland University of Technology COMP602/ENSE601 Students:
