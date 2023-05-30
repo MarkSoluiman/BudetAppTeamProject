@@ -1,24 +1,88 @@
-// Component imports
-import { View, Text, StyleSheet, Pressable, Dimensions  } from "react-native";
-import { useState , useEffect } from "react";
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
+import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
+import { useState, useEffect } from "react";
+import { firebase } from "../../firebase.config";
+import { ProgressChart } from "react-native-chart-kit";
 
-const data = {
-  labels: ["Income", "Expenditure", "Current Balance"], // optional
-  data: [0.8, 0.3, 0.5],
-  barColors: ["#47e6e6", "#e846e3","#e846e3"],
-};
-
-// Exported function
 export default function HomeBalanceModal({ navigation }) {
+  const screenWidth = Dimensions.get("window").width;
 
+  const [categoryCounts, setCategoryCounts] = useState({
+    Income: 0,
+    Expenditure: 0,
+  });
+
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const firstDayOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentMonth - 1,
+    1
+  );
+  const firstDayOfNextMonth = new Date(
+    currentDate.getFullYear(),
+    currentMonth,
+    1
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const incomeQuerySnapshot = await firebase
+          .firestore()
+          .collection("Logs")
+          .where("uid", "==", firebase.auth().currentUser.uid)
+          .where("trans_type", "==", "Income")
+          .where("trans_date", ">=", firstDayOfMonth)
+          .where("trans_date", "<", firstDayOfNextMonth)
+          .get();
+
+        const expenditureQuerySnapshot = await firebase
+          .firestore()
+          .collection("Logs")
+          .where("uid", "==", firebase.auth().currentUser.uid)
+          .where("trans_type", "==", "Expenditure")
+          .where("trans_date", ">=", firstDayOfMonth)
+          .where("trans_date", "<", firstDayOfNextMonth)
+          .get();
+
+        let totalIncome = 0;
+        incomeQuerySnapshot.forEach((documentSnapshot) => {
+          const transAmount = documentSnapshot.data().trans_amount;
+          totalIncome += parseInt(transAmount);
+        });
+        console.log(totalIncome/100);
+
+        let totalExpenditure = 0;
+        expenditureQuerySnapshot.forEach((documentSnapshot) => {
+          const transAmount = documentSnapshot.data().trans_amount;
+          totalExpenditure += parseInt(transAmount);
+        });
+        console.log(totalExpenditure/100);
+        console.log((totalIncome - totalExpenditure)/100);
+
+        setCategoryCounts({
+          Income: totalIncome,
+          Expenditure: totalExpenditure,
+        });
+      } catch (error) {
+        console.error("Error fetching category counts:", error);
+      }
+    };
+
+    fetchData();
+
+   
+  }, []);
+
+  const data = {
+    labels: ["Income", "Expenditure", "Current Balance"],
+    data: [
+      categoryCounts.Income / 100,
+      categoryCounts.Expenditure / 100,
+      (categoryCounts.Income - categoryCounts.Expenditure) / 100
+    ],
+    barColors: ["#FA5B3D", "#e846e3", "#e846e3"],
+  };
 
   return (
     <View style={styles.background}>
@@ -26,21 +90,19 @@ export default function HomeBalanceModal({ navigation }) {
       <Text style={styles.prompts}>Current Balance</Text>
       <ProgressChart
         data={data}
-        width={Dimensions.get("window").width}
-        height={220}
-        strokeWidth={16}
-        radius={32}
-        chartConfig = {{
-            backgroundGradientFrom: '#ffa600',
-            backgroundGradientFromOpacity: 1,
-            backgroundGradientTo: '#ff6361',
-            backgroundGradientToOpacity: 1,
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            strokeWidth: 2, // optional, default 3
-            barPercentage: 0.5,
-            useShadowColorFromDataset: false // optional
-          }}
-          style= {{borderRadius: 10, alignSelf: 'center'}}
+        width={screenWidth}
+        height={350}
+        chartConfig={{
+          backgroundGradientFrom: "#ffdeb7",
+          backgroundGradientFromOpacity: 1,
+          backgroundGradientTo: "#ffdeb7",
+          backgroundGradientToOpacity: 1,
+          color: (opacity = 1) => `rgba(255, 140, 0, ${opacity})`,
+          strokeWidth: 2,
+          barPercentage: 0.5,
+          useShadowColorFromDataset: false,
+        }}
+        style={{ borderRadius: 10, alignSelf: 'flex-end' }}
       />
 
       {/* Button to return to home page */}
@@ -50,10 +112,9 @@ export default function HomeBalanceModal({ navigation }) {
         </View>
       </Pressable>
     </View>
-  )
+  );
 }
 
-// Styling
 const styles = StyleSheet.create({
   background: {
     flex: 1,
@@ -73,5 +134,5 @@ const styles = StyleSheet.create({
     width: 90,
     margin: 20,
     alignSelf: "center",
-  }
-})
+  },
+});

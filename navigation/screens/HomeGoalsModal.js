@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { firebase } from "../../firebase.config";
 import { getAuth } from "firebase/auth";
-import { collection, query, where, onSnapshot,orderBy } from "firebase/firestore";
-import { Ionicons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
 import {
   LineChart,
   BarChart,
@@ -42,8 +43,12 @@ export default function HomeGoalsModal({ navigation }) {
       setGoalsList(goalsList);
     });
 
+    
+
     return () => unsubscribe();
   }, []);
+
+  console.log(goalsList);
 
   useEffect(() => {
     const transRef = query(
@@ -83,7 +88,7 @@ export default function HomeGoalsModal({ navigation }) {
       labels: labels,
       legend: labels,
       data: [],
-      barColors: ["#afddd5", "#ffcccd", "#dfe6e6", "#ffbdo0", "#f2f25a"],
+      barColors: ["#FFE572", "#FFE572", "#FFC772", "#BD7B5C"],
     };
   
     const goalBalancesByMonth = Array(12)
@@ -109,6 +114,7 @@ export default function HomeGoalsModal({ navigation }) {
       categoryPercentage: 1,
     };
   };
+
   const data = generateDataForChart();
 
   return (
