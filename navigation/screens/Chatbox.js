@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 10,
         paddingHorizontal: 10,
-        width: '90%',
+        width: '100%',
     },
 });
 
