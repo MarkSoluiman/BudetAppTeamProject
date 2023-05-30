@@ -26,6 +26,7 @@
     "android": "^0.0.8",
     "androidsdk": "^1.0.0",
     "assets": "^3.0.1",
+    "axios": "^1.4.0",
     "expo": "^48.0.17",
     "expo-status-bar": "~1.4.4",
     "firebase": "^9.21.0",

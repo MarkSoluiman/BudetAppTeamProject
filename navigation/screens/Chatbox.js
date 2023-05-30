@@ -37,26 +37,28 @@ const ChatGPT = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>AI Advice ChatBox</Text>
-            <FlatList
-                data={data}
-                keyExtractor={(item, index) => index.toString()}
-                style={styles.body}
-                renderItem={({ item }) => (
-                    <View style={{ flexDirection: 'row', padding: 10 }}>
-                        <Text style={{ fontWeight: '600', color: item.type === 'user' ? 'green' : 'red' }}>
-                            {item.type === 'user' ? 'User' : 'Bot'}
-                        </Text>
-                        <Text style={styles.bot}>{item.text}</Text>
-                    </View>
-                )}
-            />
-            <TextInput
-                style={styles.input}
-                value={textInput}
-                onChangeText={(text) => setTextInput(text)}
-                placeholder="Ask me for advice"
-                onSubmitEditing={handleSend}
-            />
+            <View style={styles.chatContainer}>
+                <FlatList
+                    data={data}
+                    keyExtractor={(item, index) => index.toString()}
+                    style={styles.body}
+                    renderItem={({ item }) => (
+                        <View style={{ flexDirection: 'row', padding: 10 }}>
+                            <Text style={{ fontWeight: '600', color: item.type === 'user' ? 'green' : 'red' }}>
+                                {item.type === 'user' ? 'User' : 'Bot'}
+                            </Text>
+                            <Text style={styles.bot}>{item.text}</Text>
+                        </View>
+                    )}
+                />
+                <TextInput
+                    style={styles.input}
+                    value={textInput}
+                    onChangeText={(text) => setTextInput(text)}
+                    placeholder="Ask me for advice"
+                    onSubmitEditing={handleSend}
+                />
+            </View>
         </View>
     );
 };
@@ -71,6 +73,10 @@ const styles = StyleSheet.create({
         marginTop: 50,
         marginBottom: 20,
         textAlign: 'center',
+    },
+    chatContainer: {
+        flex: 1,
+        paddingHorizontal: 20,
     },
     body: {
         backgroundColor: '#fff',
