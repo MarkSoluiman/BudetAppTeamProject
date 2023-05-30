@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const ChatGPT = () => {
     const [data, setData] = useState([]);
-    const apikey = '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';
+    const apikey = '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';
     const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions';
     const [textInput, setTextInput] = useState('');
 
