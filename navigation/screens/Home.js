@@ -26,10 +26,6 @@ export default function Home({navigation}){
                 <Text style={styles.heading}>Monthly Income</Text>
             </Pressable>
 
-            {/* Profit and Loss widget */}
-            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Profit and Loss')}>
-                <Text style={styles.heading}>Profit/Loss</Text>
-            </Pressable>
 
             {/* Goal Bars widget */}
             <Pressable style={styles.widget} onPress={()=> navigation.navigate('Goal Bars')}>

@@ -1,34 +1,37 @@
 // Component imports
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Dimensions,
+  Animated,
+} from "react-native";
+import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { firebase } from "../../firebase.config";
 import { getAuth } from "firebase/auth";
-import { collection, query, where, onSnapshot, orderBy } from "firebase/firestore";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-
 import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
+import { FlatList } from "react-native-gesture-handler";
 
+// Exported function
 export default function HomeGoalsModal({ navigation }) {
   const [goalsList, setGoalsList] = useState([]);
-  const [transList, setTransList] = useState([]);
-  const [yearPicker, setYearPicker] = useState(2023);
+ 
 
   useEffect(() => {
     const todoRef = query(
       collection(firebase.firestore(), "Goals"),
       where("uid", "==", getAuth().currentUser.uid),
       where("goal_complete", "==", false),
-      orderBy ("goal_date", "asc")
+      orderBy("goal_date", "asc")
     );
-
     const unsubscribe = onSnapshot(todoRef, (querySnapshot) => {
       const goalsList = [];
       querySnapshot.forEach((doc) => {
@@ -42,119 +45,94 @@ export default function HomeGoalsModal({ navigation }) {
       });
       setGoalsList(goalsList);
     });
+    return () => unsubscribe();
+  }, []);
+
+  const Progress = ({ step, steps, height }) => {
+    //useRef for  React keep track of the animation when re rendered the animated value will be the same
+    //Animated value is 1000 so we move the animation out side of the screen so we get the width of the screen
+    const animatedValue = React.useRef(new Animated.Value(-1000)).current;
+    const reactive = React.useRef(new Animated.Value(-1000)).current;
+    const [width, setWidth] = React.useState(0);
+
+    React.useEffect(() => {
+      Animated.timing(animatedValue, {
+        toValue: reactive,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }, []);
+
+    React.useEffect(() => {
+      // -width + width * step/ steps
+      reactive.setValue(-width + (width * step) / steps);
+    }, [step, width]);
 
     
 
-    return () => unsubscribe();
-  }, []);
-
-  console.log(goalsList);
-
-  useEffect(() => {
-    const transRef = query(
-      collection(firebase.firestore(), "Logs"),
-      where("uid", "==", getAuth().currentUser.uid),
-      orderBy ("trans_date", "desc")
+    return (
+      <>
+        <Text style={{ fontSize: 12, fontWeight: "900", marginBottom: 8 }}>
+          ${step} /${steps}
+        </Text>
+        <View
+          onLayout={(e) => {
+            const newWidth = e.nativeEvent.layout.width;
+            setWidth(newWidth);
+          }}
+          style={{
+            height,
+            backgroundColor:  "#ffe9de",
+            borderRadius: height,
+            overflow: "hidden",
+          }}
+        >
+          <Animated.View
+            style={{
+              height,
+              width: "100%",
+              borderRadius: height,
+              backgroundColor:  "#ff8100",
+              position: "absolute",
+              left: 0,
+              top: 0,
+              transform: [
+                {
+                  translateX: animatedValue,
+                },
+              ],
+            }}
+          />
+        </View>
+      </>
     );
-
-    const unsubscribe = onSnapshot(transRef, (querySnapshot) => {
-      const transList = [];
-      querySnapshot.forEach((doc) => {
-        const { trans_date, trans_name, trans_amount, trans_type } = doc.data();
-        transList.push({
-          trans_date: trans_date.toDate(),
-          trans_name,
-          trans_amount,
-          trans_type,
-        });
-      });
-      setTransList(transList);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const handleDecrement = () => {
-    setYearPicker((yearPicker) => yearPicker - 1);
   };
-
-  const handleIncrement = () => {
-    setYearPicker((yearPicker) => yearPicker + 1);
-  };
-
-  const generateDataForChart = () => {
-    const labels = goalsList.map((goal) => goal.goal_name);
-    const data = {
-      labels: labels,
-      legend: labels,
-      data: [],
-      barColors: ["#FFE572", "#FFE572", "#FFC772", "#BD7B5C"],
-    };
-  
-    const goalBalancesByMonth = Array(12)
-      .fill()
-      .map(() => Array(data.legend.length).fill(0));
-  
-    for (const goal of goalsList) {
-      const goalYear = goal.goal_date.getFullYear();
-      if (goalYear === yearPicker) {
-        const monthIndex = goal.goal_date.getMonth();
-        const goalIndex = data.legend.indexOf(goal.goal_name);
-        goalBalancesByMonth[monthIndex][goalIndex] += goal.goal_balance;
-      }
-    }
-  
-    data.data = goalBalancesByMonth;
-  
-    const barSpacing = 0.2; // Adjust the spacing between each bar on the x-axis
-  
-    return {
-      ...data,
-      barPercentage: 1 - barSpacing,
-      categoryPercentage: 1,
-    };
-  };
-
-  const data = generateDataForChart();
 
   return (
     <View style={styles.background}>
-      {/* Heading */}
-      <Text style={styles.prompts}>Goal Bars</Text>
-      <StackedBarChart
-        data={data}
-        width={Dimensions.get("window").width - 30}
-        height={350}
-        chartConfig={{
-          backgroundGradientFrom: "#ff8100",
-          backgroundGradientFromOpacity: 1,
-          backgroundGradientTo: "#ff8100",
-          backgroundGradientToOpacity: 1,
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          strokeWidth: 2,
-          barPercentage: 0.5,
-          useShadowColorFromDataset: false,
-        }}
-        style={{ borderRadius: 10, alignSelf: "center" }}
-        accessor={"population"}
-        backgroundColor={"transparent"}
-        paddingLeft={"15"}
-      />
+      <View style={styles.widget}>
+        <Text style={styles.prompts}> Goal Bar Progress </Text>
+        <StatusBar hidden />
+        <FlatList
+          data={goalsList}
+          renderItem={({ item }) => (
+            <View style={styles.entry}>
+              <Text> Goal Name : {item.goal_name}</Text>
+              <Progress
+                step={item.goal_balance}
+                steps={item.goal_amount}
+                height={20}
+              />
+            </View>
+          )}
+        />
 
-      <View style={{ marginTop: 5, flexDirection: "row", justifyContent: "space-between" }}>
-        <Ionicons name="caret-back-circle-sharp" size={35} color="black" onPress={handleDecrement} />
-        <Text style={{ marginTop: 12, fontSize: 20, fontWeight: "bold" }}>
-          {yearPicker}
-        </Text>
-        <MaterialCommunityIcons name="arrow-right-drop-circle" size={35} color="black" onPress={handleIncrement} />
+        <Pressable onPress={() => navigation.navigate("Home")}>
+          <View style={styles.button}>
+            <Text style={styles.prompts}>GO BACK</Text>
+          </View>
+        </Pressable>
       </View>
-
-      {/* Button to return to home page */}
-      <Pressable onPress={() => navigation.navigate("Home")}>
-        <View style={styles.button}>
-          <Text style={styles.prompts}>GO BACK</Text>
-        </View>
-      </Pressable>
     </View>
   );
 }
@@ -164,12 +142,35 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#ffdeb7",
-    padding: 5,
+    justifyContent: "center",
+    padding: 20,
+  },
+  widget: {
+    borderRadius: 10,
+    borderColor: "#ff8100",
+    borderWidth: 3,
+    width: 370,
+    padding: 15,
+    backgroundColor: "#ffe9de",
+    justifyContent: "space-evenly",
   },
   prompts: {
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
+    marginBottom: 10,
+  },
+
+  entry: {
+    //flexDirection: "row",
+    marginBottom: "5%",
+    backgroundColor: "#ffdeb7",
+    borderColor: "#ff8100",
+    borderWidth: 2,
+    borderRadius: 10,
+    justifyContent: "center",
+    padding: 15,
+    paddingTop: 25,
   },
   button: {
     backgroundColor: "#ff8100",
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     height: 50,
     width: 90,
-    margin: 20,
+    margin: 50,
     alignSelf: "center",
   },
 });

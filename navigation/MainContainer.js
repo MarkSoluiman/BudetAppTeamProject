@@ -22,7 +22,6 @@ import LogModal from './screens/LogModal'
 import HomeBalanceModal from './screens/HomeBalanceModal'
 import HomeGoalsModal from './screens/HomeGoalsModal'
 import HomeIncomeModal from './screens/HomeIncomeModal'
-import HomePLModal from './screens/HomePLModal'
 import HomeSpendingModal from './screens/HomeSpendingModal'
 import useAuth from '../hooks/useAuth'
 
@@ -34,7 +33,6 @@ const homeName = 'Home'
 const homeBalanceName = 'Current Balance'
 const homeGoalsName = 'Goal Bars'
 const homeIncomeName = 'Monthly Income'
-const homePLName = 'Profit and Loss'
 const homeSpendingName = 'Monthly Spending'
 const logName = 'Log'
 const logModalName = 'New Transaction'
@@ -104,7 +102,6 @@ function HomeStackScreen(){
                 <HomeStack.Screen name={homeBalanceName} component={HomeBalanceModal}/>
                 <HomeStack.Screen name={homeGoalsName} component={HomeGoalsModal}/>
                 <HomeStack.Screen name={homeIncomeName} component={HomeIncomeModal}/>
-                <HomeStack.Screen name={homePLName} component={HomePLModal}/>
                 <HomeStack.Screen name={homeSpendingName} component={HomeSpendingModal}/>
             </HomeStack.Group>
         </HomeStack.Navigator>
