@@ -15,6 +15,7 @@ import News from './screens/News'
 import Login from './screens/Login'
 import SignUp from './screens/SignUp'
 import Profile from './screens/Profile'
+import ResetPass from './screens/ResetPass'
 
 // Sub screen/modal imports
 import GoalsModal from './screens/GoalsModal'
@@ -40,6 +41,7 @@ const newsName = 'News'
 const profileName = 'Profile'
 const loginName = 'Login'
 const signUpName = 'Sign Up'
+const resetName = 'Reset Password'
 
 
 // Login navigation, initial navigation accessed: login, sign up, and home (access to the full application)
@@ -75,7 +77,7 @@ export default function LoginStackScreen(){
                     >
                         <LoginStack.Screen name={loginName} component={Login}/>
                         <LoginStack.Screen name={signUpName} component={SignUp}/>
-                        
+                        <LoginStack.Screen name={resetName} component={ResetPass}/>
                        
                     </LoginStack.Group>
                 </LoginStack.Navigator>

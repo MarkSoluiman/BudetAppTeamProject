@@ -84,6 +84,10 @@ export default function Login({navigation}){
                     <Text style= {styles.buttonText}>LOGIN</Text>
                 </TouchableOpacity>
           </View> 
+
+          <Pressable onPress={() => navigation.navigate('Reset Password')}>
+            <Text style={styles.smallText}>Forgotten password?</Text>
+          </Pressable>
         </View>
     )
 }
@@ -104,7 +108,7 @@ const styles = StyleSheet.create({
         , alignItems: 'center' 
     },
     buttonText:{
-        color: 'white'
+        color: 'white',
     },
     headingText:{
       color : '#ffe9df', 
@@ -116,6 +120,13 @@ const styles = StyleSheet.create({
         color : 'white', 
         fontWeight: 'bold',
         fontSize : 15,
+    },
+    smallText:{
+        color : 'white', 
+        fontStyle: 'italic',
+        opacity: 0.5,
+        fontSize : 15,
+        marginTop: 20,
     },
     button: {
         backgroundColor : '#903800',
