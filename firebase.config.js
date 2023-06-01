@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+// import { getAnalytics } from "firebase/analytics";
 import {getAuth} from 'firebase/auth' // will help with sign up page 
 import { getFirestore, getDocs } from "firebase/firestore/lite";
 import firebase from 'firebase/compat/app'
@@ -27,7 +27,7 @@ if(!firebase.apps.length){
   firebase.initializeApp(firebaseConfig)
 }
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 const auth = getAuth(app); // This will help with sign up page with authentication servers 
 const db = getFirestore(app);
 

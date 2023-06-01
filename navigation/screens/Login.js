@@ -33,7 +33,7 @@ export default function Login({navigation}){
 
 
     } else{
-    Alert.alert('LogIn error : Please enter Email and Password to LogIn')
+    Alert.alert('LogIn error: Please enter email and password to log in')
     }
 }
 
@@ -41,7 +41,7 @@ export default function Login({navigation}){
         <View style={styles.background}>
 
             {/* Main heading */}
-            <Text style={styles.headingText}>MOBILE </Text>
+            <Text style={styles.headingText}>MOBILE</Text>
             <Text style={styles.headingText}>BUDGETING</Text>
 
             {/* Log in title and entry prompt */}

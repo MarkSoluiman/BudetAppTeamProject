@@ -53,11 +53,7 @@ export default function LoginStackScreen(){
         return(
             <NavigationContainer>
                 <LoginStack.Navigator>
-                <LoginStack.Group 
-                 screenOptions={{
-                    headerShown: false
-                }}
-                >    
+                    <LoginStack.Group screenOptions={{headerShown: false}}>    
                         <LoginStack.Screen name={homeName} component={MainContainer}/>
                     </LoginStack.Group>
                 </LoginStack.Navigator>
