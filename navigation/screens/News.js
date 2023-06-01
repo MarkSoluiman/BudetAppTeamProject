@@ -3,11 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
   Image,
   Dimensions,
   TextInput,
   Linking,
+  TouchableOpacity,
 } from 'react-native';
 import { Card } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -62,32 +62,27 @@ export default function News({ navigation }) {
         <View style={styles.container}>
           <SearchBar />
           {filteredArticles.map((article, index) => (
-            <TouchableOpacity
-              key={index}
-            >
-              <Card style={styles.card}>
-                <Image
-                  source={{ uri: article.urlToImage }}
-                  style={styles.image}
-                />
-                <View style={styles.articleContainer}>
-                  <Text style={styles.title}>{article.title}</Text>
-                </View>
-                <Text style={styles.description}>{article.description}</Text>
-                <TouchableOpacity
-                  onPress={() => handleSourcePress(article.url)}
-                >
-                  <View style={styles.heading}>
-                    <Text style={styles.sourceButton}>
-                      Source: <Text style={styles.source}>{article.source.name}</Text>
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+            <Card key={index} style={styles.card}>
+              <Image
+                source={{ uri: article.urlToImage }}
+                style={styles.image}
+              />
+              <View style={styles.articleContainer}>
+                <Text style={styles.title}>{article.title}</Text>
+              </View>
+              <Text style={styles.description}>{article.description}</Text>
+              <TouchableOpacity onPress={() => handleSourcePress(article.url)}>
                 <View style={styles.heading}>
-                  <Text style={styles.date}>{article.publishedAt}</Text>
+                  <Text style={styles.sourceButton}>
+                    Source:{' '}
+                    <Text style={styles.source}>{article.source.name}</Text>
+                  </Text>
                 </View>
-              </Card>
-            </TouchableOpacity>
+              </TouchableOpacity>
+              <View style={styles.heading}>
+                <Text style={styles.date}>{article.publishedAt}</Text>
+              </View>
+            </Card>
           ))}
         </View>
       </ScrollView>
@@ -105,16 +100,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: Dimensions.get('window').width,
+    paddingHorizontal: 10,
   },
   card: {
     marginBottom: 20,
-    borderWidth: 10,
     borderRadius: 20,
     borderColor: '#ff8100',
     width: Dimensions.get('window').width - 50,
   },
   articleContainer: {
-    width: Dimensions.get('window').width - 50,
+    width: '100%',
     borderRadius: 20,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -122,33 +117,31 @@ const styles = StyleSheet.create({
     borderColor: '#ff8100',
   },
   title: {
-    width: Dimensions.get('window').width - 90,
-    marginTop: 2,
+    width: '100%',
+    marginTop: 10,
     marginBottom: 2,
-    marginHorizontal:16,
-    marginVertical: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     fontSize: 20,
     fontWeight: '600',
-    flex: 1,
   },
   image: {
-    width: Dimensions.get('window').width - 70,
+    width: '100%',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     height: 200,
-    alignItems: 'center',
   },
   description: {
     marginTop: 5,
     marginBottom: 1,
     marginHorizontal: 10,
-    width: Dimensions.get('window').width - 70,
-    alignItems: 'center',
+    paddingHorizontal: 15,
+    width: '100%',
     fontSize: 16,
     fontWeight: '400',
   },
   input: {
-    width: Dimensions.get('window').width - 40,
+    width: '100%',
     height: 45,
     backgroundColor: '#ffdeb7',
     paddingVertical: 10,
@@ -168,26 +161,26 @@ const styles = StyleSheet.create({
     marginTop: 1,
     marginBottom: 1,
     marginHorizontal: 10,
-    marginVertical:10,
+    marginVertical: 10,
     fontSize: 17,
     fontWeight: '600',
     alignItems: 'center',
-    color: 'black'
+    color: 'black',
   },
   sourceButton: {
     marginTop: 1,
     marginBottom: 1,
     marginHorizontal: 5,
-    marginVertical:5,
+    marginVertical: 5,
     fontSize: 17,
     fontWeight: '600',
     color: 'black',
-    backgroundColor:'#ffdeb7',
+    backgroundColor: '#ffdeb7',
   },
   date: {
     marginBottom: 10,
     marginHorizontal: 5,
-    marginVertical:5,
+    marginVertical: 5,
     fontSize: 15,
     fontWeight: '600',
     alignItems: 'flex-start',
