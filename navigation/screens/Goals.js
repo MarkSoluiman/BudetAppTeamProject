@@ -84,6 +84,25 @@ export default function Goals({navigation}){
           .catch(error => {
             console.log(error)
         })
+
+        // Update any transactions associated to this goal to null
+        firebase.firestore()
+            .collection('Logs')
+            .where('uid', '==', getAuth().currentUser.uid)
+            .where('trans_goal', '==', selectedGoalName)
+            .get()
+            .then(querySnapshot => {
+                querySnapshot.forEach((doc) => {
+                    const updatedData = { trans_goal: null }
+                    doc.ref.update(updatedData)
+                    .then(() => {
+                        console.log('Associated transaction updated on goal deletion')
+                    })
+                    .catch((error) => {
+                        console.log('Error updating associated transaction: ', error)
+                    })
+                })
+            })
     }
 
     const navigateToGoalsModal = (selectedGoalDate, selectedGoalName, selectedGoalAmount) => {

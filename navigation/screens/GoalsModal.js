@@ -12,6 +12,7 @@ export default function GoalsModal({navigation, route}){
 
     // Initialise constants
     const [date, setDate] = useState(new Date())
+    const [oldName, setOldName] = useState('')
     const [newName, setName] = useState('')
     const [newAmount, setAmount] = useState(route.params?.goal_amount || '');
     const [showPicker, setShowPicker] = useState(false)
@@ -35,6 +36,7 @@ export default function GoalsModal({navigation, route}){
 
                         // Set entry field variables to corresponding values in firebase
                         setName(documentSnapshot.data().goal_name);
+                        setOldName(documentSnapshot.data().goal_name)
                         setAmount(documentSnapshot.data().goal_amount);
                         const goalDateTimestamp = documentSnapshot.data().goal_date;
                         const goalDate = goalDateTimestamp.toDate(); // Convert timestamp to Date object
@@ -73,6 +75,28 @@ export default function GoalsModal({navigation, route}){
         } else {
             toggleDatepicker()
         }
+    }
+
+    // Function is called on completion of a goal update, updates associated goal names of relevant transactions
+    function updateLogs() {
+        firebase
+        .firestore()
+        .collection('Logs')
+        .where('uid','==',getAuth().currentUser.uid)
+        .where('trans_goal', '==', oldName)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const updatedData = { trans_goal: newName }
+                doc.ref.update(updatedData)
+                .then(() => {
+                    console.log('Associated transaction updated for new goal name')
+                })
+                .catch((error) => {
+                    console.log('Error updating associated transactions: ', error)
+                })
+            })
+        })
     }
 
     // Function is called on completion of a goal update, determines goal status with updated goal balance and amount, notifies user of goal completion if valid and necessary
@@ -163,7 +187,7 @@ export default function GoalsModal({navigation, route}){
                         amount = parseInt(newAmount, 10)
     
                         navigation.navigate('Goals')
-    
+                        
                         const goalRef = doc(db, 'Goals', goalID)
                         try{
                             await updateDoc(goalRef, {
@@ -174,6 +198,7 @@ export default function GoalsModal({navigation, route}){
                             console.log('Goal document updated successfully')
                             Alert.alert('Goal updated')
 
+                            updateLogs()
                             goalNotifications(goalID)
                         } catch (error){
                             console.log('Goal document updated unsuccessfully')
