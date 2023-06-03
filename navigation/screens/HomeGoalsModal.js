@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     height: 50,
     width: 90,
-    margin: 50,
+    margin: 25,
     alignSelf: "center",
   },
 });

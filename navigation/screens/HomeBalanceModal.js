@@ -4,7 +4,7 @@ import { firebase } from "../../firebase.config";
 import { ProgressChart } from "react-native-chart-kit";
 
 export default function HomeBalanceModal({ navigation }) {
-  const screenWidth = Dimensions.get("window").width;
+  const screenWidth = Dimensions.get("window").width - 60;
 
   const [categoryCounts, setCategoryCounts] = useState({
     Income: 0,
@@ -86,6 +86,9 @@ export default function HomeBalanceModal({ navigation }) {
 
   return (
     <View style={styles.background}>
+      <View style = {styles.entry}>
+
+    
       {/* Heading */}
       <Text style={styles.prompts}>Current Balance</Text>
       <ProgressChart
@@ -104,6 +107,11 @@ export default function HomeBalanceModal({ navigation }) {
         }}
         style={{ borderRadius: 10, alignSelf: 'flex-end' }}
       />
+      <View style = {styles.legendContainer}> 
+      <Text> test</Text>
+      </View>
+
+       
 
       {/* Button to return to home page */}
       <Pressable onPress={() => navigation.navigate("Home")}>
@@ -111,6 +119,7 @@ export default function HomeBalanceModal({ navigation }) {
           <Text style={styles.prompts}>GO BACK</Text>
         </View>
       </Pressable>
+      </View>
     </View>
   );
 }
@@ -125,6 +134,36 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
+  },
+  entry: {
+    //flexDirection: "row",
+    marginBottom: "5%",
+    backgroundColor: "#ffdeb7",
+    borderColor: "#ff8100",
+    borderWidth: 2,
+    borderRadius: 10,
+    justifyContent: "center",
+    padding: 15,
+    paddingTop: 25,
+  },
+  legendContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'baseline',
+    marginHorizontal: '15%'
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  legendColor: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: 5,
+  },
+  legendLabel: {
+    fontSize: 15,
   },
   button: {
     backgroundColor: "#ff8100",
