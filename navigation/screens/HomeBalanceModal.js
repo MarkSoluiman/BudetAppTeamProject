@@ -23,7 +23,7 @@ export default function HomeBalanceModal({ navigation }) {
       <Text style={styles.prompts}>Current Balance</Text>
       <ProgressChart
         data={data}
-        width={Dimensions.get("window").width}
+        width={Dimensions.get("window").width -30}
         height={220}
         strokeWidth={16}
         radius={32}
@@ -32,7 +32,7 @@ export default function HomeBalanceModal({ navigation }) {
             backgroundGradientFromOpacity: 1,
             backgroundGradientTo: '#ff6361',
             backgroundGradientToOpacity: 1,
-            color: (opacity = 1) => `rgba(211, 211, 211, ${opacity})`,
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             strokeWidth: 2, // optional, default 3
             barPercentage: 0.5,
             useShadowColorFromDataset: false // optional

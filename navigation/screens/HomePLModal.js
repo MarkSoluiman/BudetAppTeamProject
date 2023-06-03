@@ -36,7 +36,7 @@ export default function HomePLModal({ navigation }) {
 
       <PieChart
         data={data}
-        width={Dimensions.get("window").width}
+        width={Dimensions.get("window").width-30}
         height={220}
         chartConfig = {{
             backgroundGradientFrom: '#ffa600',

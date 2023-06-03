@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, StyleSheet, Pressable, Alert } from 'react-native'
+import { View, Text, StyleSheet, Pressable, Alert , Button} from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -7,6 +7,7 @@ import { Picker } from '@react-native-picker/picker'
 import { collection, addDoc, getDoc, doc, updateDoc, increment } from 'firebase/firestore/lite'
 import { db, firebase } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
+
 
 // Exported function
 export default function LogModal({navigation}){
@@ -43,6 +44,89 @@ export default function LogModal({navigation}){
         }
     }
 
+    const goalNotifications = async () => {
+
+        // Find if goal met, goal_balance >= goal_met
+        firebase.firestore().collection("Goals").where('uid', '==', getAuth().currentUser.uid).where('goal_name', '==', selectedGoal).get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(documentSnapshot => {
+                        if (documentSnapshot.data().goal_balance >= documentSnapshot.data().goal_amount){
+                            firebase.firestore().collection("Goals")
+                                .where('uid', '==', getAuth().currentUser.uid)
+                                .where('goal_name', '==', selectedGoal)
+                                .get()
+                                .then(querySnapshot => {
+                                    querySnapshot.forEach(documentSnapshot => {
+
+                                        console.log('balance>goal')
+
+                                        const goalDocRef = doc(db, "Goals", documentSnapshot.id)
+                                        const data = { goal_complete: true }
+                                        
+                                        updateDoc(goalDocRef, data)
+                                        .then(() => {
+                                            console.log("Goal document updated")
+
+                                            // Find if goal notifications are on, if yes, alert user of goal completion
+                                            firebase.firestore().collection("Profile").where('uid', '==', getAuth().currentUser.uid).where("notifications", "==", true).get()
+                                            .then(querySnapshot => {
+                                                querySnapshot.forEach(documentSnapshot => {
+                                                    if (documentSnapshot.data()['notifications'] === true){
+                                                        Alert.alert("Goal completed!")
+                                                        console.log("Goal completed as a console log")
+                                                    }
+                                                })
+                                            })
+                                            .catch((error) => {
+                                                console.log("Error getting documents: ", error)
+                                            })
+
+                                        })
+                                        .catch((error) => {
+                                            console.log(error)
+                                        })
+                                    })
+                                })
+                                .catch((error) => {
+                                    console.log(error)
+                                })   
+                        }
+                    })
+                })
+                .catch((error) => {
+                    console.log(error)
+                })        
+    }
+
+    // Add to goal balance, if there is an income association
+    const increaseGoal = async () => {
+        if (selectedGoal != null && selectedType === 'Income'){  
+            firebase.firestore().collection("Goals")
+                .where('uid', '==', getAuth().currentUser.uid)
+                .where('goal_name', '==', selectedGoal)
+                .get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(documentSnapshot => {
+
+                        const goalDocRef = doc(db, "Goals", documentSnapshot.id)
+                        const data = { goal_balance: increment(tranAmount) }
+                        
+                        updateDoc(goalDocRef, data)
+                        .then(() => {
+                            console.log("Goal field has been updated with income association")
+                            goalNotifications()
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+                    })
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
+    }
+
     // Validate entry input, if successful... write to firebase
     const handleSubmit = async () => {
         if(date){
@@ -52,31 +136,8 @@ export default function LogModal({navigation}){
                         if (selectedCat.length > 0){
                             if (selectedGoal == null || selectedGoal.length > 0){
 
-                                // Deduce from goal, if there is an income association
-                                if (selectedGoal != null && selectedType === 'Income'){  
-                                    firebase.firestore().collection("Goals").where('goal_name', '==', selectedGoal).get()
-                                        .then(querySnapshot => {
-                                            querySnapshot.forEach(documentSnapshot => {
-                                                setGoalID(documentSnapshot.id)
-                                            })
-                                        })
-                                        .catch(error => {
-                                            console.error(error)
-                                        })
-                                    const goalDocRef = doc(db, "Goals", goalID)
-                                    const data = { goal_balance: increment(tranAmount) }
-                                    updateDoc(goalDocRef, data)
-                                    .then(goalDocRef => {
-                                        console.log("Field has been updated")
-                                    })
-                                    .catch(error => {
-                                        console.log(error)
-                                    })
-                                }
-
                                 // Save transaction and upload as new document to firebase
                                 Alert.alert('Transaction saved')
-                                console.log(selectedType)
                                 navigation.navigate('Log')
                                 const docRef = addDoc(collection(db, "Logs"), {
                                     uid: getAuth().currentUser.uid
@@ -87,7 +148,12 @@ export default function LogModal({navigation}){
                                     , trans_category: selectedCat
                                     , trans_goal: selectedGoal
                                 });
-                                console.log('Document written with ID: ', docRef.id)
+
+                                increaseGoal()
+
+                                console.log('Document written with ID: ', (await docRef).id)
+
+                            // If unsuccessul... present user alert
                             } else {
                                 Alert.alert('Error: A transaction goal association needs to be selected')
                             }
@@ -128,7 +194,6 @@ export default function LogModal({navigation}){
         }
         fetchData()
     }, [])
-
 
     // Exported function
     return(
@@ -221,6 +286,7 @@ export default function LogModal({navigation}){
                     <Text style={styles.prompts}>SAVE</Text>
                 </Pressable>
             </View>
+            
         </View>
     )
 }
