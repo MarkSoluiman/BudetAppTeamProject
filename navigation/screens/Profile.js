@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { doc, collection, addDoc, updateDoc } from "firebase/firestore/lite";
@@ -6,6 +6,7 @@ import { auth, db, firebase } from "../../firebase.config";
 import { getAuth, signOut, updateEmail, updatePassword } from "firebase/auth";
 import { Picker } from "@react-native-picker/picker";
 import { Switch } from '@rneui/themed'
+
 
 // Exported function
 export default function Profile({ navigation }) {
@@ -129,6 +130,14 @@ export default function Profile({ navigation }) {
         console.error(error);
       });
 
+
+
+      //getting the password:
+     
+
+
+ 
+
     // Document will be updating as the following. Done individually as users don't have to change all fields.
     const profileDocRef = doc(db, "Profile", profileID);
     const dataEmail = {
@@ -146,6 +155,8 @@ export default function Profile({ navigation }) {
     const dataTransport = {
       transportMeans: transportMeans,
     };
+
+
 
     // Input validation
     if (email.length > 0) {
@@ -210,6 +221,40 @@ export default function Profile({ navigation }) {
     await signOut(auth);
   };
 
+  useEffect(() => {
+    function fetchData() {
+      firebase
+        .firestore()
+        .collection("Profile")
+        .where("uid", "==", "oTwksGN0FncxUdmdljLlLWy6Cr92")
+        .get()
+        .then((querySnapshot) => {
+          if (!querySnapshot.empty) {
+            const documentSnapshot = querySnapshot.docs[0];
+            const password = documentSnapshot.data().password;
+            setPassword(password);
+            const primaryLocation=documentSnapshot.data().primaryLocation
+            if(primaryLocation==null){
+              setPrimaryLocation("No location was chosen")
+            }else{
+              setPrimaryLocation(primaryLocation)
+            }
+
+            const student=documentSnapshot.data().student
+            setStudent(student)
+           
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    fetchData();
+  }, []);
+  
+
+
+
   return (
     <View style={styles.background}>
       <View style={styles.widget}>
@@ -217,9 +262,10 @@ export default function Profile({ navigation }) {
           <Text style={styles.prompts}>Email</Text>
           <TextInput
             style={styles.entry}
-            value={email}
+            value={getAuth().currentUser.email}
             onChangeText={(value) => setEmail(value)}
-            placeholder={getAuth().currentUser.email}
+            defaultValue={getAuth().currentUser.email}
+            
           />
 
           {/* Password prompt and entry */}
@@ -228,8 +274,9 @@ export default function Profile({ navigation }) {
             style={styles.entry}
             value={password}
             onChangeText={(value) => setPassword(value)}
-            placeholder={getAuth().currentUser.password}
-            secureTextEntry = {true}
+            placeholder={password}
+
+            editable={false}
           />
 
           {/* Student prompt and picker */}
