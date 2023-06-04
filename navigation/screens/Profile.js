@@ -226,12 +226,14 @@ export default function Profile({ navigation }) {
       firebase
         .firestore()
         .collection("Profile")
-        .where("uid", "==", "oTwksGN0FncxUdmdljLlLWy6Cr92")
+        .where("uid", "==", getAuth().currentUser.uid)
         .get()
         .then((querySnapshot) => {
           if (!querySnapshot.empty) {
+            
             const documentSnapshot = querySnapshot.docs[0];
             const password = documentSnapshot.data().password;
+            const email=documentSnapshot.data().email
             setPassword(password);
             const primaryLocation=documentSnapshot.data().primaryLocation
             if(primaryLocation==null){
@@ -242,12 +244,15 @@ export default function Profile({ navigation }) {
 
             const student=documentSnapshot.data().student
             setStudent(student)
+            setEmail(email)
            
           }
         })
         .catch((error) => {
           console.log(error);
         });
+
+        console.log(primaryLocation)
     }
     fetchData();
   }, []);
@@ -262,10 +267,9 @@ export default function Profile({ navigation }) {
           <Text style={styles.prompts}>Email</Text>
           <TextInput
             style={styles.entry}
-            value={getAuth().currentUser.email}
-            onChangeText={(value) => setEmail(value)}
+            onChangeText={(newEmail) => setEmail(newEmail)}
             defaultValue={getAuth().currentUser.email}
-            
+            value={getAuth().currentUser.email}
           />
 
           {/* Password prompt and entry */}
