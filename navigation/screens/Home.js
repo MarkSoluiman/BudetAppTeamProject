@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
         , borderRadius: 200
         , borderColor: '#ff8100'
         , borderWidth: 6
-        , width: Dimensions.get('window').width-40
-        , height: Dimensions.get('window').height-770
+        , width: Dimensions.get('window').width/1.1
+        , height: Dimensions.get('window').height/8
         , backgroundColor: '#ffe9de'
         , justifyContent: 'space-evenly'
         , fontWeight: 'bold'
