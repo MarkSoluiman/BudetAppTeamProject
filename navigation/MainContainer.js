@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { Pressable, StyleSheet } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import 'react-native-gesture-handler'
+import React from 'react'
 
 // Main screen imports
 import Advice from './screens/Advice'
