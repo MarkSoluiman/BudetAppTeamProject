@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert, Dimensions } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { doc, collection, addDoc, updateDoc } from "firebase/firestore/lite";
 import { auth, db, firebase } from "../../firebase.config";
@@ -286,13 +286,16 @@ export default function Profile({ navigation }) {
           />
         </View>
 
-        <TouchableOpacity style={styles.saveButton} onPress={saveData}>
-          <Text style={styles.prompts}>SAVE</Text>
-        </TouchableOpacity>
+        <View style={styles.buttons}>
+          <TouchableOpacity style={styles.button} onPress={saveData}>
+            <Text style={styles.prompts}>SAVE</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={handleLogout}>
+            <Text style={styles.prompts}>LOG OUT</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <TouchableOpacity style={styles.logButton} onPress={handleLogout}>
-        <Text style={styles.prompts}>LOG OUT</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -307,29 +310,20 @@ const styles = StyleSheet.create({
     paddingVertical: "6%",
   },
   widget: {
-    marginHorizontal: 10,
+    alignSelf: 'center',
     borderRadius: 15,
-    width: 350,
-    height: 625,
+    width: Dimensions.get('window').width-500,
+    height: Dimensions.get('window').height-500,
     padding: 15,
     backgroundColor: "#ffdeb7",
-    justifyContent: "center",
-  },
-  semiWidget: {
-    marginHorizontal: 10,
-    marginVertical: 20,
-    borderRadius: 15,
-    width: 400,
-    height: 675,
-    padding: 15,
     justifyContent: "center",
   },
   entry: {
     borderRadius: 15,
     borderColor: "#ff8100",
     borderWidth: 6,
-    width: 370,
-    height: 50,
+    width: Dimensions.get('window').height-500,
+    height: Dimensions.get('window').height-820,
     backgroundColor: "#ffe9de",
     marginVertical: "3.5%",
     paddingHorizontal: "5%",
@@ -351,8 +345,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderColor: "#ff8100",
     borderWidth: 6,
-    width: 370,
-    height: 50,
+    width: Dimensions.get('window').height-500,
+    height: Dimensions.get('window').height-820,
     backgroundColor: "#ffe9de",
     marginVertical: "3.5%",
     paddingHorizontal: "5%",
@@ -379,20 +373,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'flex-end'
   },
-  saveButton: {
-    backgroundColor: "#ff8100",
-    height: 50,
-    marginTop: '5%',
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
+  buttons:{
+    flexDirection: 'row',
+    alignSelf: 'center'
   },
-  logButton: {
+  button: {
     backgroundColor: "#ff8100",
-    height: 40,
-    width: 200,
-    borderRadius: 20,
+    width: Dimensions.get('window').width/2.5,
+    height: Dimensions.get('window').height-820,
+    marginTop: '5%',
+    borderRadius: 30,
     justifyContent: "center",
-    alignItems: "center",
+    alignSelf: "center",
+    marginHorizontal: 5
   }
 });

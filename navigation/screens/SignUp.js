@@ -1,7 +1,7 @@
 // Components import
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React,{useState} from 'react'; 
-import { View, Text, StyleSheet, Button, TextInput, Alert, TouchableOpacity} from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TextInput, Alert, TouchableOpacity} from 'react-native'
 import { auth } from '../../firebase.config';
 
 //import firebase from 'firebase'
@@ -118,38 +118,32 @@ const styles = StyleSheet.create({
         color : 'white', 
         fontWeight: 'bold',
         fontSize : 15,
-
     },
     buttons:{
-        flexDirection: 'row', 
-        width : '70%', 
-        justifyContent: 'space-between', 
-        alignItems: 'center' 
+        flexDirection: 'row'
+        , width : Dimensions.get('window').width/2
+        , justifyContent: 'space-between'
     },
     buttonText:{
         color: 'white'
     },
     button: {
         backgroundColor : '#903800',
-        height : 30,
-        width: 80,
+        height: Dimensions.get('window').height/20,
+        width: Dimensions.get('window').width/4.5,
         marginTop: 10,
         borderRadius: 20,
         justifyContent : 'center',
         alignItems : 'center'
-       },
+    },
     textInput: {
-        padding : 3,
+        paddingLeft: 10,
+        paddingVertical: 4,
         borderWidth: 1,
-        fontSize: 20,
+        borderRadius: 9,
         borderColor:'#ffdeb7',
         backgroundColor : '#ffdeb7',
-        borderRadius: 9,
-        width: '80%',
-        marginVertical : 10,
-        marginBottom: 15,
-        alignItems: 'center'
+        width: Dimensions.get('window').width/2,
+        marginVertical : 10
     }
-
-   
 })

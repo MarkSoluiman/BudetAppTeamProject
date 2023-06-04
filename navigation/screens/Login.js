@@ -1,7 +1,7 @@
 // Components import
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, TextInput, Button, Alert, TouchableOpacity} from 'react-native'
+import { View, Text, Pressable, StyleSheet, TextInput, Button, Alert, TouchableOpacity, Dimensions} from 'react-native'
 import { auth } from '../../firebase.config';
 
 // Exported function
@@ -16,26 +16,21 @@ export default function Login({navigation}){
         await signOut(auth);
     }
   
-
     // Async as we will be calling firebase function to check if the email && password is entered
     const handleSubmit = async ()=>{
     
-    // Checks that user has input an email and password
-    if(email && password){
-        try{
-            await signInWithEmailAndPassword(auth, email, password)
-
-        }catch(err) {
-            console.log('got error: ', err.message);
-            Alert.alert('LogIn Error: ',err.message)
-
+        // Checks that user has input an email and password
+        if(email && password){
+            try{
+                await signInWithEmailAndPassword(auth, email, password)
+            } catch(err) {
+                console.log('got error: ', err.message)
+                Alert.alert('LogIn Error: ',err.message)
+            }
+        } else{
+            Alert.alert('LogIn error: Please enter email and password to log in')
         }
-
-
-    } else{
-    Alert.alert('LogIn error: Please enter email and password to log in')
     }
-}
 
     return(
         <View style={styles.background}>
@@ -103,9 +98,8 @@ const styles = StyleSheet.create({
     },
     buttons:{
         flexDirection: 'row'
-        , width : '50%'
+        , width : Dimensions.get('window').width/2
         , justifyContent: 'space-between'
-        , alignItems: 'center' 
     },
     buttonText:{
         color: 'white',
@@ -130,20 +124,21 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor : '#903800',
-        height : 30,
-        width: 80,
+        height: Dimensions.get('window').height/20,
+        width: Dimensions.get('window').width/4.5,
         marginTop: 10,
         borderRadius: 20,
         justifyContent : 'center',
         alignItems : 'center'
     },
-    textInput : {
-        padding : 2,
+    textInput: {
+        paddingLeft: 10,
+        paddingVertical: 4,
         borderWidth: 1,
         borderRadius: 9,
         borderColor:'#ffdeb7',
         backgroundColor : '#ffdeb7',
-        width: '50%',
-         marginVertical : 10
+        width: Dimensions.get('window').width/2,
+        marginVertical : 10
     }
 })

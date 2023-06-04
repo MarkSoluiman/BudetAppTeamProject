@@ -1,8 +1,7 @@
 //  Import components
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Pressable, Alert } from "react-native";
-import { initializeApp } from "firebase/app";
-import { getAuth, sendPasswordResetEmail, generatePasswordResetLink } from "firebase/auth";
+import { StyleSheet, View, Text, TextInput, Pressable, Alert, Dimensions } from "react-native";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 const auth = getAuth();
 
 // Exported function
@@ -92,30 +91,30 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     textInput: {
-        padding: 2,
+        paddingLeft: 10,
+        paddingVertical: 4,
         borderWidth: 1,
         borderRadius: 9,
         borderColor: "#ffdeb7",
         backgroundColor: "#ffdeb7",
-        width: "50%",
+        width: Dimensions.get('window').width/2,
         marginVertical: 10,
     },
 
     // Button styling
     button: {
-        backgroundColor: "#903800",
-        height: 30,
-        width: 80,
+        backgroundColor : '#903800',
+        height: Dimensions.get('window').height/20,
+        width: Dimensions.get('window').width/4.5,
         marginTop: 10,
         borderRadius: 20,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent : 'center',
+        alignItems : 'center'
     },
-    buttons: {
-        flexDirection: "row",
-        width: "50%",
-        justifyContent: "space-between",
-        alignItems: "center",
+    buttons:{
+        flexDirection: 'row'
+        , width : Dimensions.get('window').width/2
+        , justifyContent: 'space-between'
     },
     buttonText: {
         color: "white",
