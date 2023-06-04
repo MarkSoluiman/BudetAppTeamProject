@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { doc, collection, addDoc, updateDoc } from "firebase/firestore/lite";
+import { doc,  addDoc, updateDoc } from "firebase/firestore/lite";
 import { auth, db, firebase } from "../../firebase.config";
 import { getAuth, signOut, updateEmail, updatePassword } from "firebase/auth";
 import { Picker } from "@react-native-picker/picker";
@@ -15,24 +15,24 @@ export default function Profile({ navigation }) {
   const [student, setStudent] = useState();
   const [primaryLocation, setPrimaryLocation] = useState("");
   const [transportMeans, setTransportMeans] = useState("");
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
 
   // Function to save data
   const saveData = async () => {
-    const currentUser = getAuth().currentUser;
-    if (!currentUser) {
-      console.log("User is not authenticated");
-      return;
-    }
+    // const currentUser = getAuth().currentUser;
+    // if (!currentUser) {
+    //   //console.log("User is not authenticated");
+    //   return;
+    // }
 
-  // Refresh user token
-  const idToken = await currentUser.getIdToken(true);
+    // Refresh user token
+    //const idToken = await currentUser.getIdToken(true);
 
     // Find document for authenticated user
     firebase
       .firestore()
       .collection("Profile")
-      .where("uid", "==", currentUser.uid)
+      .where("uid", "==", getAuth().currentUser.uid)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((documentSnapshot) => {
@@ -59,10 +59,10 @@ export default function Profile({ navigation }) {
           }
 
           updateDoc(profileDocRef, dataNotifs).then(() => {
-            console.log("Goal Notifications has been updated")
+            Alert.alert("Goal Notifications has been updated")
           })
           .catch((error) => {
-            console.log(error)
+            Alert.alert(error)
           })
       
           // Input validation
@@ -158,6 +158,7 @@ export default function Profile({ navigation }) {
 
 
 
+
     // Input validation
     if (email.length > 0) {
       updateDoc(profileDocRef, dataEmail)
@@ -234,12 +235,19 @@ export default function Profile({ navigation }) {
             const documentSnapshot = querySnapshot.docs[0];
             const password = documentSnapshot.data().password;
             const email=documentSnapshot.data().email
+            const notifications=documentSnapshot.data().notifications
             setPassword(password);
             const primaryLocation=documentSnapshot.data().primaryLocation
             if(primaryLocation==null){
               setPrimaryLocation("No location was chosen")
             }else{
               setPrimaryLocation(primaryLocation)
+            }
+            if (notifications==false){
+              setChecked(false)
+            }
+            else{
+              setChecked(true)
             }
 
             const student=documentSnapshot.data().student
@@ -304,7 +312,7 @@ export default function Profile({ navigation }) {
             style={styles.entry}
             value={primaryLocation}
             onChangeText={(value) => setPrimaryLocation(value)}
-            placeholder="Primary location "
+            placeholder="Primary location"
           />
 
           {/* Transport prompt and picker  */}
