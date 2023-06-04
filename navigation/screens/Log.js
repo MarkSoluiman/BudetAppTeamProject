@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
@@ -207,18 +207,18 @@ const styles = StyleSheet.create({
       , backgroundColor: '#ffdeb7'
   },
   textEntry:{
-    width: 280,
+    width: Dimensions.get('window').width-60,
     fontWeight: '400'
   },
   widget:{
-      marginHorizontal: '5%'
-      , marginVertical: '5%'
+      marginVertical: '5%'
       , borderRadius: 15
-      , width: 370
-      , height: 605
+      , width: Dimensions.get('window').width-40
+      , height: Dimensions.get('window').height-260
       , padding: 15
       , backgroundColor: '#ff8100'
       , justifyContent: 'space-evenly'
+      , alignSelf: 'center'
   },
 
   // Entry styling
@@ -236,12 +236,12 @@ const styles = StyleSheet.create({
 
   // Button styling
   button:{
-      width: 370
-      , height: 55
+      width: Dimensions.get('window').width-40
+      , height: Dimensions.get('window').height-810
       , borderRadius: 30
-      , marginHorizontal: 20
       , backgroundColor: '#bd5100'
       , justifyContent: 'center'
+      , alignSelf: 'center'
   },
   buttonText:{
       textAlign: 'center'

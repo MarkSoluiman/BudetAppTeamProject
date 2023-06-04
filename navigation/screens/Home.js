@@ -1,7 +1,7 @@
 // Component imports
 import { signOut } from 'firebase/auth'
 import React, { Component } from 'react'
-import { StyleSheet, Pressable, Text,View, SafeAreaView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Pressable, Text,View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { auth } from '../../firebase.config'
 
@@ -44,13 +44,13 @@ const styles = StyleSheet.create({
         , alignItems: 'flex-start'
     },
     widget:{
-        marginHorizontal: '5%'
+        alignSelf: 'center'
         , marginBottom: '5%'
         , borderRadius: 200
         , borderColor: '#ff8100'
         , borderWidth: 6
-        , width: 370
-        , height: 80
+        , width: Dimensions.get('window').width-40
+        , height: Dimensions.get('window').height-770
         , backgroundColor: '#ffe9de'
         , justifyContent: 'space-evenly'
         , fontWeight: 'bold'
