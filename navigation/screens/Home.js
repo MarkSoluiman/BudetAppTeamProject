@@ -10,22 +10,22 @@ export default function Home({navigation}){
     return(
        <View style={styles.background}>
             {/* Monthly Spending widget */}
-            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Home_Current Balance')}>
+            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Current Balance')}>
                 <Text style={styles.heading}>Current Balance</Text>
             </Pressable>
 
             {/* Monthly Spending widget */}
-            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Home_Monthly Spending')}>
+            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Spending')}>
                 <Text style={styles.heading}>Monthly Spending</Text>
             </Pressable>
 
             {/* Monthly Income widget */}
-            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Home_Monthly Income')}>
+            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Monthly Income')}>
                 <Text style={styles.heading}>Monthly Income</Text>
             </Pressable>
 
             {/* Goal Bars widget */}
-            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Home_Goal Bars')}>
+            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Goal Bars')}>
                 <Text style={styles.heading}>Goal Bars</Text>
             </Pressable>
         </View>
