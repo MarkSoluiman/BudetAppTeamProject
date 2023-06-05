@@ -123,4 +123,4 @@ const styles = StyleSheet.create({
         , padding: 15
         , justifyContent: 'space-evenly'
     }
-})  
+})
