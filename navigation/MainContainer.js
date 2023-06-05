@@ -58,7 +58,7 @@ export default function LoginStackScreen(){
                         headerShown: false
                     }}
                 >
-                    <LoginStack.Screen name={homeName} component={MainContainer}/>
+                    <LoginStack.Screen name={`${loginName}-${homeName}`} component={MainContainer}/>
                 </LoginStack.Navigator>
             </NavigationContainer>
         )
@@ -91,7 +91,7 @@ function HomeStackScreen(){
                     headerShown: false
                 }}
             >
-                <HomeStack.Screen name={homeName} component={Home}/>
+                <HomeStack.Screen name={`${homeName}-${homeName}`} component={Home}/>
                 <HomeStack.Screen name={profileName} component={Profile}/>
                 <HomeStack.Screen name={homeBalanceName} component={HomeBalanceModal}/>
                 <HomeStack.Screen name={homeGoalsName} component={HomeGoalsModal}/>
@@ -131,111 +131,129 @@ function LogStackScreen(){
 }
 
 // Main container navigation, uses bottom tab to access other navigation structures: advice, news, home, log, and goals
-const Tab = createBottomTabNavigator()
-function MainContainer(){
-    const navigation = useNavigation();
-    
-    // returned function
-    return(
-        <Tab.Navigator
-            initialRouteName={homeName}
-            screenOptions={({route}) => ({
-                headerStyle: {
-                    backgroundColor: '#ff8100',
-                },
-                tabBarStyle: {
-                    paddingBottom: 10,
-                    paddingTop: 10,
-                    backgroundColor: '#ff8100',
-                    height: 60
-                },
-                tabBarIcon: ({ focused, color, size}) => {
-                    let iconName;
-                    let rn = route.name;
-    
-                    if (rn === adviceName){
-                        iconName = focused ? 'thumbs-up' : 'thumbs-up-outline'
-                    } else if (rn === goalsName){
-                        iconName = focused ? 'list-circle' : 'list-circle-outline'
-                    } else if (rn === homeName){
-                        iconName = focused ? 'home' : 'home-outline'
-                    } else if (rn === logName){
-                        iconName = focused ? 'document-text' : 'document-text-outline'
-                    } else if (rn === newsName){
-                        iconName = focused ? 'newspaper' : 'newspaper-outline'
-                    }
+const Tab = createBottomTabNavigator();
+function MainContainer() {
+  const navigation = useNavigation();
 
-                    return <Ionicones name={iconName} size={size} color={color}/>
-                },
-            })}
-            tabBarOptions={{
-                activeTintColor: 'white',
-                inactiveTintColor: '#682d01',
-                labelStyle: { fontSize: 10 }
-            }}
-        >
-            {/* Advice pages */}
-            <Tab.Screen name={adviceName} component={Advice} options={() => ({
-                headerRight: () => (
-                    <Pressable 
-                        style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(profileName)}
-                    >
-                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
-                    </Pressable>
-                )
-            })}/>
+  return (
+    <Tab.Navigator
+      initialRouteName={homeName}
+      screenOptions={({ route }) => ({
+        headerStyle: {
+          backgroundColor: '#ff8100',
+        },
+        tabBarStyle: {
+          paddingBottom: 10,
+          paddingTop: 10,
+          backgroundColor: '#ff8100',
+          height: 60,
+        },
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          let rn = route.name;
 
-            {/* News */}
-            <Tab.Screen name={newsName} component={News} options={() => ({
-                headerRight: () => (
-                    <Pressable 
-                        style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(profileName)}
-                    >
-                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
-                    </Pressable>
-                )
-            })}/>
+          if (rn === adviceName) {
+            iconName = focused ? 'thumbs-up' : 'thumbs-up-outline';
+          } else if (rn === goalsName) {
+            iconName = focused ? 'list-circle' : 'list-circle-outline';
+          } else if (rn === homeName) {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (rn === logName) {
+            iconName = focused ? 'document-text' : 'document-text-outline';
+          } else if (rn === newsName) {
+            iconName = focused ? 'newspaper' : 'newspaper-outline';
+          }
 
-            {/* Home */}
-            <Tab.Screen name={homeName} component={HomeStackScreen} options={() => ({
-                headerRight: () => (
-                    <Pressable 
-                        style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(profileName)}
-                    >
-                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
-                    </Pressable>
-                )
-            })}/>
+          return <Ionicones name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: '#682d01',
+        tabBarLabelStyle: { fontSize: 10 },
+      })}
+    >
+      {/* Advice pages */}
+      <Tab.Screen
+        name={adviceName}
+        component={Advice}
+        options={{
+          headerRight: () => (
+            <Pressable
+              style={styles.headerButton}
+              onPress={() => navigation.navigate(profileName)}
+            >
+              <Ionicones name='person-circle-outline' size={35} color='#682d01' />
+            </Pressable>
+          ),
+        }}
+      />
 
-            {/* Transaction pages */}
-            <Tab.Screen name={logName} component={LogStackScreen} options={() => ({
-                headerRight: () => (
-                    <Pressable 
-                        style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(profileName)}
-                    >
-                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
-                    </Pressable>
-                )
-            })}/>
+      {/* News */}
+      <Tab.Screen
+        name={newsName}
+        component={News}
+        options={{
+          headerRight: () => (
+            <Pressable
+              style={styles.headerButton}
+              onPress={() => navigation.navigate(profileName)}
+            >
+              <Ionicones name='person-circle-outline' size={35} color='#682d01' />
+            </Pressable>
+          ),
+        }}
+      />
 
-            {/* Goals pages */}
-            <Tab.Screen name={goalsName} component={GoalsStackScreen} options={() => ({
-                headerRight: () => (
-                    <Pressable 
-                        style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(profileName)}
-                    >
-                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
-                    </Pressable>
-                )
-            })}/>
-        </Tab.Navigator>
-    )
+      {/* Home */}
+      <Tab.Screen
+        name={homeName}
+        component={HomeStackScreen}
+        options={{
+          headerRight: () => (
+            <Pressable
+              style={styles.headerButton}
+              onPress={() => navigation.navigate(profileName)}
+            >
+              <Ionicones name='person-circle-outline' size={35} color='#682d01' />
+            </Pressable>
+          ),
+        }}
+      />
+
+      {/* Transaction pages */}
+      <Tab.Screen
+        name={logName}
+        component={LogStackScreen}
+        options={{
+          headerRight: () => (
+            <Pressable
+              style={styles.headerButton}
+              onPress={() => navigation.navigate(profileName)}
+            >
+              <Ionicones name='person-circle-outline' size={35} color='#682d01' />
+            </Pressable>
+          ),
+        }}
+      />
+
+      {/* Goals pages */}
+      <Tab.Screen
+        name={goalsName}
+        component={GoalsStackScreen}
+        options={{
+          headerRight: () => (
+            <Pressable
+              style={styles.headerButton}
+              onPress={() => navigation.navigate(profileName)}
+            >
+              <Ionicones name='person-circle-outline' size={35} color='#682d01' />
+            </Pressable>
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
 }
+
 
 //styling for profile icons in top header
 const styles = StyleSheet.create ({
