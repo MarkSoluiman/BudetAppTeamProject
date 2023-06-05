@@ -1,25 +1,25 @@
-const ResetPass = require('./ResetPass')
+import React from "react";
+import { render, fireEvent, waitFor } from "@testing-library/react-native";
+import ResetPass from "./ResetPass";
 
-// TEST CASE 1: Reset password email sent
-test('Reset password email sent', () => {
-    // // Mock the necessary Firebase SDK methods
-    // const sendPasswordResetEmailMock = jest.fn();
-    // firebase.auth.mockReturnValue({ sendPasswordResetEmail: sendPasswordResetEmailMock });
+jest.mock("firebase/auth", () => ({
+  getAuth: jest.fn(() => ({
+    sendPasswordResetEmail: jest.fn().mockResolvedValue(),
+  })),
+}));
 
-    // // Call the function you want to test
-    // await sendPasswordResetEmail('user@example.com');
+describe("ResetPass", () => {
+  it("shows success alert when a known email is input", async () => {
+    const { getByPlaceholderText, getByText, findByText } = render(<ResetPass />);
+    const emailInput = getByPlaceholderText("Email");
+    const resetButton = getByText("RESET");
 
-    // // Assert that the mock function was called with the expected arguments
-    // expect(sendPasswordResetEmailMock).toHaveBeenCalledWith('user@example.com');
-    expect(2).toBe(1);
-})
+    fireEvent.changeText(emailInput, "jasmine_amohia@hotmail.com");
+    fireEvent.press(resetButton);
 
-// TEST CASE 2: Password reset with bad password
-test('User attempting to reset password that DOESNT meet password criteria', () => {
-    expect(2).toBe(1);
-})
+    // Wait for the success alert to appear
+    const successAlert = await findByText("Password reset email sent successfully!");
 
-// TEST CASE 3: Password reset with good password
-test('User attempting to reset password that DOES meet password criteria', () => {
-    expect(2).toBe(1);
-})
+    expect(successAlert).toBeDefined();
+  });
+});
