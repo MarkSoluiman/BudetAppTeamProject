@@ -1,9 +1,9 @@
 // Component imports
-import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import { NavigationContainer, getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import { Pressable, StyleSheet } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicones from 'react-native-vector-icons/Ionicons'
 import 'react-native-gesture-handler'
 import React from 'react'
 
@@ -81,21 +81,23 @@ export default function LoginStackScreen(){
     }
 }
 
-// Home screen navigation: home screen, profile, and data visualization modals
+// Home screen navigation: homescreen, profile, and data visualisation modals
 const HomeStack = createStackNavigator()
 function HomeStackScreen(){
     return(
-        <HomeStack.Navigator
-            screenOptions={{
-                headerShown: false
-            }}
-        >
-            <HomeStack.Screen name={homeName} component={Home}/>
-            <HomeStack.Screen name={`${homeName}_${profileName}`} component={Profile}/>
-            <HomeStack.Screen name={`${homeName}_${homeBalanceName}`} component={HomeBalanceModal}/>
-            <HomeStack.Screen name={`${homeName}_${homeGoalsName}`} component={HomeGoalsModal}/>
-            <HomeStack.Screen name={`${homeName}_${homeIncomeName}`} component={HomeIncomeModal}/>
-            <HomeStack.Screen name={`${homeName}_${homeSpendingName}`} component={HomeSpendingModal}/>
+        <HomeStack.Navigator>
+            <HomeStack.Group
+                screenOptions={{
+                    headerShown: false
+                }}
+            >
+                <HomeStack.Screen name={homeName} component={Home}/>
+                <HomeStack.Screen name={profileName} component={Profile}/>
+                <HomeStack.Screen name={homeBalanceName} component={HomeBalanceModal}/>
+                <HomeStack.Screen name={homeGoalsName} component={HomeGoalsModal}/>
+                <HomeStack.Screen name={homeIncomeName} component={HomeIncomeModal}/>
+                <HomeStack.Screen name={homeSpendingName} component={HomeSpendingModal}/>
+            </HomeStack.Group>
         </HomeStack.Navigator>
     )
 }
@@ -163,7 +165,7 @@ function MainContainer(){
                         iconName = focused ? 'newspaper' : 'newspaper-outline'
                     }
 
-                    return <Ionicons name={iconName} size={size} color={color}/>
+                    return <Ionicones name={iconName} size={size} color={color}/>
                 },
             })}
             tabBarOptions={{
@@ -177,9 +179,9 @@ function MainContainer(){
                 headerRight: () => (
                     <Pressable 
                         style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(`${homeName}_${profileName}`)}
+                        onPress={()=> navigation.navigate(profileName)}
                     >
-                        <Ionicons name='person-circle-outline' size={35} color='#682d01'/>
+                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
                     </Pressable>
                 )
             })}/>
@@ -189,9 +191,9 @@ function MainContainer(){
                 headerRight: () => (
                     <Pressable 
                         style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(`${homeName}_${profileName}`)}
+                        onPress={()=> navigation.navigate(profileName)}
                     >
-                        <Ionicons name='person-circle-outline' size={35} color='#682d01'/>
+                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
                     </Pressable>
                 )
             })}/>
@@ -201,9 +203,9 @@ function MainContainer(){
                 headerRight: () => (
                     <Pressable 
                         style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(`${homeName}_${profileName}`)}
+                        onPress={()=> navigation.navigate(profileName)}
                     >
-                        <Ionicons name='person-circle-outline' size={35} color='#682d01'/>
+                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
                     </Pressable>
                 )
             })}/>
@@ -213,9 +215,9 @@ function MainContainer(){
                 headerRight: () => (
                     <Pressable 
                         style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(`${homeName}_${profileName}`)}
+                        onPress={()=> navigation.navigate(profileName)}
                     >
-                        <Ionicons name='person-circle-outline' size={35} color='#682d01'/>
+                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
                     </Pressable>
                 )
             })}/>
@@ -225,9 +227,9 @@ function MainContainer(){
                 headerRight: () => (
                     <Pressable 
                         style={styles.headerButton} 
-                        onPress={()=> navigation.navigate(`${homeName}_${profileName}`)}
+                        onPress={()=> navigation.navigate(profileName)}
                     >
-                        <Ionicons name='person-circle-outline' size={35} color='#682d01'/>
+                        <Ionicones name='person-circle-outline' size={35} color='#682d01'/>
                     </Pressable>
                 )
             })}/>
