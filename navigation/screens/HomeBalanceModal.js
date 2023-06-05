@@ -68,6 +68,14 @@ export default function HomeBalanceModal({ navigation }) {
     };
 
     fetchData();
+    
+    const interval = setInterval(() => {
+      fetchData();
+    }, 3000); // Update every 3 seconds
+  
+    return () => {
+      clearInterval(interval);
+    };
 
    
   }, []);
