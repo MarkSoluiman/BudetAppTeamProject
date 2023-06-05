@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import { useState, useEffect } from "react";
 import { firebase } from "../../firebase.config";
-import { ProgressChart } from "react-native-chart-kit";
+import { PieChart } from "react-native-chart-kit";
 
 export default function HomeBalanceModal({ navigation }) {
-  const screenWidth = Dimensions.get("window").width - 60;
+  const screenWidth = Dimensions.get("window").width;
 
   const [categoryCounts, setCategoryCounts] = useState({
     Income: 0,
@@ -50,15 +50,13 @@ export default function HomeBalanceModal({ navigation }) {
           const transAmount = documentSnapshot.data().trans_amount;
           totalIncome += parseInt(transAmount);
         });
-        console.log(totalIncome/100);
 
         let totalExpenditure = 0;
         expenditureQuerySnapshot.forEach((documentSnapshot) => {
           const transAmount = documentSnapshot.data().trans_amount;
           totalExpenditure += parseInt(transAmount);
         });
-        console.log(totalExpenditure/100);
-        console.log((totalIncome - totalExpenditure)/100);
+     
 
         setCategoryCounts({
           Income: totalIncome,
@@ -74,42 +72,71 @@ export default function HomeBalanceModal({ navigation }) {
    
   }, []);
 
-  const data = {
-    labels: ["Income", "Expenditure", "Current Balance"],
-    data: [
-      categoryCounts.Income / 100,
-      categoryCounts.Expenditure / 100,
-      (categoryCounts.Income - categoryCounts.Expenditure) / 100
-    ],
-    barColors: ["#FA5B3D", "#e846e3", "#e846e3"],
-  };
 
+  graphData = [
+    {
+      name: "Income",
+      population: categoryCounts.Income,
+      color: "#DFE823",
+      legendFontColor: "black",
+      legendFontSize: 15
+    },
+    {
+      name: "Expenditure",
+      population: categoryCounts.Expenditure,
+      color: "#FFE572",
+      legendFontColor: "black",
+      legendFontSize: 15
+    },
+    {
+      name: "Current Balance",
+      population: categoryCounts.Income - categoryCounts.Expenditure,
+      color: "#FFF4C3",
+      legendFontColor: "black",
+      legendFontSize: 15
+    }]
+
+    const chartConfig = {
+      color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    };
+
+ 
   return (
     <View style={styles.background}>
-      <View style = {styles.entry}>
+       <View style={styles.widget}>
+      
 
     
       {/* Heading */}
       <Text style={styles.prompts}>Current Balance</Text>
-      <ProgressChart
-        data={data}
-        width={screenWidth}
-        height={350}
-        chartConfig={{
-          backgroundGradientFrom: "#ffdeb7",
-          backgroundGradientFromOpacity: 1,
-          backgroundGradientTo: "#ffdeb7",
-          backgroundGradientToOpacity: 1,
-          color: (opacity = 1) => `rgba(255, 140, 0, ${opacity})`,
-          strokeWidth: 2,
-          barPercentage: 0.5,
-          useShadowColorFromDataset: false,
-        }}
-        style={{ borderRadius: 10, alignSelf: 'flex-end' }}
-      />
-      <View style = {styles.legendContainer}> 
-      <Text> test</Text>
-      </View>
+      <PieChart
+          data={graphData}
+          width={screenWidth}
+          height={350}
+          paddingLeft={screenWidth / 6.5}
+          chartConfig={chartConfig}
+          accessor="population"
+          hasLegend={false}
+        />
+            {/* Legend */}
+        <View style={styles.legendContainer}>
+          {graphData.map((data, index) => (
+            <View style={styles.legendItem} key={index}>
+
+              {/* Data colour bullet point */}
+              <View style={[styles.legendColor, { backgroundColor: data.color }]} />
+
+              {/* Data label, value, and percentage */}
+              <Text style={styles.legendLabel}>
+                {data.name}, ${data.population} (
+                {categoryCounts.Income !== 0 ? ((data.population / categoryCounts.Income) * 100).toFixed(2) : 0}
+                %)
+              </Text>
+            </View>
+            
+          ))}
+          </View>
+       
 
        
 
@@ -129,7 +156,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffdeb7",
     padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
+  widget:{
+    marginHorizontal: 20
+    , borderRadius: 10
+    , borderColor: '#ff8100'
+    , borderWidth: 3
+    , height: 650
+    , width: 370
+    , padding: 10
+    , backgroundColor: '#ffe9de'
+    , justifyContent: 'space-evenly'
+},
   prompts: {
     textAlign: "center",
     fontWeight: "bold",
