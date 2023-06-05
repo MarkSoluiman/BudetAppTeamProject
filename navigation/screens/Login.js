@@ -116,9 +116,8 @@ const styles = StyleSheet.create({
         fontSize : 15,
     },
     smallText:{
-        color : 'white', 
+        color : '#903800', 
         fontStyle: 'italic',
-        opacity: 0.5,
         fontSize : 15,
         marginTop: 20,
     },
