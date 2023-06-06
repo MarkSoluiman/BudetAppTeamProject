@@ -42,7 +42,7 @@ const ChatBot = () => {
         renderItem={({ item }) => (
           <View style={{ flexDirection: 'row', padding: 10 }}>
             <Text style={{ fontWeight: 'bold', color: item.type === 'user' ? 'green' : 'orange' }}>
-              {item.type === 'user' ? 'User' : 'Advice Bot'}
+              {item.type === 'user' ? 'User' : 'Advice Bot'}  // User and bot  response and retrieve 
             </Text>
             <Text style={styles.bot}>{item.text}</Text>
           </View>
@@ -55,7 +55,7 @@ const ChatBot = () => {
         placeholder="Please enter your question"
       />
       <TouchableOpacity style={styles.button} onPress={handleSend}>
-        <Text style={styles.buttonText}>Send</Text>
+        <Text style={styles.buttonText}>Send</Text>    /// Send button 
       </TouchableOpacity>
     </View>
   );
