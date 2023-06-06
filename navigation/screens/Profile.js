@@ -57,20 +57,29 @@ export default function Profile({ navigation }) {
 
           // Input validation
           if (email.length > 0) {
-            updateEmail(getAuth().currentUser, email)
-              .then(() => {
                 updateDoc(profileDocRef, dataEmail)
                   .then(() => {
                     console.log("Email has been updated");
                   })
                   .catch((error) => {
-                    console.log(error);
+                    console.log(error," e:1");
                   });
                 console.log("Email updated");
-              })
-              .catch((error) => {
-                console.log("Updating email", error);
-              });
+
+
+                updateEmail(getAuth().currentUser,email)
+                .then(()=>{
+                  updateDoc(profileDocRef,dataEmail)
+                  .then(()=>{
+                    console.log("Email updated")
+                  })
+                  .catch((error)=>{
+                    console.log(error," e:2")
+                  })
+                })
+                .catch((error)=>{console.log(error," e:3")})
+                
+          
           }
        
 
@@ -236,9 +245,9 @@ export default function Profile({ navigation }) {
           <Text style={styles.prompts}>Email</Text>
           <TextInput
             style={styles.entry}
-            onChangeText={(newEmail) => setEmail(newEmail)}
-            defaultValue={getAuth().currentUser.email}
-            value={getAuth().currentUser.email}
+            onChangeText={(email) => setEmail(email)}
+            defaultValue={email}
+            // value={getAuth().currentUser.email}
           />
 
 
