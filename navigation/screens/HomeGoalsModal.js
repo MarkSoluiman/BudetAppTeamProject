@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { firebase } from "../../firebase.config";
+import { db, firebase } from '../../firebase.config';
 import { getAuth } from "firebase/auth";
 import {
   collection,
@@ -126,6 +126,7 @@ export default function HomeGoalsModal({ navigation }) {
             </View>
           )}
         />
+        
 
         <Pressable onPress={() => navigation.navigate("Home")}>
           <View style={styles.button}>

@@ -68,7 +68,7 @@ export default function HomeBalanceModal({ navigation }) {
     };
 
     fetchData();
-    
+
     const interval = setInterval(() => {
       fetchData();
     }, 3000); // Update every 3 seconds
@@ -96,13 +96,7 @@ export default function HomeBalanceModal({ navigation }) {
       legendFontColor: "black",
       legendFontSize: 15
     },
-    {
-      name: "Current Balance",
-      population: categoryCounts.Income - categoryCounts.Expenditure,
-      color: "#FFF4C3",
-      legendFontColor: "black",
-      legendFontSize: 15
-    }]
+    ]
 
     const chartConfig = {
       color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
@@ -116,7 +110,12 @@ export default function HomeBalanceModal({ navigation }) {
 
     
       {/* Heading */}
-      <Text style={styles.prompts}>Current Balance</Text>
+      <Text style={styles.prompts}> Current Balance</Text>
+      <Text style={styles.legendLabel}>
+                Current Balance for this Month : (
+                {categoryCounts.Income !== 0 ? (((categoryCounts.Income- categoryCounts.Expenditure)/ (categoryCounts.Income + categoryCounts.Expenditure)) * 100).toFixed(2) : 0}
+                %)
+              </Text>
       <PieChart
           data={graphData}
           width={screenWidth}
@@ -137,7 +136,7 @@ export default function HomeBalanceModal({ navigation }) {
               {/* Data label, value, and percentage */}
               <Text style={styles.legendLabel}>
                 {data.name}, ${data.population} (
-                {categoryCounts.Income !== 0 ? ((data.population / categoryCounts.Income) * 100).toFixed(2) : 0}
+                {categoryCounts.Income !== 0 ? ((data.population / (categoryCounts.Income + categoryCounts.Expenditure)) * 100).toFixed(2) : 0}
                 %)
               </Text>
             </View>
