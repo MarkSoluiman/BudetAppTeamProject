@@ -11,11 +11,10 @@ import { Switch } from "@rneui/themed";
 // Exported function
 export default function Profile({ navigation }) {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [student, setStudent] = useState();
+  const [student, setStudent] = useState(false);
   const [primaryLocation, setPrimaryLocation] = useState("");
   const [transportMeans, setTransportMeans] = useState("");
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(false);
   const [shouldRenderTransport, setShouldRenderTransport] = useState(false);
 
   // Function to save data
@@ -133,25 +132,25 @@ export default function Profile({ navigation }) {
         console.error(error);
       });
 
-    const shouldRenderStudent = () => {
-      firebase
-        .firestore()
-        .collection("Profile")
-        .where("uid", "==", getAuth().currentUser.uid)
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((documentSnapshot) => {
-            if (documentSnapshot.data().student == null) {
-              return false;
-            } else {
-              return true;
-            }
-          });
-        })
-        .catch((error) => {
-          Alert.alert(error);
-        });
-    };
+    // const shouldRenderStudent = () => {
+    //   firebase
+    //     .firestore()
+    //     .collection("Profile")
+    //     .where("uid", "==", getAuth().currentUser.uid)
+    //     .get()
+    //     .then((querySnapshot) => {
+    //       querySnapshot.forEach((documentSnapshot) => {
+    //         if (documentSnapshot.data().student == null) {
+    //           return false;
+    //         } else {
+    //           return true;
+    //         }
+    //       });
+    //     })
+    //     .catch((error) => {
+    //       Alert.alert(error);
+    //     });
+    // };
     const shouldRenderTransport = () => {
       firebase
         .firestore()
@@ -172,11 +171,11 @@ export default function Profile({ navigation }) {
         });
     };
 
-    useEffect(() => {
-      shouldRenderTransport().then((shouldRender) => {
-        setShouldRenderTransport(shouldRender);
-      });
-    }, []);
+    // useEffect(() => {
+    //   shouldRenderTransport().then((shouldRender) => {
+    //     setShouldRenderTransport(shouldRender);
+    //   });
+    // }, []);
 
     // Document will be updating as the following. Done individually as users don't have to change all fields.
     const profileDocRef = doc(db, "Profile", profileID);
@@ -275,22 +274,20 @@ export default function Profile({ navigation }) {
             const transportMeans = documentSnapshot.data().transportMeans;
             const student = documentSnapshot.data().student;
             const primaryLocation = documentSnapshot.data().primaryLocation;
+            
 
-            if (primaryLocation == null) {
+            if (primaryLocation == null || primaryLocation=="") {
               setPrimaryLocation("No location was chosen");
             } else {
               setPrimaryLocation(primaryLocation);
             }
-            if (notifications == false) {
-              setChecked(false);
-            } else {
-              setChecked(true);
-            }
+
 
             setStudent(student);
             setEmail(email);
             setTransportMeans(transportMeans);
-            setPassword(password);
+            setChecked(notifications)
+            console.log(transportMeans)
           }
         })
         .catch((error) => {
@@ -314,15 +311,7 @@ export default function Profile({ navigation }) {
             value={getAuth().currentUser.email}
           />
 
-          {/* Password prompt and entry */}
-          <Text style={styles.prompts}>Password</Text>
-          <TextInput
-            style={styles.entry}
-            value={password}
-            onChangeText={(value) => setPassword(value)}
-            placeholder={password}
-            editable={false}
-          />
+
 
           {/* Student prompt and picker */}
           <Text style={styles.prompts}>Student Status</Text>
@@ -358,7 +347,7 @@ export default function Profile({ navigation }) {
                   setTransportMeans(itemValue);
                 }}
               >
-                <Picker.Item label="Select transport means..." />
+                <Picker.Item label="Select transport means..." value="" />
                 <Picker.Item label="Car" value="car" />
                 <Picker.Item label="Cycling" value="cycling" />
                 <Picker.Item label="Walking" value="walking" />
