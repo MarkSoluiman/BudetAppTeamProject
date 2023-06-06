@@ -1,11 +1,11 @@
 // Component imports
 import { View,StyleSheet } from 'react-native'
-import ChatBot from './Bot';
+import ChatBot from './ChatBot';
 
 // Exported function
 export default function Advice({navigation}){
     return(
-        <View style={styles.container}>
+        <View style={styles.coantainer}>
         <ChatBot/>
         </View>
         
