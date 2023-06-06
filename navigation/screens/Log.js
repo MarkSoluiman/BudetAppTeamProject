@@ -206,10 +206,6 @@ const styles = StyleSheet.create({
       , paddingTop: '5%'
       , backgroundColor: '#ffdeb7'
   },
-  textEntry:{
-    width: Dimensions.get('window').width-60,
-    fontWeight: '400'
-  },
   widget:{
       marginVertical: '5%'
       , borderRadius: 15
@@ -223,16 +219,23 @@ const styles = StyleSheet.create({
 
   // Entry styling
   icon:{
-    paddingVertical: 5,
-  },
-  entry:{
+    paddingTop: 10,
+    paddingRight: 10,
+},
+entry:{
     flexDirection: 'row'
     , marginBottom: '5%'
     , backgroundColor: '#ffdeb7'
     , borderRadius: 10
     , padding: 15
     , paddingTop: 25
-  },
+    , width: Dimensions.get('window').width-70
+    , alignSelf: 'center'
+    , justifyContent: 'space-between'
+},
+textEntry:{
+    fontWeight: '400'
+},
 
   // Button styling
   button:{

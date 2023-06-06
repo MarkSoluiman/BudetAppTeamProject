@@ -141,7 +141,7 @@ export default function Goals({navigation}){
                     renderItem={({item}) => (
                         <View style={styles.entry}>
                     
-                        {/* Formatting of entries */}
+                            {/* Formatting of entries */}
                             <Pressable onPress={() => navigateToGoalsModal(item.goal_date
                                 , item.goal_name
                                 , item.goal_amount)}
@@ -174,10 +174,6 @@ const styles = StyleSheet.create({
         , paddingTop: '5%'
         , backgroundColor: '#ffdeb7'
     },
-    textEntry:{
-        width: Dimensions.get('window').width-60,
-        fontWeight: '400'
-    },
     widget:{
         marginVertical: '5%'
         , borderRadius: 15
@@ -192,6 +188,7 @@ const styles = StyleSheet.create({
     // Entry styling
     icon:{
         paddingTop: 15,
+        paddingRight: 10
     },
     entry:{
         flexDirection: 'row'
@@ -200,6 +197,12 @@ const styles = StyleSheet.create({
         , borderRadius: 10
         , padding: 15
         , paddingTop: 25
+        , width: Dimensions.get('window').width-70
+        , alignSelf: 'center'
+        , justifyContent: 'space-between'
+    },
+    textEntry:{
+        fontWeight: '400'
     },
 
     // Button styling
