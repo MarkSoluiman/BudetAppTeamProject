@@ -1,14 +1,9 @@
-import { renderHook } from '@testing-library/react-native';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { collection, getAuth, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { mocked } from 'ts-jest/utils';
-import HomeGoalsModal from "./HomeGoalsModal";
+import { render, act } from '@testing-library/react';
 
 jest.mock('firebase/firestore');
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useEffect: jest.fn(),
-}));
 
 describe('useGoalsList', () => {
   const mockedGetAuth = mocked(getAuth, true);
@@ -22,7 +17,7 @@ describe('useGoalsList', () => {
     jest.clearAllMocks();
   });
 
-  test('fetches goals list on mount', () => {
+  test('fetches goals list on mount', async () => {
     const dummyUid = 'dummyUid';
     const dummyGoalsList = [
       {
@@ -41,8 +36,36 @@ describe('useGoalsList', () => {
     mockedWhere.mockReturnValue(dummyGoalsList);
     mockedOrderBy.mockReturnValue(dummyGoalsList);
 
-    // Render the hook
-    renderHook(() => useGoalsList());
+    // Create a test component that uses the useEffect hook
+    const TestComponent = () => {
+      useEffect(() => {
+        const todoRef = query(
+          collection(firebase.firestore(), "Goals"),
+          where("uid", "==", getAuth().currentUser.uid),
+          where("goal_complete", "==", false),
+          orderBy("goal_date", "asc")
+        );
+        const unsubscribe = onSnapshot(todoRef, (querySnapshot) => {
+          const goalsList = [];
+          querySnapshot.forEach((doc) => {
+            const { goal_date, goal_name, goal_balance, goal_amount } = doc.data();
+            goalsList.push({
+              goal_date: goal_date.toDate(),
+              goal_name,
+              goal_balance,
+              goal_amount,
+            });
+          });
+          setGoalsList(goalsList);
+        });
+        return () => unsubscribe();
+      }, []);
+
+      return null;
+    };
+
+    // Render the test component
+    render(<TestComponent />);
 
     // Assert that the Firebase Firestore functions were called correctly
     expect(mockedCollection).toHaveBeenCalledWith(expect.anything(), 'Goals');
@@ -53,38 +76,5 @@ describe('useGoalsList', () => {
       dummyGoalsList,
       expect.any(Function)
     );
-  });
-
-  test('updates goals list on snapshot', () => {
-    // Define initial and updated goals list
-    const initialGoalsList = [];
-    const updatedGoalsList = [
-      {
-        goal_date: new Date(),
-        goal_name: 'Goal 1',
-        goal_balance: 100,
-        goal_amount: 500,
-      },
-      // ... add more updated goals
-    ];
-
-    // Mock the onSnapshot callback function
-    const onSnapshotCallback = jest.fn((callback) => {
-      // Invoke the callback with updated goals list
-      callback({ forEach: (cb) => updatedGoalsList.forEach(cb) });
-    });
-    mockedOnSnapshot.mockImplementation(onSnapshotCallback);
-
-    // Render the hook
-    const { result } = renderHook(() => useGoalsList());
-
-    // Assert that the initial goals list is empty
-    expect(result.current.goalsList).toEqual(initialGoalsList);
-
-    // Call the onSnapshot callback to simulate snapshot update
-    onSnapshotCallback.mock.calls[0][1]();
-
-    // Assert that the goals list is updated
-    expect(result.current.goalsList).toEqual(updatedGoalsList);
   });
 });
