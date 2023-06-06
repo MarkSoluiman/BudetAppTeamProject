@@ -7,7 +7,7 @@ import ChatBot from './ChatBot';
 export default function Advice({ navigation }) {
   return (
     <View style={styles.container}>
-      <ChatBot />
+      <ChatBot /> 
     </View>
   );
 }

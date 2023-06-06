@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   fontSize: 17,
   fontWeight: '600',
   color: 'black',
-  backgroundColor: '#ffdeb7',
+  backgroundColor: '#ff8100',
   width: '90%',
   height: 60,
   justifyContent: 'center',
