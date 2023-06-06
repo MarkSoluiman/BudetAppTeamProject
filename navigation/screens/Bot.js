@@ -3,8 +3,6 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity, TextInput } from 
 import axios from 'axios';
 import { FlatList } from 'react-native-gesture-handler';
 
-const windowWidth = Dimensions.get('window').width;
-
 const ChatBot = () => {
   const [data, setData] = useState([]);
   const apiKey = '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'; // API Key
