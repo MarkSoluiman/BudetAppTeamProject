@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { doc, addDoc, updateDoc } from "firebase/firestore/lite";
+import { doc, addDoc, updateDoc } from "firebase/firestore";
 import { auth, db, firebase } from "../../firebase.config";
 import { getAuth, signOut, updateEmail, updatePassword } from "firebase/auth";
 import { Picker } from "@react-native-picker/picker";
@@ -19,16 +19,7 @@ export default function Profile({ navigation }) {
 
   // Function to save data
   const saveData = async () => {
-    // const currentUser = getAuth().currentUser;
-    // if (!currentUser) {
-    //   //console.log("User is not authenticated");
-    //   return;
-    // }
 
-    // Refresh user token
-    //const idToken = await currentUser.getIdToken(true);
-
-    // Find document for authenticated user
     firebase
       .firestore()
       .collection("Profile")
@@ -42,9 +33,7 @@ export default function Profile({ navigation }) {
           const dataEmail = {
             email: email,
           };
-          const dataPass = {
-            password: password,
-          };
+
           const dataLocation = {
             primaryLocation: primaryLocation,
           };
@@ -83,22 +72,8 @@ export default function Profile({ navigation }) {
                 console.log("Updating email", error);
               });
           }
-          if (password.length > 5) {
-            updatePassword(getAuth().currentUser, password)
-              .then(() => {
-                updateDoc(profileDocRef, dataPass)
-                  .then(() => {
-                    console.log("Password has been updated");
-                  })
-                  .catch((error) => {
-                    console.log(error);
-                  });
-                console.log("Password updated");
-              })
-              .catch((error) => {
-                console.log("Updating password", error);
-              });
-          }
+       
+
           if (primaryLocation.length > 1) {
             updateDoc(profileDocRef, dataLocation)
               .then(() => {
@@ -108,7 +83,7 @@ export default function Profile({ navigation }) {
                 console.log(error);
               });
           }
-          if (student != "") {
+          if (student ==true || student==false) {
             updateDoc(profileDocRef, dataStudent)
               .then(() => {
                 console.log("Student Status has been updated");
@@ -132,50 +107,7 @@ export default function Profile({ navigation }) {
         console.error(error);
       });
 
-    // const shouldRenderStudent = () => {
-    //   firebase
-    //     .firestore()
-    //     .collection("Profile")
-    //     .where("uid", "==", getAuth().currentUser.uid)
-    //     .get()
-    //     .then((querySnapshot) => {
-    //       querySnapshot.forEach((documentSnapshot) => {
-    //         if (documentSnapshot.data().student == null) {
-    //           return false;
-    //         } else {
-    //           return true;
-    //         }
-    //       });
-    //     })
-    //     .catch((error) => {
-    //       Alert.alert(error);
-    //     });
-    // };
-    const shouldRenderTransport = () => {
-      firebase
-        .firestore()
-        .collection("Profile")
-        .where("uid", "==", getAuth().currentUser.uid)
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((documentSnapshot) => {
-            if (documentSnapshot.data().transportMeans == null) {
-              return false;
-            } else {
-              return true;
-            }
-          });
-        })
-        .catch((error) => {
-          Alert.alert(error);
-        });
-    };
 
-    // useEffect(() => {
-    //   shouldRenderTransport().then((shouldRender) => {
-    //     setShouldRenderTransport(shouldRender);
-    //   });
-    // }, []);
 
     // Document will be updating as the following. Done individually as users don't have to change all fields.
     const profileDocRef = doc(db, "Profile", profileID);
