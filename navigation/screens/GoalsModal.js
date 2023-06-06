@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, StyleSheet, Pressable, Platform, Alert } from 'react-native'
+import { View, Text, StyleSheet, Pressable, Platform, Alert, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TextInput } from 'react-native-gesture-handler'
@@ -12,6 +12,7 @@ export default function GoalsModal({navigation, route}){
 
     // Initialise constants
     const [date, setDate] = useState(new Date())
+    const [oldName, setOldName] = useState('')
     const [newName, setName] = useState('')
     const [newAmount, setAmount] = useState(route.params?.goal_amount || '');
     const [showPicker, setShowPicker] = useState(false)
@@ -37,6 +38,7 @@ export default function GoalsModal({navigation, route}){
 
                         // Set entry field variables to corresponding values in firebase
                         setName(documentSnapshot.data().goal_name);
+                        setOldName(documentSnapshot.data().goal_name)
                         setAmount(documentSnapshot.data().goal_amount);
                         const goalDateTimestamp = documentSnapshot.data().goal_date;
                         const goalDate = goalDateTimestamp.toDate(); // Convert timestamp to Date object
@@ -75,6 +77,28 @@ export default function GoalsModal({navigation, route}){
         } else {
             toggleDatepicker()
         }
+    }
+
+    // Function is called on completion of a goal update, updates associated goal names of relevant transactions
+    function updateLogs() {
+        firebase
+        .firestore()
+        .collection('Logs')
+        .where('uid','==',getAuth().currentUser.uid)
+        .where('trans_goal', '==', oldName)
+        .get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                const updatedData = { trans_goal: newName }
+                doc.ref.update(updatedData)
+                .then(() => {
+                    console.log('Associated transaction updated for new goal name')
+                })
+                .catch((error) => {
+                    console.log('Error updating associated transactions: ', error)
+                })
+            })
+        })
     }
 
     // Function is called on completion of a goal update, determines goal status with updated goal balance and amount, notifies user of goal completion if valid and necessary
@@ -133,7 +157,7 @@ export default function GoalsModal({navigation, route}){
                 if(date > new Date()){
                     amount = parseInt(newAmount, 10)
 
-                    navigation.navigate('Goals')
+                    navigation.navigate('Goals-Goals')
 
                     const docRef = addDoc(collection(db, "Goals"),{
                         uid: getAuth().currentUser.uid
@@ -164,8 +188,8 @@ export default function GoalsModal({navigation, route}){
                     if(date > new Date()){
                         amount = parseInt(newAmount, 10)
     
-                        navigation.navigate('Goals')
-    
+                        navigation.navigate('Goals-Goals')
+                        
                         const goalRef = doc(db, 'Goals', goalID)
                         try{
                             await updateDoc(goalRef, {
@@ -176,6 +200,7 @@ export default function GoalsModal({navigation, route}){
                             console.log('Goal document updated successfully')
                             Alert.alert('Goal updated')
 
+                            updateLogs()
                             goalNotifications(goalID)
                         } catch (error){
                             console.log('Goal document updated unsuccessfully')
@@ -233,7 +258,7 @@ export default function GoalsModal({navigation, route}){
             <View style={styles.buttons}>
 
                 {/* Cancel goal data entry */}
-                <Pressable style={styles.button} onPress={()=> navigation.navigate('Goals')}>
+                <Pressable style={styles.button} onPress={()=> navigation.navigate('Goals-Goals')}>
                     <Text style={styles.prompts}>BACK</Text>
                 </Pressable>
 
@@ -265,8 +290,8 @@ const styles = StyleSheet.create({
         borderRadius: 15
         , borderColor: '#ff8100'
         , borderWidth: 6
-        , width: 370
-        , height: 50
+        , width: Dimensions.get('window').height-500
+        , height: Dimensions.get('window').height-820
         , backgroundColor: '#ffe9de'
         , marginVertical: 30
         , paddingHorizontal: 20
@@ -289,8 +314,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff8100'
         , borderRadius: 25
         , paddingVertical: 10
-        , height: 50
-        , width: 90
+        , height: Dimensions.get('window').height-820 
+        , width: Dimensions.get('window').height-780
         , marginHorizontal: 20
     }
 })

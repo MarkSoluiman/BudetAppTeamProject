@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, StyleSheet, Pressable, Alert , Button} from 'react-native'
+import { View, Text, StyleSheet, Pressable, Alert , Button, Dimensions } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -138,7 +138,7 @@ export default function LogModal({navigation}){
 
                                 // Save transaction and upload as new document to firebase
                                 Alert.alert('Transaction saved')
-                                navigation.navigate('Log')
+                                navigation.navigate('Log-Log')
                                 const docRef = addDoc(collection(db, "Logs"), {
                                     uid: getAuth().currentUser.uid
                                     , trans_date: date
@@ -279,7 +279,7 @@ export default function LogModal({navigation}){
 
             {/* Buttons to save or cancel log data entry */}
             <View style={styles.buttons}>
-                <Pressable style={styles.button} onPress={()=> navigation.navigate('Log')}>
+                <Pressable style={styles.button} onPress={()=> navigation.navigate('Log-Log')}>
                     <Text style={styles.prompts}>BACK</Text>
                 </Pressable>
                 <Pressable style={styles.button} onPress={handleSubmit}>
@@ -302,8 +302,8 @@ const styles = StyleSheet.create({
         borderRadius: 15
         , borderColor: '#ff8100'
         , borderWidth: 6
-        , width: 370
-        , height: 50
+        , width: Dimensions.get('window').height-500
+        , height: Dimensions.get('window').height-820
         , backgroundColor: '#ffe9de'
         , marginVertical: '3.5%'
         , paddingHorizontal: '5%'
@@ -315,8 +315,8 @@ const styles = StyleSheet.create({
         borderRadius: 15
         , borderColor: '#ff8100'
         , borderWidth: 6
-        , width: 370
-        , height: 50
+        , width: Dimensions.get('window').height-500
+        , height: Dimensions.get('window').height-820
         , backgroundColor: '#ffe9de'
         , marginVertical: '3.5%'
         , paddingHorizontal: '5%'
@@ -338,8 +338,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff8100'
         , borderRadius: 25
         , paddingVertical: 10
-        , height: 50
-        , width: 90
+        , height: Dimensions.get('window').height-820 
+        , width: Dimensions.get('window').height-780
         , marginHorizontal: 20
     }
 })

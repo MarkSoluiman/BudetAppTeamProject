@@ -1,5 +1,5 @@
 // Component imports
-import { TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable, Alert } from 'react-native'
+import { TouchableOpacity, View, Text, SafeAreaView, FlatList, StyleSheet, Pressable, Alert, Dimensions } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
@@ -84,6 +84,25 @@ export default function Goals({navigation}){
           .catch(error => {
             console.log(error)
         })
+
+        // Update any transactions associated to this goal to null
+        firebase.firestore()
+            .collection('Logs')
+            .where('uid', '==', getAuth().currentUser.uid)
+            .where('trans_goal', '==', selectedGoalName)
+            .get()
+            .then(querySnapshot => {
+                querySnapshot.forEach((doc) => {
+                    const updatedData = { trans_goal: null }
+                    doc.ref.update(updatedData)
+                    .then(() => {
+                        console.log('Associated transaction updated on goal deletion')
+                    })
+                    .catch((error) => {
+                        console.log('Error updating associated transaction: ', error)
+                    })
+                })
+            })
     }
 
     const navigateToGoalsModal = (selectedGoalDate, selectedGoalName, selectedGoalAmount) => {
@@ -122,7 +141,7 @@ export default function Goals({navigation}){
                     renderItem={({item}) => (
                         <View style={styles.entry}>
                     
-                        {/* Formatting of entries */}
+                            {/* Formatting of entries */}
                             <Pressable onPress={() => navigateToGoalsModal(item.goal_date
                                 , item.goal_name
                                 , item.goal_amount)}
@@ -155,24 +174,21 @@ const styles = StyleSheet.create({
         , paddingTop: '5%'
         , backgroundColor: '#ffdeb7'
     },
-    textEntry:{
-        width: 280,
-        fontWeight: '400'
-    },
     widget:{
-        marginHorizontal: '5%'
-        , marginVertical: '5%'
+        marginVertical: '5%'
         , borderRadius: 15
-        , width: 370
-        , height: 605
+        , width: Dimensions.get('window').width-40
+        , height: Dimensions.get('window').height-260
         , padding: 15
         , backgroundColor: '#ff8100'
         , justifyContent: 'space-evenly'
+        , alignSelf: 'center'
     },
 
     // Entry styling
     icon:{
         paddingTop: 15,
+        paddingRight: 10
     },
     entry:{
         flexDirection: 'row'
@@ -181,12 +197,18 @@ const styles = StyleSheet.create({
         , borderRadius: 10
         , padding: 15
         , paddingTop: 25
+        , width: Dimensions.get('window').width-70
+        , alignSelf: 'center'
+        , justifyContent: 'space-between'
+    },
+    textEntry:{
+        fontWeight: '400'
     },
 
     // Button styling
     button:{
-        width: 370
-        , height: 55
+        width: Dimensions.get('window').width-40
+        , height: Dimensions.get('window').height-810
         , borderRadius: 30
         , marginHorizontal: 20
         , backgroundColor: '#bd5100'

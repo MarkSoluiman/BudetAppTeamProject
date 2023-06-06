@@ -41,7 +41,7 @@ export default function HomeBalanceModal({ navigation }) {
       />
 
       {/* Button to return to home page */}
-      <Pressable onPress={() => navigation.navigate("Home")}>
+      <Pressable onPress={() => navigation.navigate("Home-Home")}>
         <View style={styles.button}>
           <Text style={styles.prompts}>GO BACK</Text>
         </View>
