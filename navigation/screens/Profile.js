@@ -282,7 +282,7 @@ export default function Profile({ navigation }) {
             <View style={styles.drop}>
               <Picker
                 selectedValue={transportMeans}
-                onValueChange={(itemValue, itemIndex) => {
+                onValueChange={(itemValue) => {
                   setTransportMeans(itemValue);
                 }}
               >
@@ -298,7 +298,7 @@ export default function Profile({ navigation }) {
             <View style={styles.drop}>
               <Picker
                 selectedValue={transportMeans}
-                onValueChange={(itemValue, itemIndex) => {
+                onValueChange={(itemValue) => {
                   setTransportMeans(itemValue);
                 }}
               >
