@@ -138,7 +138,7 @@ export default function LogModal({navigation}){
 
                                 // Save transaction and upload as new document to firebase
                                 Alert.alert('Transaction saved')
-                                navigation.navigate('Log')
+                                navigation.navigate('Log-Log')
                                 const docRef = addDoc(collection(db, "Logs"), {
                                     uid: getAuth().currentUser.uid
                                     , trans_date: date
@@ -279,7 +279,7 @@ export default function LogModal({navigation}){
 
             {/* Buttons to save or cancel log data entry */}
             <View style={styles.buttons}>
-                <Pressable style={styles.button} onPress={()=> navigation.navigate('Log')}>
+                <Pressable style={styles.button} onPress={()=> navigation.navigate('Log-Log')}>
                     <Text style={styles.prompts}>BACK</Text>
                 </Pressable>
                 <Pressable style={styles.button} onPress={handleSubmit}>

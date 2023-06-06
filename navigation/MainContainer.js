@@ -110,7 +110,7 @@ function GoalsStackScreen(){
             initialRouteName={goalsName}
             screenOptions={{headerShown: false}}
         >
-            <GoalsStack.Screen name={goalsName} component={Goals}/>
+            <GoalsStack.Screen name={`${goalsName}-${goalsName}`} component={Goals}/>
             <GoalsStack.Screen name={goalsModalName} component={GoalsModal}/>
         </GoalsStack.Navigator>
     )
@@ -124,7 +124,7 @@ function LogStackScreen(){
             initialRouteName={logName}
             screenOptions={{headerShown: false}}
         >
-            <LogStack.Screen name={logName} component={Log}/>
+            <LogStack.Screen name={`${logName}-${logName}`} component={Log}/>
             <LogStack.Screen name={logModalName} component={LogModal}/>
         </LogStack.Navigator>
     )

@@ -155,7 +155,7 @@ export default function GoalsModal({navigation, route}){
                 if(date > new Date()){
                     amount = parseInt(newAmount, 10)
 
-                    navigation.navigate('Goals')
+                    navigation.navigate('Goals-Goals')
 
                     const docRef = addDoc(collection(db, "Goals"),{
                         uid: getAuth().currentUser.uid
@@ -186,7 +186,7 @@ export default function GoalsModal({navigation, route}){
                     if(date > new Date()){
                         amount = parseInt(newAmount, 10)
     
-                        navigation.navigate('Goals')
+                        navigation.navigate('Goals-Goals')
                         
                         const goalRef = doc(db, 'Goals', goalID)
                         try{
@@ -256,7 +256,7 @@ export default function GoalsModal({navigation, route}){
             <View style={styles.buttons}>
 
                 {/* Cancel goal data entry */}
-                <Pressable style={styles.button} onPress={()=> navigation.navigate('Goals')}>
+                <Pressable style={styles.button} onPress={()=> navigation.navigate('Goals-Goals')}>
                     <Text style={styles.prompts}>BACK</Text>
                 </Pressable>
 
