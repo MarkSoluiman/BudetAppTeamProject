@@ -8,7 +8,6 @@ export default function Advice({navigation}){
         <View style={styles.coantainer}>
         <ChatBot/>
         </View>
-        
     );
 }
 
