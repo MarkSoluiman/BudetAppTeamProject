@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Alert } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { doc, addDoc, updateDoc } from "firebase/firestore";
 import { auth, db, firebase } from "../../firebase.config";
-import { getAuth, signOut, updateEmail, updatePassword } from "firebase/auth";
+import { getAuth, signOut, updateEmail } from "firebase/auth";
 import { Picker } from "@react-native-picker/picker";
 import { Switch } from "@rneui/themed";
 
@@ -15,7 +15,7 @@ export default function Profile({ navigation }) {
   const [primaryLocation, setPrimaryLocation] = useState("");
   const [transportMeans, setTransportMeans] = useState("");
   const [checked, setChecked] = useState(false);
-  const [shouldRenderTransport, setShouldRenderTransport] = useState(false);
+
 
   // Function to save data
   const saveData = async () => {
@@ -189,7 +189,7 @@ export default function Profile({ navigation }) {
     }
   };
 
-  // Switch
+
 
 
   // Logout
@@ -207,7 +207,6 @@ export default function Profile({ navigation }) {
         .then((querySnapshot) => {
           if (!querySnapshot.empty) {
             const documentSnapshot = querySnapshot.docs[0];
-            const password = documentSnapshot.data().password;
             const email = documentSnapshot.data().email;
             const notifications = documentSnapshot.data().notifications;
             const transportMeans = documentSnapshot.data().transportMeans;
@@ -278,7 +277,6 @@ export default function Profile({ navigation }) {
 
           {/* Transport prompt and picker  */}
           <Text style={styles.prompts}>Transport Means</Text>
-          {shouldRenderTransport ? (
             <View style={styles.drop}>
               <Picker
                 selectedValue={transportMeans}
@@ -294,23 +292,7 @@ export default function Profile({ navigation }) {
                 <Picker.Item label="Other" value="other" />
               </Picker>
             </View>
-          ) : (
-            <View style={styles.drop}>
-              <Picker
-                selectedValue={transportMeans}
-                onValueChange={(itemValue) => {
-                  setTransportMeans(itemValue);
-                }}
-              >
-                <Picker.Item label="Select transport means..." value="" />
-                <Picker.Item label="Car" value="car" />
-                <Picker.Item label="Cycling" value="cycling" />
-                <Picker.Item label="Walking" value="walking" />
-                <Picker.Item label="Bus" value="bus" />
-                <Picker.Item label="Other" value="other" />
-              </Picker>
-            </View>
-          )}
+          
         </View>
 
         {/* Notifications Switch */}
