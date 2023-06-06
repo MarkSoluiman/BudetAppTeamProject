@@ -110,10 +110,11 @@ export default function HomeBalanceModal({ navigation }) {
 
     
       {/* Heading */}
-      <Text style={styles.prompts}> Current Balance</Text>
+      <Text style={styles.prompts}> Monthly Current Balance</Text>
       <Text style={styles.legendLabel}>
-                Current Balance for this Month : (
-                {categoryCounts.Income !== 0 ? (((categoryCounts.Income- categoryCounts.Expenditure)/ (categoryCounts.Income + categoryCounts.Expenditure)) * 100).toFixed(2) : 0}
+                Current Balance : {categoryCounts.Income- categoryCounts.Expenditure}
+                ({categoryCounts.Income !== 0 ? 
+                (((categoryCounts.Income- categoryCounts.Expenditure)/ (categoryCounts.Income + categoryCounts.Expenditure)) * 100).toFixed(2) : 0}
                 %)
               </Text>
       <PieChart
@@ -211,6 +212,9 @@ const styles = StyleSheet.create({
   },
   legendLabel: {
     fontSize: 15,
+    textAlign: "center",
+    
+
   },
   button: {
     backgroundColor: "#ff8100",
