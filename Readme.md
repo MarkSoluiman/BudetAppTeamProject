@@ -1,7 +1,7 @@
 # :moneybag: Mobile Budgeting App :moneybag:
 
 ## Description
-The Mobile Budgeting App takes mobile budgeting to the next level. Users can create and monitor their own transactions and goals, and intricate data visualisations based on these entries are calculated and shown. View real-time financial news updates, receive financial feedback with our AI Chatbot, and see advice filtered on relevance by a users personal settings.
+The Mobile Budgeting App takes mobile budgeting to the next level. Users can create and monitor their own transactions and goals, and intricate data visualisations based on these entries are calculated and shown. View real-time financial news updates.
 
 ## How to Build the Project
 ### Installations
@@ -51,7 +51,7 @@ Users can view their set and change their email, password, student status, prima
 <p align="center">
   <img src="assets/advice.png" alt="Advice page" width="250">
 </p>
-The advice page shows local deals regarding grocery prices, entertainment deals, student deals, and fuel deals, dependent on a users profile settings. A map showing nearby deals can be accessed via the 'map' button. The user is also able to interact with an AI Chatbot on this advice page, intending to ask for financial advice. 
+The advice page shows local deals regarding grocery prices, entertainment deals, student deals, and fuel deals, dependent on a users profile settings. 
 
 ### 7. News
 <p align="center">
