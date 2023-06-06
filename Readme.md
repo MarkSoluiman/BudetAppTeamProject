@@ -42,12 +42,21 @@ The home page displays several buttons that when pressed, show the user the spec
 * Goal Bars
 
 ### 5. Profile
+<p align="center">
+  <img src="assets/profile.png" alt="Profile page" width="250">
+</p>
 Users can view their set and change their email, password, student status, primary location, transport means, and goal notifications. If the user changes the values of the previously stated attributes and wants to keep them, there's a 'save' button that can be pressed to validate the entry and save it. There's also a 'log out' button on the profile page.
 
 ### 6. Advice
+<p align="center">
+  <img src="assets/advice.png" alt="Advice page" width="250">
+</p>
 The advice page shows local deals regarding grocery prices, entertainment deals, student deals, and fuel deals, dependent on a users profile settings. A map showing nearby deals can be accessed via the 'map' button. The user is also able to interact with an AI Chatbot on this advice page, intending to ask for financial advice. 
 
 ### 7. News
+<p align="center">
+  <img src="assets/News.png" alt="News page" width="250">
+</p>
 Financial articles are displayed and updated on the news page. To filter recent news based on a search query, the user can use the search bar at the top of the screen. If a user wants to read more about a featured article, the article is clickable and takes the user to its source.
 
 ### 8. Log
