@@ -18,6 +18,8 @@ export default function GoalsModal({navigation, route}){
     const [showPicker, setShowPicker] = useState(false)
     const [goalDate, setGoalDate] = useState("Select your goal completion date")
 
+
+
     // Hook useEffect checks if user was navigated to page with route parameters, if the user wants to update a document
     useEffect(() => {
         if (route.params) {
