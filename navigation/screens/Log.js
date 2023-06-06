@@ -69,6 +69,9 @@ export default function Log({navigation}) {
         const selectionIDs = [];
         querySnapshot.forEach((documentSnapshot) => {
           selectionIDs.push(documentSnapshot.id);
+
+          setTranName(documentSnapshot.data().trans_name);
+          setTranAmount(documentSnapshot.data().trans_amount);
   
           // Deduce transaction amount from goal balance, if associated with a goal
           if (documentSnapshot.data().trans_goal != null) {

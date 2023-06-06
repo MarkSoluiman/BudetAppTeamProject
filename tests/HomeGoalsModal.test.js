@@ -1,47 +1,90 @@
-import React from "react";
-import { render, fireEvent } from "@testing-library/react-native";
+import { renderHook } from '@testing-library/react-native';
+import { useEffect } from 'react';
+import { collection, getAuth, onSnapshot, orderBy, query, where } from 'firebase/firestore';
+import { mocked } from 'ts-jest/utils';
 import HomeGoalsModal from "./HomeGoalsModal";
 
-// Mock dependencies
-// jest.mock("../../firebase.config", () => ({
-//   firebase: {
-//     firestore: jest.fn(),
-//   },
-// }));
-jest.mock("firebase/auth", () => ({
-  getAuth: jest.fn(),
-}));
-jest.mock("firebase/firestore", () => ({
-  collection: jest.fn(),
-  query: jest.fn(),
-  where: jest.fn(),
-  onSnapshot: jest.fn(),
-  orderBy: jest.fn(),
-}));
-jest.mock("expo-status-bar", () => ({
-  StatusBar: jest.fn(),
-}));
-jest.mock("react-native-gesture-handler", () => ({
-  FlatList: jest.fn(),
+jest.mock('firebase/firestore');
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useEffect: jest.fn(),
 }));
 
-describe("HomeGoalsModal", () => {
-  test("renders the component and navigates back on button press", () => {
-    const navigationMock = {
-      navigate: jest.fn(),
-    };
+describe('useGoalsList', () => {
+  const mockedGetAuth = mocked(getAuth, true);
+  const mockedCollection = mocked(collection, true);
+  const mockedQuery = mocked(query, true);
+  const mockedWhere = mocked(where, true);
+  const mockedOrderBy = mocked(orderBy, true);
+  const mockedOnSnapshot = mocked(onSnapshot, true);
 
-    const { getByText } = render(
-      <HomeGoalsModal navigation={navigationMock} />
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('fetches goals list on mount', () => {
+    const dummyUid = 'dummyUid';
+    const dummyGoalsList = [
+      {
+        goal_date: new Date(),
+        goal_name: 'Goal 1',
+        goal_balance: 100,
+        goal_amount: 500,
+      },
+      // ... add more dummy goals
+    ];
+
+    // Mock the return values for Firebase Firestore functions
+    mockedGetAuth.mockReturnValue({ currentUser: { uid: dummyUid } });
+    mockedCollection.mockReturnValue(dummyGoalsList);
+    mockedQuery.mockReturnValue(dummyGoalsList);
+    mockedWhere.mockReturnValue(dummyGoalsList);
+    mockedOrderBy.mockReturnValue(dummyGoalsList);
+
+    // Render the hook
+    renderHook(() => useGoalsList());
+
+    // Assert that the Firebase Firestore functions were called correctly
+    expect(mockedCollection).toHaveBeenCalledWith(expect.anything(), 'Goals');
+    expect(mockedWhere).toHaveBeenCalledWith(expect.anything(), 'uid', '==', dummyUid);
+    expect(mockedWhere).toHaveBeenCalledWith(expect.anything(), 'goal_complete', '==', false);
+    expect(mockedOrderBy).toHaveBeenCalledWith(expect.anything(), 'goal_date', 'asc');
+    expect(mockedOnSnapshot).toHaveBeenCalledWith(
+      dummyGoalsList,
+      expect.any(Function)
     );
+  });
 
-    // Assert that the component renders correctly
-    expect(getByText("Goal Bar Progress")).toBeTruthy();
+  test('updates goals list on snapshot', () => {
+    // Define initial and updated goals list
+    const initialGoalsList = [];
+    const updatedGoalsList = [
+      {
+        goal_date: new Date(),
+        goal_name: 'Goal 1',
+        goal_balance: 100,
+        goal_amount: 500,
+      },
+      // ... add more updated goals
+    ];
 
-    // Simulate button press
-    fireEvent.press(getByText("GO BACK"));
+    // Mock the onSnapshot callback function
+    const onSnapshotCallback = jest.fn((callback) => {
+      // Invoke the callback with updated goals list
+      callback({ forEach: (cb) => updatedGoalsList.forEach(cb) });
+    });
+    mockedOnSnapshot.mockImplementation(onSnapshotCallback);
 
-    // Assert that the navigation function was called
-    expect(navigationMock.navigate).toHaveBeenCalledWith("Home");
+    // Render the hook
+    const { result } = renderHook(() => useGoalsList());
+
+    // Assert that the initial goals list is empty
+    expect(result.current.goalsList).toEqual(initialGoalsList);
+
+    // Call the onSnapshot callback to simulate snapshot update
+    onSnapshotCallback.mock.calls[0][1]();
+
+    // Assert that the goals list is updated
+    expect(result.current.goalsList).toEqual(updatedGoalsList);
   });
 });

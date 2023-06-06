@@ -9,58 +9,66 @@ import { db, firebase } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
 
 
+
 // Exported function
-export default function LogModal({navigation}){
+export default function LogModal({navigation, route}){
 
     // Initialise constants
     const [date, setDate] = useState(new Date())
     const [showPicker, setShowPicker] = useState(false)
     const [tranDate, setTranDate] = useState("Select your transaction date")
     const [tranName, setTranName] = useState('')
-    const [tranAmount, setTranAmount] = useState('')
+    const [tranAmount, setTranAmount] = useState(route.params?.trans_amount || '')
     const [selectedType, setSelectedType] = useState('')
     const [selectedCat, setSelectedCat] = useState('')
     const [selectedGoal, setSelectedGoal] = useState('')
     const [goalsList, setGoalsList] = useState([])
     const [goalID, setGoalID] = useState('')
    
-    // useEffect(() => {
-    //     if (route.params) {
+    useEffect(() => {
+        if (route.params) {
 
-    //         // Assign parameter as goal document ID
-    //         const {logID } = route.params;
+            // Assign parameter as log document ID
+            const {logID } = route.params;
 
-    //         // Query to find goal document in firebase from assigned ID
-    //         firebase
-    //             .firestore()
-    //             .collection('Goals')
-    //             .doc(logID)
-    //             .get()
-    //             .then((documentSnapshot) => {
-    //                 if (documentSnapshot.exists) {
+            // Query to find log document in firebase from assigned ID
+            firebase
+                .firestore()
+                .collection('Logs')
+                .doc(logID)
+                .get()
+                .then((documentSnapshot) => {
+                    if (documentSnapshot.exists) {
 
-    //                     // Set entry field variables to corresponding values in firebase
-    //                     setName(documentSnapshot.data().trans_name);
-    //                     setAmount(documentSnapshot.data().trans_amount);
-    //                     const logDateTimestamp = documentSnapshot.data().trans_date;
-    //                     const logDate = logDateTimestamp.toDate(); // Convert timestamp to Date object
-    //                     setDate(logDate);
-    //                     setGoalDate(logDate.toDateString());
+                        // Set entry field variables to corresponding values in firebase
+                       
+                       
+                        setTranName(documentSnapshot.data().trans_name);
+                        setSelectedType(documentSnapshot.data().trans_type);
+                        setSelectedCat(documentSnapshot.data().trans_category);
+                        setTranAmount(documentSnapshot.data().trans_amount);
+                        setSelectedGoal(documentSnapshot.data().trans_goal);
 
-    //                 // Possible error messages
-    //                 } else {
-    //                     console.log('Document not found!');
-    //                 }
-    //             })
-    //             .catch((error) => {
-    //                 console.log(error);
-    //             });
-    //     }
-    // }, []);
+                        const logDateTimestamp = documentSnapshot.data().trans_date;
+                        const logDate = logDateTimestamp.toDate(); // Convert timestamp to Date object
+                        setDate(logDate);
+                        setTranDate(logDate.toDateString());
 
-    // // Constants used to determine if app should render components for a new goal to add, or an existing goal to update
-    // const shouldRenderName = route.params; 
-    // const shouldRenderAmount = !!route.params;
+
+                    // Possible error messages
+                    } else {
+                        console.log('Document not found!');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, []);
+
+    // Constants used to determine if app should render components for a new log to add, or an existing log to update
+    const shouldRenderName = route.params; 
+    const shouldRenderAmount = !!route.params;
  
 
 
@@ -173,7 +181,7 @@ export default function LogModal({navigation}){
     // Validate entry input, if successful... write to firebase
     const handleSubmit = async () => {
         if(date){
-            if (tranName.length > 0){
+            if ( tranName.length > 0){
                 if (Number.isInteger(parseInt(tranAmount)) && parseInt(tranAmount) > 0){
                     if (selectedType.length > 0){
                         if (selectedCat.length > 0){
@@ -238,12 +246,68 @@ export default function LogModal({navigation}){
         fetchData()
     }, [])
 
+   
+
+    const handleUpdate = async (logID)=>{
+
+        if(date){
+            if (tranName.length > 0){
+                if (Number.isInteger(parseInt(tranAmount)) && parseInt(tranAmount) > 0){
+                    if (selectedType.length > 0){
+                        if (selectedCat.length > 0){
+                            if (selectedGoal == null || selectedGoal.length > 0){
+               
+
+                        amount = parseInt(tranAmount, 10)
+                        navigation.navigate('Log')
+                        const logRef = doc(db, 'Logs', logID)
+
+                        try{
+                            await updateDoc(logRef, {   trans_date: date
+                                , trans_name: tranName
+                                , trans_type: selectedType
+                                , trans_amount: tranAmount
+                                , trans_category: selectedCat
+                                , trans_goal: selectedGoal
+                })
+                      console.log('Transaction Log updated successfully')
+                      Alert.alert('Transaction updated')
+
+                        } catch(error){
+                            console.log(' log document updated successfully')
+
+                        } 
+  
+                    
+                    
+                    } else {
+                        Alert.alert('Error: A transaction goal association needs to be selected')
+                    }
+                    
+                } else {
+                    Alert.alert('Error: A transaction category needs to be selected')
+                }
+            } else {
+                Alert.alert('Error: A transaction type needs to be selected')
+            }
+        } else {
+            Alert.alert('Error: Transaction amount must be a number greater than 0')
+        }
+    } else {
+        Alert.alert('Error: Transaction name be of length greater than 0')
+    } 
+} else {
+    Alert.alert('Error: Date must be selected')
+}
+}
+
     // Exported function
     return(
         <View style={styles.background}>
 
             {/* Date prompt and entry */}
             <Text style={styles.prompts}>DATE</Text>
+            
             {!showPicker && (
                 <Pressable style={styles.entry} onPress={toggleDatepicker}>
                     <Text>{tranDate}</Text>
@@ -260,7 +324,15 @@ export default function LogModal({navigation}){
 
             {/* Transaction name prompt and entry */}
             <Text style={styles.prompts}>TRANSACTION NAME</Text>
-            <TextInput placeholder="Write your transaction name" onChangeText={tranName => setTranName(tranName)} style={styles.entry}/>
+            {shouldRenderName ? (
+
+            
+                    <TextInput value = {tranName} onChangeText = {tranName => setTranName(tranName) }
+                    style = {styles.entry}/>
+                  
+             
+            ) : (<TextInput placeholder="Write your transaction name" onChangeText={tranName => setTranName(tranName)} style={styles.entry}/>)}
+           
 
             {/* Transaction type prompt and picker */}
             <Text style={styles.prompts}>TRANSACTION TYPE</Text>
@@ -278,10 +350,18 @@ export default function LogModal({navigation}){
             </View>
             
             {/* Transaction amount prompt and entry */}
+          
             <Text style={styles.prompts}>AMOUNT</Text>
-            <TextInput placeholder="Write your transaction amount" keyboardType='numeric' onChangeText={tranAmount => setTranAmount(tranAmount)} style={styles.entry}/>
+            {shouldRenderAmount ? (
+                <TextInput value = {tranAmount.toString()} 
+                keyboardType = 'numeric' onChangeText={tranAmount => setTranAmount(tranAmount)} style = {styles.entry}/>
+            ): (
+                <TextInput placeholder="Write your transaction amount" keyboardType='numeric' onChangeText={tranAmount => setTranAmount(tranAmount)} style={styles.entry}/>
+            )}
+           
 
             {/* Transaction category prompt and picker */}
+
             <Text style={styles.prompts}>CATEGORY</Text>
             <View style={styles.drop}>
                 <Picker
@@ -325,9 +405,13 @@ export default function LogModal({navigation}){
                 <Pressable style={styles.button} onPress={()=> navigation.navigate('Log')}>
                     <Text style={styles.prompts}>BACK</Text>
                 </Pressable>
-                <Pressable style={styles.button} onPress={handleSubmit}>
+                {shouldRenderName ? 
+                (   <Pressable style={styles.button} onPress={()=>handleUpdate(route.params.logID)}>
+                    <Text style={styles.prompts}>UPDATE</Text>
+                </Pressable>) : (   <Pressable style={styles.button} onPress={handleSubmit}>
                     <Text style={styles.prompts}>SAVE</Text>
-                </Pressable>
+                </Pressable>)}
+                
             </View>
             
         </View>

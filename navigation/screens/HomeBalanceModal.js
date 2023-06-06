@@ -112,7 +112,7 @@ export default function HomeBalanceModal({ navigation }) {
       {/* Heading */}
       <Text style={styles.prompts}> Monthly Current Balance</Text>
       <Text style={styles.legendLabel}>
-                Current Balance : ${categoryCounts.Income- categoryCounts.Expenditure}
+                Current Balance : ${categoryCounts.Income - categoryCounts.Expenditure}
               
               </Text>
       <PieChart
