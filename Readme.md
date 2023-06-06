@@ -58,6 +58,7 @@ Financial articles are displayed and updated on the news page. To filter recent 
 Users can add, track, edit, and delete their transactions on the log page. The 'new transaction' button at the top of the page takes the user to a modal to input a new transactions details and save it to the log. Within the log, transactions are ordered chronologically, with recent transactions being at the top. To delete a transaction, the user can press the bin emoticon next to their desired transaction. To edit a transaction, the user can press the transaction.
 
 ### 9. Goals
+<p align="center">
   <img src="assets/goals.png" alt="Goal page" width="250">
   <img src="assets/goalentry.png" alt="Goal entry page" width="250">
 </p>
