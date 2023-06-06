@@ -5,32 +5,33 @@ import axios from 'axios';
 
 const ChatBot = () => {
   const [data, setData] = useState([]);
-  const apiKey = ''; // API Key
+  const apiKey = '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'; // API Key
   const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions'; // URL to OpenAI
   const [textInput, setTextInput] = useState('');
 
   const handleSend = async () => {
-    const prompt = textInput;
-    const response = await axios.post(
-      apiUrl,
-      {
-        prompt: prompt,
-        max_tokens: 1024,
-        temperature: 0.5,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`, // API key for verification
+    try {
+      const prompt = textInput;
+      const response = await axios.post(
+        apiUrl,
+        {
+          prompt: prompt,
+          max_tokens: 1024,
+          temperature: 0.5,
         },
-      }
-    );
-    const text = response.data.choices[0].text;
-    setData([...data, { type: 'user', text: textInput }, { type: 'bot', text: text }]);
-    setTextInput(''); 
-  }catch(error){
-    console.error('error ',error);
-  }
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`, // API key for verification
+          },
+        }
+      );
+      const text = response.data.choices[0].text;
+      setData([...data, { type: 'user', text: textInput }, { type: 'bot', text: text }]);
+      setTextInput('');
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: '600',
-    fontSize: 25,
+    fontSize: 20,
     marginBottom: 20,
     marginTop: 20,
   },
@@ -84,19 +85,29 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: 10,
     borderRadius: 10,
+    borderWidth: 5,
     paddingHorizontal: 10,
   },
-  button: {
-    backgroundColor: '#ffdeb7',
-    width: '90%',
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-    borderColor: '#ff8100',
-  },
+ button: {
+  marginTop: 10,
+  marginBottom: 10,
+  marginHorizontal: 5,
+  marginVertical: 5,
+  fontSize: 17,
+  fontWeight: '600',
+  color: 'black',
+  backgroundColor: '#ffdeb7',
+  width: '90%',
+  height: 60,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 10,
+  borderWidth: 5,
+   borderColor: '#ff8100',
+
+},
   buttonText: {
-    fontSize: 25,
+    fontSize: 15,
     fontWeight: 'bold',
     color: 'black',
   },
@@ -106,4 +117,3 @@ const styles = StyleSheet.create({
 });
 
 export default ChatBot;
-//reference: 
