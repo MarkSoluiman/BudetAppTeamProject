@@ -49,7 +49,7 @@ export default function Profile({ navigation }) {
 
           updateDoc(profileDocRef, dataNotifs)
             .then(() => {
-              Alert.alert("Goal Notifications has been updated");
+              Alert.alert("Your changes have been saved!");
             })
             .catch((error) => {
               Alert.alert(error);
@@ -181,9 +181,7 @@ export default function Profile({ navigation }) {
   };
 
   // Switch
-  const toggleSwitch = () => {
-    setChecked(!checked);
-  };
+
 
   // Logout
   const handleLogout = async () => {
