@@ -55,7 +55,7 @@ The advice page shows local deals regarding grocery prices, entertainment deals,
 
 ### 7. News
 <p align="center">
-  <img src="assets/News.png" alt="News page" width="250">
+  <img src="assets/news.png" alt="News page" width="250">
 </p>
 Financial articles are displayed and updated on the news page. To filter recent news based on a search query, the user can use the search bar at the top of the screen. If a user wants to read more about a featured article, the article is clickable and takes the user to its source.
 
