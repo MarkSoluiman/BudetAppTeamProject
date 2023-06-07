@@ -125,3 +125,5 @@ const styles = StyleSheet.create({
 });
 
 export default ChatBot;
+
+////reference: https://platform.openai.com/docs/guides/gpt/chat-completions-api
