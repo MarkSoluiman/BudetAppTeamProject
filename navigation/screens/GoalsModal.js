@@ -277,45 +277,56 @@ export default function GoalsModal({navigation, route}){
     )
 }
 
+
 // Styling
 const styles = StyleSheet.create({
-
-    // Page styling
-    background:{
-        flex:1
-        , backgroundColor: '#ffdeb7'
-        , paddingVertical: 120
+    background: {
+      flex: 1,
+      backgroundColor: "#ffdeb7",
+     
     },
-    entry:{
-        borderRadius: 15
-        , borderColor: '#ff8100'
-        , borderWidth: 6
-        , width: Dimensions.get('window').height-500
-        , height: Dimensions.get('window').height-820
-        , backgroundColor: '#ffe9de'
-        , marginVertical: 30
-        , paddingHorizontal: 20
-        , alignSelf: 'center'
-        , alignItems: 'center'
-        , paddingVertical: 7
+    entry: {
+      borderRadius: 15,
+      borderColor: "#ff8100",
+      borderWidth: 6,
+      width: 370,
+      height: 50,
+      backgroundColor: "#ffe9de",
+      marginVertical: 15,
+      paddingHorizontal: 15,
+      alignSelf: "center",
+      alignItems: "center",
+      paddingVertical: 7,
     },
-    prompts:{
-        textAlign: 'center'
-        , fontWeight: 'bold'
-        , fontSize: 17
+    drop: {
+      borderRadius: 15,
+      borderColor: "#ff8100",
+      borderWidth: 6,
+      width: 370,
+      height: 50,
+      backgroundColor: "#ffe9de",
+      marginVertical: 15,
+      paddingHorizontal: 15,
+      alignSelf: "center",
+      overflow: "hidden",
+      justifyContent: "center",
     },
-
-    // Button styling
+    prompts: {
+      textAlign: "center",
+      fontWeight: "bold",
+      fontSize: 17,
+    },
     buttons: {
-        justifyContent: 'center'
-        , flexDirection: 'row'
+     
+      justifyContent: "center",
+      flexDirection: "row",
     },
     button: {
-        backgroundColor: '#ff8100'
-        , borderRadius: 25
-        , paddingVertical: 10
-        , height: Dimensions.get('window').height-820 
-        , width: Dimensions.get('window').height-780
-        , marginHorizontal: 20
-    }
-})
+      backgroundColor: "#ff8100",
+      borderRadius: 25,
+      paddingVertical: 10,
+      height: 50,
+      width: 90,
+      marginHorizontal: 20,
+    },
+  });

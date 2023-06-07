@@ -20,7 +20,7 @@ import {
   doc,
   updateDoc,
   increment,
-} from "firebase/firestore/lite";
+} from "firebase/firestore";
 import { db, firebase } from "../../firebase.config";
 import { getAuth } from "firebase/auth";
 
@@ -288,7 +288,7 @@ export default function LogModal({ navigation, route }) {
               if (selectedGoal == null || selectedGoal.length > 0) {
                 amount = parseInt(tranAmount, 10);
                 navigation.navigate("Log-Log");
-                const logRef = doc(db, "Logs", logID);
+                const logRef = typeof logID === 'string' ? doc(db, 'Logs', logID) : logID;
 
                 try {
                   await updateDoc(logRef, {
@@ -475,17 +475,17 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#ffdeb7",
-    paddingVertical: "6%",
+   
   },
   entry: {
     borderRadius: 15,
     borderColor: "#ff8100",
     borderWidth: 6,
-    width: Dimensions.get("window").height - 500,
-    height: Dimensions.get("window").height - 820,
+    width: 370,
+    height: 50,
     backgroundColor: "#ffe9de",
-    marginVertical: "3.5%",
-    paddingHorizontal: "5%",
+    marginVertical: 15,
+    paddingHorizontal: 15,
     alignSelf: "center",
     alignItems: "center",
     paddingVertical: 7,
@@ -494,11 +494,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderColor: "#ff8100",
     borderWidth: 6,
-    width: Dimensions.get("window").height - 500,
-    height: Dimensions.get("window").height - 820,
+    width: 370,
+    height: 50,
     backgroundColor: "#ffe9de",
-    marginVertical: "3.5%",
-    paddingHorizontal: "5%",
+    marginVertical: 15,
+    paddingHorizontal: 15,
     alignSelf: "center",
     overflow: "hidden",
     justifyContent: "center",
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   buttons: {
-    paddingTop: "2%",
+   
     justifyContent: "center",
     flexDirection: "row",
   },
@@ -517,8 +517,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#ff8100",
     borderRadius: 25,
     paddingVertical: 10,
-    height: Dimensions.get("window").height - 820,
-    width: Dimensions.get("window").height - 780,
+    height: 50,
+    width: 90,
     marginHorizontal: 20,
   },
 });
