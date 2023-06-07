@@ -5,9 +5,10 @@ import axios from 'axios';
 
 const ChatBot = () => {
   const [data, setData] = useState([]);
-  const apiKey = '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'; // API Key
+  const apiKey = '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'; // API Key
   const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions'; // URL to OpenAI
   const [textInput, setTextInput] = useState('');
+  const [error, setError] = useState(null);
 
   const handleSend = async () => {
     try {
@@ -29,8 +30,10 @@ const ChatBot = () => {
       const text = response.data.choices[0].text;
       setData([...data, { type: 'user', text: textInput }, { type: 'bot', text: text }]);
       setTextInput('');
+      setError(null);
     } catch (error) {
       console.error('Error:', error);
+      setError('Error Occurred!');
     }
   };
 
@@ -50,6 +53,7 @@ const ChatBot = () => {
           </View>
         )}
       />
+      {error && <Text style={styles.error}>{error}</Text>}
       <TextInput
         style={styles.input}
         value={textInput}
@@ -88,24 +92,23 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     paddingHorizontal: 10,
   },
- button: {
-  marginTop: 10,
-  marginBottom: 10,
-  marginHorizontal: 5,
-  marginVertical: 5,
-  fontSize: 17,
-  fontWeight: '600',
-  color: 'black',
-  backgroundColor: '#ff8100',
-  width: '90%',
-  height: 60,
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: 10,
-  borderWidth: 5,
-   borderColor: '#ff8100',
-
-},
+  button: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginHorizontal: 5,
+    marginVertical: 5,
+    fontSize: 17,
+    fontWeight: '600',
+    color: 'black',
+    backgroundColor: '#ff8100',
+    width: '90%',
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderWidth: 5,
+    borderColor: '#ff8100',
+  },
   buttonText: {
     fontSize: 15,
     fontWeight: 'bold',
@@ -114,7 +117,11 @@ const styles = StyleSheet.create({
   bot: {
     marginLeft: 5,
   },
+  error: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
+  },
 });
 
 export default ChatBot;
-//reference: https://platform.openai.com/docs/api-reference/authentication
