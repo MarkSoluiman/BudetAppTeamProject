@@ -69,6 +69,8 @@ export default function Log({navigation}) {
         const selectionIDs = [];
         querySnapshot.forEach((documentSnapshot) => {
           selectionIDs.push(documentSnapshot.id);
+
+          
   
           // Deduce transaction amount from goal balance, if associated with a goal
           if (documentSnapshot.data().trans_goal != null) {
@@ -161,6 +163,27 @@ export default function Log({navigation}) {
       });
   }
   
+
+  const navigateToLogModal = (selectedTransDate, selectedTransName, selectedTransAmount) => {
+    firebase.firestore()
+      .collection("Logs")
+      .where("uid", "==", getAuth().currentUser.uid)
+      .where("trans_date", "==", selectedTransDate)
+      .where("trans_name", "==", selectedTransName)
+      .where("trans_amount", "==", selectedTransAmount)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          const logID = documentSnapshot.id;
+          navigation.navigate('New Transaction', { logID });
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+}; 
+  
+  // Returned function
   // Returned function
   return (
     <SafeAreaView style={styles.background}>
@@ -177,9 +200,15 @@ export default function Log({navigation}) {
             numColumns={1}
             renderItem={({item}) => (
               <View style={styles.entry}>
+
+                <Pressable onPress={() => navigateToLogModal(item.trans_date
+                                , item.trans_name
+                                , item.trans_amount)}> 
                 
                 {/* Formatting of entries */}
                 <Text style={styles.textEntry}>Date: {item.day}/{item.month}/{item.year}{'\n'}Transaction: {item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
+                </Pressable>
+                
                 
                 {/* Trash icon to delete an entry */}
                 <Pressable style={styles.icon} onPress={() => deleteEntry(
@@ -199,6 +228,8 @@ export default function Log({navigation}) {
 
 // Styling
 const styles = StyleSheet.create({
+
+  // Page styling
 
   // Page styling
   background:{
@@ -222,6 +253,8 @@ const styles = StyleSheet.create({
   },
 
   // Entry styling
+
+  // Entry styling
   icon:{
     paddingVertical: 5,
   },
@@ -233,6 +266,8 @@ const styles = StyleSheet.create({
     , padding: 15
     , paddingTop: 25
   },
+
+  // Button styling
 
   // Button styling
   button:{

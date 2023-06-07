@@ -205,7 +205,7 @@ export default function HomeIncomeModal({ navigation }) {
         </View>
     
         {/* Button to return to home page */}
-        <Pressable onPress={() => navigation.navigate('Home')}>
+        <Pressable onPress={() => navigation.navigate('Home-Home')}>
           <View style={styles.button}>
             <Text style={styles.prompts}>GO BACK</Text>
           </View>
@@ -227,11 +227,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   widget:{
-    marginHorizontal: 20
+    alignSelf: 'center'
     , borderRadius: 10
     , borderColor: '#ff8100'
     , borderWidth: 3
-    , width: 370
+    , width: Dimensions.get('window').width-40
     , padding: 15
     , backgroundColor: '#ffe9de'
     , justifyContent: 'space-evenly'
@@ -245,8 +245,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#ff8100",
     borderRadius: 25,
     paddingVertical: 10,
-    height: 50,
-    width: 110,
+    width: Dimensions.get('window').width/3.5,
+    height: Dimensions.get('window').height-820,
     margin: 20,
     alignSelf: "center",
   },
@@ -256,15 +256,15 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'baseline',
-    marginHorizontal: '15%'
+    alignSelf: 'center'
   },
   legendItem: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   legendColor: {
-    width: 10,
-    height: 10,
+    width: Dimensions.get('window').width-400,
+    height: Dimensions.get('window').width-400,
     borderRadius: 5,
     marginRight: 5,
   },

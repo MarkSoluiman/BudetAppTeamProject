@@ -1,196 +1,141 @@
 // Component imports
-import { useState , useEffect } from "react";
-import { View, Text, StyleSheet, Pressable, Dimensions } from "react-native";
-import { app, auth, db, firebase } from '../../firebase.config'
-import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
-import { QuerySnapshot } from '@firebase/firestore'
-import { getAuth } from 'firebase/auth'
-import { Ionicons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-
-
 import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart,
-} from "react-native-chart-kit";
-
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Dimensions,
+  Animated,
+} from "react-native";
+import { StatusBar } from "expo-status-bar";
+import React, { useState, useEffect } from "react";
+import { db, firebase } from '../../firebase.config';
+import { getAuth } from "firebase/auth";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
+import { FlatList } from "react-native-gesture-handler";
 
 // Exported function
 export default function HomeGoalsModal({ navigation }) {
+  const [goalsList, setGoalsList] = useState([]);
+ 
 
-  const [goalsList, setGoalsList] = useState([])
-  const [transList, setTransList] = useState([])
+  useEffect(() => {
+    const todoRef = query(
+      collection(firebase.firestore(), "Goals"),
+      where("uid", "==", getAuth().currentUser.uid),
+      where("goal_complete", "==", false),
+      orderBy("goal_date", "asc")
+    );
+    const unsubscribe = onSnapshot(todoRef, (querySnapshot) => {
+      const goalsList = [];
+      querySnapshot.forEach((doc) => {
+        const { goal_date, goal_name, goal_balance, goal_amount } = doc.data();
+        goalsList.push({
+          goal_date: goal_date.toDate(),
+          goal_name,
+          goal_balance,
+          goal_amount,
+        });
+      });
+      setGoalsList(goalsList);
+    });
+    return () => unsubscribe();
+  }, []);
 
-  var [yearPicker, setYearPicker] = useState(2023)
+  const Progress = ({ step, steps, height }) => {
+    //useRef for  React keep track of the animation when re rendered the animated value will be the same
+    //Animated value is 1000 so we move the animation out side of the screen so we get the width of the screen
+    const animatedValue = React.useRef(new Animated.Value(-1000)).current;
+    const reactive = React.useRef(new Animated.Value(-1000)).current;
+    const [width, setWidth] = React.useState(0);
 
+    React.useEffect(() => {
+      Animated.timing(animatedValue, {
+        toValue: reactive,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }, []);
 
+    React.useEffect(() => {
+      // -width + width * step/ steps
+      reactive.setValue(-width + (width * step) / steps);
+    }, [step, width]);
 
-  const handleDecrement = () => {
-   
-     setYearPicker(yearPicker = yearPicker -1);
-     console.log(yearPicker)
-  }
-  const handleIncrement = () => {
-    setYearPicker(yearPicker = yearPicker +1);
-    console.log(yearPicker)
-  }
+    
 
-
-  
-
-  const todoRef = firebase.firestore().collection('Goals').where('uid', '==',getAuth().currentUser.uid).where('goal_complete','==', false).orderBy('goal_date', 'asc')
-  useEffect( () => {
-    async function fetchData(){
-        todoRef
-        .onSnapshot(
-            querySnapshot => {
-                const goalsList = []
-                querySnapshot.forEach((doc) => {
-                    const {day, month, year, goal_date, goal_name, goal_balance, goal_amount} = doc.data()
-                    goalsList.push({
-
-                        // Formatting date, converting from Firestore TIMESTAMP to DD/MM/YYYY
-                        day: goal_date.toDate().getDate().toString().padStart(2, '0'),
-                        month: (goal_date.toDate().getMonth() + 1).toString().padStart(2, '0'),
-                        year: goal_date.toDate().getFullYear().toString().slice(0),
-                        goal_date,
-                        goal_name,
-                        goal_balance,
-                        goal_amount,
-                    })
-                })
-                setGoalsList(goalsList)
-                console.log(goalsList)
-            }
-        )
-    }
-    fetchData()
-}, [] )
-
-const TransRef = firebase.firestore().collection('Logs').where('uid','==',getAuth().currentUser.uid).orderBy('trans_date', 'desc')
-var sign = ''
-
-// Use effect for fetching transaction log data
-useEffect( () => {
-  async function fetchData(){
-    TransRef
-    .onSnapshot(
-      querySnapshot => {
-        const transList = []
-        querySnapshot.forEach((doc) => {
-          const { day, month, year, trans_date, trans_name, trans_amount, trans_type } = doc.data()
-          
-          // Add a negative sign to expenditure entries
-          if(trans_type==='Expenditure'){
-            sign = '-'
-          } else {
-            sign = ''
-          }
-          transList.push({
-            // Formatting date, converting from Firestore TIMESTAMP to DD/MM/YYYY
-            day: trans_date.toDate().getDate().toString().padStart(2, '0'),
-            month: (trans_date.toDate().getMonth() + 1).toString().padStart(2, '0'),
-            year: trans_date.toDate().getFullYear().toString().slice(-2),
-            trans_date,
-            trans_name,
-            sign,
-            trans_amount,
-          })
-        }) 
-        setTransList(transList)
-      }
-    )
-  }
-  fetchData()
-}, [])
-
-
-const generateDataForChart = () => {
-  const data = {
-    labels: [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ],
-    legend: goalsList.map((goal) => goal.goal_name),
-    data: [],
-    barColors: ['#f2f25a', '#e3e31e', '#fa1eca', '#e3e31e','#f2f25a' ],
+    return (
+      <>
+        <Text style={{ fontSize: 12, fontWeight: "900", marginBottom: 8 }}>
+          ${step} /${steps}
+        </Text>
+        <View
+          onLayout={(e) => {
+            const newWidth = e.nativeEvent.layout.width;
+            setWidth(newWidth);
+          }}
+          style={{
+            height,
+            backgroundColor:  "#ffe9de",
+            borderRadius: height,
+            overflow: "hidden",
+          }}
+        >
+          <Animated.View
+            style={{
+              height,
+              width: "100%",
+              borderRadius: height,
+              backgroundColor:  "#ff8100",
+              position: "absolute",
+              left: 0,
+              top: 0,
+              transform: [
+                {
+                  translateX: animatedValue,
+                },
+              ],
+            }}
+          />
+        </View>
+      </>
+    );
   };
-
-  const goalBalancesByMonth = Array(12).fill().map(() => Array(data.legend.length).fill(0));
-
-  for (const goal of goalsList) {
-    const goalYear = parseInt(goal.year, 10);
-    if (goalYear === yearPicker) {
-      const monthIndex = parseInt(goal.month, 10) - 1;
-      const goalIndex = data.legend.indexOf(goal.goal_name);
-      goalBalancesByMonth[monthIndex][goalIndex] += goal.goal_balance;
-    }
-  }
-
-  data.data = goalBalancesByMonth;
-
-  return data;
-};
-
-const data = generateDataForChart();
-
 
   return (
     <View style={styles.background}>
-      {/* Heading */}
-      <Text style={styles.prompts}>Goal Bars</Text>
-      <StackedBarChart
-        data={data}
-        width={Dimensions.get("window").width-30}
-        height={350}
-        chartConfig = {{
-            backgroundGradientFrom: '#ff8100',
-            backgroundGradientFromOpacity: 1,
-            backgroundGradientTo: '#ff8100',
-            backgroundGradientToOpacity: 1,
-            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            strokeWidth: 2, // optional, default 3
-            barPercentage: 0.5,
-            useShadowColorFromDataset: false // optional
-          }}
-          style= {{borderRadius: 10, alignSelf: 'center'}}
-          accessor={"population"}
-        backgroundColor={"transparent"}
-        paddingLeft={"15"}
-      />
+      <View style={styles.widget}>
+        <Text style={styles.prompts}> Goal Bar Progress </Text>
+        <StatusBar hidden />
+        <FlatList
+          data={goalsList}
+          renderItem={({ item }) => (
+            <View style={styles.entry}>
+              <Text> Goal Name : {item.goal_name}</Text>
+              <Progress
+                step={item.goal_balance}
+                steps={item.goal_amount}
+                height={20}
+              />
+            </View>
+          )}
+        />
+        
 
-      <View style = {{  marginTop: 5 , flexDirection : 'row', justifyContent: 'space-between'}}>
-      <Ionicons name="caret-back-circle-sharp" size={35} color="black" onPress={handleDecrement} />
-      <Text style = {{ marginTop: 12, fontSize : 20 , fontWeight : 5}}>
-        {yearPicker}
-      </Text>
-      
-      <MaterialCommunityIcons name="arrow-right-drop-circle" size={35} color="black"  onPress={handleIncrement}/>
+        <Pressable onPress={() => navigation.navigate("Home")}>
+          <View style={styles.button}>
+            <Text style={styles.prompts}>GO BACK</Text>
+          </View>
+        </Pressable>
       </View>
-
-      {/* Button to return to home page */}
-      <Pressable onPress={() => navigation.navigate("Home")}>
-        <View style={styles.button}>
-          <Text style={styles.prompts}>GO BACK</Text>
-        </View>
-      </Pressable>
     </View>
-  )
+  );
 }
 
 // Styling
@@ -198,12 +143,35 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#ffdeb7",
-    padding: 5,
+    justifyContent: "center",
+    padding: 20,
+  },
+  widget: {
+    borderRadius: 10,
+    borderColor: "#ff8100",
+    borderWidth: 3,
+    width: 370,
+    padding: 15,
+    backgroundColor: "#ffe9de",
+    justifyContent: "space-evenly",
   },
   prompts: {
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
+    marginBottom: 10,
+  },
+
+  entry: {
+    //flexDirection: "row",
+    marginBottom: "5%",
+    backgroundColor: "#ffdeb7",
+    borderColor: "#ff8100",
+    borderWidth: 2,
+    borderRadius: 10,
+    justifyContent: "center",
+    padding: 15,
+    paddingTop: 25,
   },
   button: {
     backgroundColor: "#ff8100",
@@ -211,7 +179,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     height: 50,
     width: 90,
-    margin: 20,
+    margin: 25,
     alignSelf: "center",
-  }
-})
+  },
+});

@@ -1,7 +1,7 @@
 // Components import
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import React,{useState} from 'react'; 
-import { View, Text, StyleSheet, Button, TextInput, Alert, TouchableOpacity} from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TextInput, Alert, TouchableOpacity} from 'react-native'
 import { auth } from '../../firebase.config';
 
 //import firebase from 'firebase'
@@ -59,8 +59,8 @@ export default function SignUp({navigation}){
         <View style={styles.background}>
 
             {/* Heading */}
-            <Text style ={styles.headingText} >MOBILE  </Text>
-            <Text style ={styles.headingText} > BUDGETING  </Text>
+            <Text style ={styles.headingText} >MOBILE</Text>
+            <Text style ={styles.headingText} >BUDGETING</Text>
             <Text style = {styles.subHeadingText}>SIGN UP</Text>
             <Text style = {styles.subHeadingText}>EMAIL</Text>
 
@@ -77,37 +77,23 @@ export default function SignUp({navigation}){
              placeholder='Password'
              secureTextEntry = {true} />
 
-            <Text style = {styles.subHeadingText}> CONFIRM PASSWORD</Text>
+            <Text style = {styles.subHeadingText}>CONFIRM PASSWORD</Text>
 
             <TextInput style = {styles.textInput} 
-            placeholder=' Confirm Password'
+            placeholder='Confirm Password'
             value = {confirmPassword}
             onChangeText={value => setconfirmPassword(value)}
             secureTextEntry = {true} />
 
-            <View style = {{flexDirection: 'row', width : '70%', justifyContent: 'space-between', alignItems: 'center' }}>
+            <View style={styles.buttons}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+                    <Text style= {styles.buttonText}>GO BACK</Text>
+                </TouchableOpacity>
 
-              
-               <TouchableOpacity style = {styles.button}
-             onPress = {() => navigation.navigate('Login')}
-             >
-                <Text style= {{
-                    color : 'white'
-                }}>
-                    GO BACK 
-                </Text>
-             </TouchableOpacity>
-
-               <TouchableOpacity style = {styles.button}
-             onPress = {handleSubmit} 
-             >
-                <Text style= {{
-                    color : 'white'
-                }}>
-                    SIGN UP
-                </Text>
-             </TouchableOpacity>
-             </View>           
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                    <Text style={styles.buttonText}>SIGN UP</Text>
+                </TouchableOpacity>
+            </View>           
              
         </View>
     )
@@ -122,43 +108,42 @@ const styles = StyleSheet.create({
         , alignItems: 'center'
         , justifyContent: 'center'
     },
-
     headingText:{
         color : '#ffe9df', 
         fontWeight: 'bold',
         fontSize : 35,
         marginBottom: 5
     },
-
     subHeadingText:{
         color : 'white', 
         fontWeight: 'bold',
         fontSize : 15,
-
     },
-
+    buttons:{
+        flexDirection: 'row'
+        , width : Dimensions.get('window').width/2
+        , justifyContent: 'space-between'
+    },
+    buttonText:{
+        color: 'white'
+    },
     button: {
         backgroundColor : '#903800',
-                    height : 30,
-                    width: 80,
-                    marginTop: 10,
-                    borderRadius: 20,
-                    justifyContent : 'center',
-                    alignItems : 'center'
-       },
-    
+        height: Dimensions.get('window').height/20,
+        width: Dimensions.get('window').width/4.5,
+        marginTop: 10,
+        borderRadius: 20,
+        justifyContent : 'center',
+        alignItems : 'center'
+    },
     textInput: {
-        padding : 3,
+        paddingLeft: 10,
+        paddingVertical: 4,
         borderWidth: 1,
-        fontSize: 20,
+        borderRadius: 9,
         borderColor:'#ffdeb7',
         backgroundColor : '#ffdeb7',
-        borderRadius: 9,
-        width: '80%',
-        marginVertical : 10,
-        marginBottom: 15,
-        alignItems: 'center'
+        width: Dimensions.get('window').width/2,
+        marginVertical : 10
     }
-
-   
 })

@@ -1,11 +1,9 @@
 // Component imports
 import { signOut } from 'firebase/auth'
 import React, { Component } from 'react'
-import { StyleSheet, Pressable, Text,View, SafeAreaView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Pressable, Text,View, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { auth } from '../../firebase.config'
-
-//import { SafeAreaView } from 'react-native-safe-area-context'
 
 // Exported function
 export default function Home({navigation}){
@@ -26,10 +24,6 @@ export default function Home({navigation}){
                 <Text style={styles.heading}>Monthly Income</Text>
             </Pressable>
 
-            {/* Profit and Loss widget */}
-            <Pressable style={styles.widget} onPress={()=> navigation.navigate('Profit and Loss')}>
-                <Text style={styles.heading}>Profit/Loss</Text>
-            </Pressable>
 
             {/* Goal Bars widget */}
             <Pressable style={styles.widget} onPress={()=> navigation.navigate('Goal Bars')}>
@@ -51,13 +45,13 @@ const styles = StyleSheet.create({
         , alignItems: 'flex-start'
     },
     widget:{
-        marginHorizontal: '5%'
+        alignSelf: 'center'
         , marginBottom: '5%'
         , borderRadius: 200
         , borderColor: '#ff8100'
         , borderWidth: 6
-        , width: 370
-        , height: 80
+        , width: Dimensions.get('window').width/1.1
+        , height: Dimensions.get('window').height/8
         , backgroundColor: '#ffe9de'
         , justifyContent: 'space-evenly'
         , fontWeight: 'bold'

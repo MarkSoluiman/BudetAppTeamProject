@@ -1,37 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { doc, collection, addDoc, updateDoc } from "firebase/firestore/lite";
+import { doc, addDoc, updateDoc } from "firebase/firestore";
 import { auth, db, firebase } from "../../firebase.config";
-import { getAuth, signOut, updateEmail, updatePassword } from "firebase/auth";
+import { getAuth, signOut, updateEmail } from "firebase/auth";
 import { Picker } from "@react-native-picker/picker";
-import { Switch } from '@rneui/themed'
+import { Switch } from "@rneui/themed";
+
 
 // Exported function
 export default function Profile({ navigation }) {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [student, setStudent] = useState();
+  const [student, setStudent] = useState(false);
   const [primaryLocation, setPrimaryLocation] = useState("");
   const [transportMeans, setTransportMeans] = useState("");
   const [checked, setChecked] = useState(false);
 
+
   // Function to save data
   const saveData = async () => {
-    const currentUser = getAuth().currentUser;
-    if (!currentUser) {
-      console.log("User is not authenticated");
-      return;
-    }
 
-  // Refresh user token
-  const idToken = await currentUser.getIdToken(true);
-
-    // Find document for authenticated user
     firebase
       .firestore()
       .collection("Profile")
-      .where("uid", "==", currentUser.uid)
+      .where("uid", "==", getAuth().currentUser.uid)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((documentSnapshot) => {
@@ -41,9 +33,7 @@ export default function Profile({ navigation }) {
           const dataEmail = {
             email: email,
           };
-          const dataPass = {
-            password: password,
-          };
+
           const dataLocation = {
             primaryLocation: primaryLocation,
           };
@@ -55,47 +45,44 @@ export default function Profile({ navigation }) {
           };
           const dataNotifs = {
             notifications: checked,
-          }
+          };
 
-          updateDoc(profileDocRef, dataNotifs).then(() => {
-            console.log("Goal Notifications has been updated")
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      
+          updateDoc(profileDocRef, dataNotifs)
+            .then(() => {
+              Alert.alert("Your changes have been saved!");
+            })
+            .catch((error) => {
+              Alert.alert(error);
+            });
+
           // Input validation
           if (email.length > 0) {
-            
-            updateEmail(getAuth().currentUser, email)
-              .then(() => {
                 updateDoc(profileDocRef, dataEmail)
-                .then(() => {
-                  console.log("Email has been updated");
+                  .then(() => {
+                    console.log("Email has been updated");
+                  })
+                  .catch((error) => {
+                    console.log(error," e:1");
+                  });
+                console.log("Email updated");
+
+
+                updateEmail(getAuth().currentUser,email)
+                .then(()=>{
+                  updateDoc(profileDocRef,dataEmail)
+                  .then(()=>{
+                    console.log("Email updated")
+                  })
+                  .catch((error)=>{
+                    console.log(error," e:2")
+                  })
                 })
-                .catch((error) => {
-                  console.log(error);
-                });
-                console.log("Email updated")
-              }).catch((error) => {
-                console.log("Updating email",error)
-              })
+                .catch((error)=>{console.log(error," e:3")})
+                
+          
           }
-          if (password.length > 5) {
-              updatePassword(getAuth().currentUser, password)
-              .then(() => {
-                updateDoc(profileDocRef, dataPass)
-                .then(() => {
-                  console.log("Password has been updated");
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-                console.log("Password updated")
-              }).catch((error) => {
-                console.log("Updating password",error)
-              })
-          }
+       
+
           if (primaryLocation.length > 1) {
             updateDoc(profileDocRef, dataLocation)
               .then(() => {
@@ -105,7 +92,7 @@ export default function Profile({ navigation }) {
                 console.log(error);
               });
           }
-          if (student != "") {
+          if (student ==true || student==false) {
             updateDoc(profileDocRef, dataStudent)
               .then(() => {
                 console.log("Student Status has been updated");
@@ -128,6 +115,8 @@ export default function Profile({ navigation }) {
       .catch((error) => {
         console.error(error);
       });
+
+
 
     // Document will be updating as the following. Done individually as users don't have to change all fields.
     const profileDocRef = doc(db, "Profile", profileID);
@@ -200,15 +189,53 @@ export default function Profile({ navigation }) {
     }
   };
 
-  // Switch
-  const toggleSwitch = () => {
-    setChecked(!checked)
-  }
+
+
 
   // Logout
   const handleLogout = async () => {
     await signOut(auth);
   };
+
+  useEffect(() => {
+    function fetchData() {
+      firebase
+        .firestore()
+        .collection("Profile")
+        .where("uid", "==", getAuth().currentUser.uid)
+        .get()
+        .then((querySnapshot) => {
+          if (!querySnapshot.empty) {
+            const documentSnapshot = querySnapshot.docs[0];
+            const email = documentSnapshot.data().email;
+            const notifications = documentSnapshot.data().notifications;
+            const transportMeans = documentSnapshot.data().transportMeans;
+            const student = documentSnapshot.data().student;
+            const primaryLocation = documentSnapshot.data().primaryLocation;
+            
+
+            if (primaryLocation == null || primaryLocation=="") {
+              setPrimaryLocation("No location was chosen");
+            } else {
+              setPrimaryLocation(primaryLocation);
+            }
+
+
+            setStudent(student);
+            setEmail(email);
+            setTransportMeans(transportMeans);
+            setChecked(notifications)
+            console.log(transportMeans)
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      console.log(primaryLocation);
+    }
+    fetchData();
+  }, []);
 
   return (
     <View style={styles.background}>
@@ -217,20 +244,12 @@ export default function Profile({ navigation }) {
           <Text style={styles.prompts}>Email</Text>
           <TextInput
             style={styles.entry}
-            value={email}
-            onChangeText={(value) => setEmail(value)}
-            placeholder={getAuth().currentUser.email}
+            onChangeText={(email) => setEmail(email)}
+            defaultValue={email}
+            // value={getAuth().currentUser.email}
           />
 
-          {/* Password prompt and entry */}
-          <Text style={styles.prompts}>Password</Text>
-          <TextInput
-            style={styles.entry}
-            value={password}
-            onChangeText={(value) => setPassword(value)}
-            placeholder={getAuth().currentUser.password}
-            secureTextEntry = {true}
-          />
+
 
           {/* Student prompt and picker */}
           <Text style={styles.prompts}>Student Status</Text>
@@ -253,36 +272,37 @@ export default function Profile({ navigation }) {
             style={styles.entry}
             value={primaryLocation}
             onChangeText={(value) => setPrimaryLocation(value)}
-            placeholder="Primary location "
+            placeholder="Primary location"
           />
 
           {/* Transport prompt and picker  */}
           <Text style={styles.prompts}>Transport Means</Text>
-          <View style={styles.drop}>
-            <Picker
-              selectedValue={transportMeans}
-              onValueChange={(itemValue, itemIndex) => {
-                setTransportMeans(itemValue);
-              }}
-            >
-              <Picker.Item label="Select transport means..." value="" />
-              <Picker.Item label="Car" value="car" />
-              <Picker.Item label="Cycling" value="cycling" />
-              <Picker.Item label="Walking" value="walking" />
-              <Picker.Item label="Bus" value="bus" />
-              <Picker.Item label="Other" value="other" />
-            </Picker>
-          </View>
+            <View style={styles.drop}>
+              <Picker
+                selectedValue={transportMeans}
+                onValueChange={(itemValue) => {
+                  setTransportMeans(itemValue);
+                }}
+              >
+                <Picker.Item label="Select transport means..." value="" />
+                <Picker.Item label="Car" value="car" />
+                <Picker.Item label="Cycling" value="cycling" />
+                <Picker.Item label="Walking" value="walking" />
+                <Picker.Item label="Bus" value="bus" />
+                <Picker.Item label="Other" value="other" />
+              </Picker>
+            </View>
+          
         </View>
 
         {/* Notifications Switch */}
         <View style={styles.switchView}>
           <Text style={styles.sidePrompts}>Goal Notifications</Text>
-          <Switch 
+          <Switch
             style={styles.switch}
-            color='#ff8100' 
-            value={checked} 
-            onValueChange={(value) => setChecked(value)} 
+            color="#ff8100"
+            value={checked}
+            onValueChange={(value) => setChecked(value)}
           />
         </View>
 
@@ -345,7 +365,7 @@ const styles = StyleSheet.create({
   sidePrompts: {
     fontWeight: "bold",
     fontSize: 17,
-    verticalAlign: 'middle'
+    verticalAlign: "middle",
   },
   drop: {
     borderRadius: 15,
@@ -374,15 +394,15 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   switchView: {
-    flexDirection: 'row',
-    verticalAlign: 'middle',
-    alignSelf: 'center',
-    justifyContent: 'flex-end'
+    flexDirection: "row",
+    verticalAlign: "middle",
+    alignSelf: "center",
+    justifyContent: "flex-end",
   },
   saveButton: {
     backgroundColor: "#ff8100",
     height: 50,
-    marginTop: '5%',
+    marginTop: "5%",
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -394,5 +414,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-  }
+  },
 });
