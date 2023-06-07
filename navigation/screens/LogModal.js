@@ -24,6 +24,7 @@ export default function LogModal({navigation, route}){
     const [selectedGoal, setSelectedGoal] = useState('')
     const [goalsList, setGoalsList] = useState([])
     const [goalID, setGoalID] = useState('')
+    
    
     useEffect(() => {
         if (route.params) {
@@ -146,9 +147,12 @@ export default function LogModal({navigation, route}){
                 })
                 .catch((error) => {
                     console.log(error)
-                })        
+                })      
+                
+             
     }
 
+ 
     // Add to goal balance, if there is an income association
     const increaseGoal = async () => {
         if (selectedGoal != null && selectedType === 'Income'){  
@@ -174,7 +178,7 @@ export default function LogModal({navigation, route}){
                 })
                 .catch((error) => {
                     console.log(error)
-                })
+                },3000)
         }
     }
 
