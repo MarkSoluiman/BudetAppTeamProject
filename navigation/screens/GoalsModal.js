@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable, Platform, Alert, Dimensions } from '
 import React, { useState, useEffect } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { TextInput } from 'react-native-gesture-handler'
-import { collection, addDoc, updateDoc, doc } from 'firebase/firestore/lite'
+import { collection, addDoc, updateDoc, doc } from 'firebase/firestore'
 import { db, firebase } from '../../firebase.config'
 import { getAuth } from 'firebase/auth'
 
@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
     background: {
       flex: 1,
       backgroundColor: "#ffdeb7",
+      padding: 20,
      
     },
     entry: {

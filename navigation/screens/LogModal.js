@@ -39,6 +39,9 @@ export default function LogModal({ navigation, route }) {
   const [selectedGoal, setSelectedGoal] = useState("");
   const [goalsList, setGoalsList] = useState([]);
   const [goalID, setGoalID] = useState("");
+  const [currentGoal, setCurrentGoal] = useState("");
+  let previousSelectedGoal = null;
+ 
 
   useEffect(() => {
     if (route.params) {
@@ -60,6 +63,7 @@ export default function LogModal({ navigation, route }) {
             setSelectedCat(documentSnapshot.data().trans_category);
             setTranAmount(documentSnapshot.data().trans_amount);
             setSelectedGoal(documentSnapshot.data().trans_goal);
+            
 
             const logDateTimestamp = documentSnapshot.data().trans_date;
             const logDate = logDateTimestamp.toDate(); // Convert timestamp to Date object
@@ -206,6 +210,9 @@ export default function LogModal({ navigation, route }) {
     }
   };
 
+  
+
+
   // Validate entry input, if successful... write to firebase
   const handleSubmit = async () => {
     if (date) {
@@ -279,55 +286,99 @@ export default function LogModal({ navigation, route }) {
   const handleUpdate = async (logID) => {
     if (date) {
       if (tranName.length > 0) {
-        if (
-          Number.isInteger(parseInt(tranAmount)) &&
-          parseInt(tranAmount) > 0
-        ) {
+        if (Number.isInteger(parseInt(tranAmount)) && parseInt(tranAmount) > 0) {
           if (selectedType.length > 0) {
             if (selectedCat.length > 0) {
               if (selectedGoal == null || selectedGoal.length > 0) {
                 amount = parseInt(tranAmount, 10);
                 navigation.navigate("Log-Log");
                 const logRef = typeof logID === 'string' ? doc(db, 'Logs', logID) : logID;
-
+  
                 try {
-                  await updateDoc(logRef, {
-                    trans_date: date,
-                    trans_name: tranName,
-                    trans_type: selectedType,
-                    trans_amount: tranAmount,
-                    trans_category: selectedCat,
-                    trans_goal: selectedGoal,
-                  });
-                  console.log("Transaction Log updated successfully");
-                  Alert.alert("Transaction updated");
+                  const logDoc = await getDoc(logRef);
+                 
+                  const fetchedGoal = logDoc.data().trans_goal;
+                  previousSelectedGoal = fetchedGoal;
+
+                  if (selectedGoal !== fetchedGoal) {
+
+                    decreaseGoal(previousSelectedGoal);
+
+                    console.log('Goal has been changed');
+  
+                    await updateDoc(logRef, {
+                      trans_date: date,
+                      trans_name: tranName,
+                      trans_type: selectedType,
+                      trans_amount: tranAmount,
+                      trans_category: selectedCat,
+                      trans_goal: selectedGoal,
+                    });
+  
+                   
+                    
+                    console.log('Transaction Log updated successfully');
+                    Alert.alert('Transaction updated');
+                  }
+                  
+                  else {
+                    console.log('Goal has not been changed');
+                  }
+                 increaseGoal(); 
                 } catch (error) {
-                  console.log(" log document updated successfully");
+                  console.log('Error updating log document: ', error);
                 }
               } else {
-                Alert.alert(
-                  "Error: A transaction goal association needs to be selected"
-                );
+                Alert.alert('Error: A transaction goal association needs to be selected');
               }
             } else {
-              Alert.alert("Error: A transaction category needs to be selected");
+              Alert.alert('Error: A transaction category needs to be selected');
             }
           } else {
-            Alert.alert("Error: A transaction type needs to be selected");
+            Alert.alert('Error: A transaction type needs to be selected');
           }
         } else {
-          Alert.alert(
-            "Error: Transaction amount must be a number greater than 0"
-          );
+          Alert.alert('Error: Transaction amount must be a number greater than 0');
         }
       } else {
-        Alert.alert("Error: Transaction name be of length greater than 0");
+        Alert.alert('Error: Transaction name must have a length greater than 0');
       }
     } else {
-      Alert.alert("Error: Date must be selected");
+      Alert.alert('Error: Date must be selected');
     }
   };
 
+  const decreaseGoal = async (previousGoal) => {
+    if (previousGoal != null && selectedType === "Income"   ) {
+      firebase
+        .firestore()
+        .collection("Goals")
+        .where("uid", "==", getAuth().currentUser.uid)
+        .where("goal_name", "==", previousGoal)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((documentSnapshot) => {
+            const goalDocRef = doc(db, "Goals", documentSnapshot.id);
+            const data = { goal_balance: increment(-tranAmount) };
+
+            updateDoc(goalDocRef, data)
+              .then(() => {
+                console.log(
+                  "Goal field has been updated with income association"
+                );
+                //goalNotifications();
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        }, 3000);
+    }
+  };
+  
   // Exported function
   return (
     <View style={styles.background}>
