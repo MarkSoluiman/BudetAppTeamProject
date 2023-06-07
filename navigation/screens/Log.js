@@ -229,7 +229,7 @@ export default function Log({navigation}) {
 // Styling
 const styles = StyleSheet.create({
 
-  // Page styling
+ 
 
   // Page styling
   background:{
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
       , justifyContent: 'space-evenly'
   },
 
-  // Entry styling
+ 
 
   // Entry styling
   icon:{
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     , paddingTop: 25
   },
 
-  // Button styling
+  
 
   // Button styling
   button:{
