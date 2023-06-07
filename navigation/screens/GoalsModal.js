@@ -283,7 +283,8 @@ const styles = StyleSheet.create({
     background: {
       flex: 1,
       backgroundColor: "#ffdeb7",
-      padding: 20,
+      justifyContent:'center',
+      
      
     },
     entry: {

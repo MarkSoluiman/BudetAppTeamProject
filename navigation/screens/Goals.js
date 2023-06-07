@@ -166,7 +166,10 @@ export default function Goals({navigation}){
 }
 
 // Styling
+// Styling
 const styles = StyleSheet.create({
+
+ 
 
     // Page styling
     background:{
@@ -174,41 +177,42 @@ const styles = StyleSheet.create({
         , paddingTop: '5%'
         , backgroundColor: '#ffdeb7'
     },
+    textEntry:{
+      width: 280,
+      fontWeight: '400'
+    },
     widget:{
-        marginVertical: '5%'
+        marginHorizontal: '5%'
+        , marginVertical: '5%'
         , borderRadius: 15
-        , width: Dimensions.get('window').width-40
-        , height: Dimensions.get('window').height-260
+        , width: 370
+        , height: 605
         , padding: 15
         , backgroundColor: '#ff8100'
         , justifyContent: 'space-evenly'
-        , alignSelf: 'center'
     },
-
+  
+   
+  
     // Entry styling
     icon:{
-        paddingTop: 15,
-        paddingRight: 10
+      paddingVertical: 5,
     },
     entry:{
-        flexDirection: 'row'
-        , marginBottom: '5%'
-        , backgroundColor: '#ffdeb7'
-        , borderRadius: 10
-        , padding: 15
-        , paddingTop: 25
-        , width: Dimensions.get('window').width-70
-        , alignSelf: 'center'
-        , justifyContent: 'space-between'
+      flexDirection: 'row'
+      , marginBottom: '5%'
+      , backgroundColor: '#ffdeb7'
+      , borderRadius: 10
+      , padding: 15
+      , paddingTop: 25
     },
-    textEntry:{
-        fontWeight: '400'
-    },
-
+  
+    
+  
     // Button styling
     button:{
-        width: Dimensions.get('window').width-40
-        , height: Dimensions.get('window').height-810
+        width: 370
+        , height: 55
         , borderRadius: 30
         , marginHorizontal: 20
         , backgroundColor: '#bd5100'
@@ -219,4 +223,4 @@ const styles = StyleSheet.create({
         , fontSize: 17
         , fontWeight: 'bold'
     }
-})
+  })
