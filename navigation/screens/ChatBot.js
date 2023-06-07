@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const ChatBot = () => {
   const [data, setData] = useState([]);
-  const apiKey = 'sk-vGJlp9Kft58bJZ5BQSqgT3BlbkFJWDH609M67miEQRPFKdHPA'; // API Key
+  const apiKey = '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'; // API Key
   const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions'; // URL to OpenAI
   const [textInput, setTextInput] = useState('');
   const [error, setError] = useState(null);
