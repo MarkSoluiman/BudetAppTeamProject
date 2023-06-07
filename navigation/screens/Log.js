@@ -1,5 +1,5 @@
 // Component imports
-import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable, Dimensions } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, StyleSheet, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { app, auth, db, firebase } from '../../firebase.config'
 import { collection, getDoc, deleteDoc } from 'firebase/firestore/lite'
@@ -69,6 +69,8 @@ export default function Log({navigation}) {
         const selectionIDs = [];
         querySnapshot.forEach((documentSnapshot) => {
           selectionIDs.push(documentSnapshot.id);
+
+          
   
           // Deduce transaction amount from goal balance, if associated with a goal
           if (documentSnapshot.data().trans_goal != null) {
@@ -161,6 +163,27 @@ export default function Log({navigation}) {
       });
   }
   
+
+  const navigateToLogModal = (selectedTransDate, selectedTransName, selectedTransAmount) => {
+    firebase.firestore()
+      .collection("Logs")
+      .where("uid", "==", getAuth().currentUser.uid)
+      .where("trans_date", "==", selectedTransDate)
+      .where("trans_name", "==", selectedTransName)
+      .where("trans_amount", "==", selectedTransAmount)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          const logID = documentSnapshot.id;
+          navigation.navigate('New Transaction', { logID });
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+}; 
+  
+  // Returned function
   // Returned function
   return (
     <SafeAreaView style={styles.background}>
@@ -177,9 +200,15 @@ export default function Log({navigation}) {
             numColumns={1}
             renderItem={({item}) => (
               <View style={styles.entry}>
+
+                <Pressable onPress={() => navigateToLogModal(item.trans_date
+                                , item.trans_name
+                                , item.trans_amount)}> 
                 
                 {/* Formatting of entries */}
                 <Text style={styles.textEntry}>Date: {item.day}/{item.month}/{item.year}{'\n'}Transaction: {item.trans_name}, {item.sign}${item.trans_amount}{'\n'}</Text>
+                </Pressable>
+                
                 
                 {/* Trash icon to delete an entry */}
                 <Pressable style={styles.icon} onPress={() => deleteEntry(
@@ -201,50 +230,53 @@ export default function Log({navigation}) {
 const styles = StyleSheet.create({
 
   // Page styling
+
+  // Page styling
   background:{
       flex:1
       , paddingTop: '5%'
       , backgroundColor: '#ffdeb7'
   },
+  textEntry:{
+    width: 280,
+    fontWeight: '400'
+  },
   widget:{
-      marginVertical: '5%'
+      marginHorizontal: '5%'
+      , marginVertical: '5%'
       , borderRadius: 15
-      , width: Dimensions.get('window').width-40
-      , height: Dimensions.get('window').height-260
+      , width: 370
+      , height: 605
       , padding: 15
       , backgroundColor: '#ff8100'
       , justifyContent: 'space-evenly'
-      , alignSelf: 'center'
   },
 
   // Entry styling
+
+  // Entry styling
   icon:{
-    paddingTop: 10,
-    paddingRight: 10,
-},
-entry:{
+    paddingVertical: 5,
+  },
+  entry:{
     flexDirection: 'row'
     , marginBottom: '5%'
     , backgroundColor: '#ffdeb7'
     , borderRadius: 10
     , padding: 15
     , paddingTop: 25
-    , width: Dimensions.get('window').width-70
-    , alignSelf: 'center'
-    , justifyContent: 'space-between'
-},
-textEntry:{
-    fontWeight: '400'
-},
+  },
+
+  // Button styling
 
   // Button styling
   button:{
-      width: Dimensions.get('window').width-40
-      , height: Dimensions.get('window').height-810
+      width: 370
+      , height: 55
       , borderRadius: 30
+      , marginHorizontal: 20
       , backgroundColor: '#bd5100'
       , justifyContent: 'center'
-      , alignSelf: 'center'
   },
   buttonText:{
       textAlign: 'center'

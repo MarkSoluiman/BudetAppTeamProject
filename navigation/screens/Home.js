@@ -24,6 +24,7 @@ export default function Home({navigation}){
                 <Text style={styles.heading}>Monthly Income</Text>
             </Pressable>
 
+
             {/* Goal Bars widget */}
             <Pressable style={styles.widget} onPress={()=> navigation.navigate('Goal Bars')}>
                 <Text style={styles.heading}>Goal Bars</Text>
