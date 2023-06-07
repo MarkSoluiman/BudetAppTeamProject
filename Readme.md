@@ -51,8 +51,8 @@ Users can view their set and change their email, password, student status, prima
 <p align="center">
   <img src="assets/advice.png" alt="Advice page" width="250">
 </p>
-The advice page shows personalised adviced on what the user asks from the
-Advice ChatBot. 
+The advice page shows personalised advice for the User.
+It bases the answer on what the user asks from the Advice ChatBot. 
 
 ### 7. News
 <p align="center">
