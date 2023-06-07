@@ -324,6 +324,7 @@ export default function LogModal({ navigation, route }) {
                   else {
                     console.log('Goal has not been changed');
                   }
+                  decreaseByExpenditureGoal(previousSelectedGoal);
                  increaseGoal(); 
                 } catch (error) {
                   console.log('Error updating log document: ', error);
@@ -349,7 +350,38 @@ export default function LogModal({ navigation, route }) {
   };
 
   const decreaseGoal = async (previousGoal) => {
-    if (previousGoal != null && selectedType === "Income"   ) {
+    if (previousGoal != null && selectedType === "Income"  ) {
+      firebase
+        .firestore()
+        .collection("Goals")
+        .where("uid", "==", getAuth().currentUser.uid)
+        .where("goal_name", "==", previousGoal)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((documentSnapshot) => {
+            const goalDocRef = doc(db, "Goals", documentSnapshot.id);
+            const data = { goal_balance: increment(-tranAmount) };
+
+            updateDoc(goalDocRef, data)
+              .then(() => {
+                console.log(
+                  "Goal field has been updated with income association"
+                );
+                //goalNotifications();
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        }, 3000);
+    }
+  };
+
+  const decreaseByExpenditureGoal = async (previousGoal) => {
+    if (selectedGoal != null && selectedType === "Expenditure"  ) {
       firebase
         .firestore()
         .collection("Goals")
